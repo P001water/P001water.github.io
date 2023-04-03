@@ -1,0 +1,251 @@
+
+
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <id>/</id>
+  <title>may1as' blog</title>
+  <subtitle>SEC, may1as, nyist .</subtitle>
+  <updated>2023-02-16T19:24:54+08:00</updated>
+  <author>
+    <name>may1as</name>
+    <uri>/</uri>
+  </author>
+  <link rel="self" type="application/atom+xml" href="/feed.xml"/>
+  <link rel="alternate" type="text/html" hreflang="en"
+    href="/"/>
+  <generator uri="https://jekyllrb.com/" version="4.3.1">Jekyll</generator>
+  <rights> © 2023 may1as </rights>
+  <icon>/assets/img/favicons/favicon.ico</icon>
+  <logo>/assets/img/favicons/favicon-96x96.png</logo>
+
+
+  
+  <entry>
+    <title>BurpSuite Pro 2022.8和练手写的一个小工具</title>
+    <link href="/posts/BurpSuite-Pro-2022.8%E5%92%8C%E7%BB%83%E6%89%8B%E5%86%99%E7%9A%84%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%B7%A5%E5%85%B7/" rel="alternate" type="text/html" title="BurpSuite Pro 2022.8和练手写的一个小工具" />
+    <published>2022-12-01T00:00:00+08:00</published>
+  
+    <updated>2022-12-01T00:00:00+08:00</updated>
+  
+    <id>/posts/BurpSuite-Pro-2022.8%E5%92%8C%E7%BB%83%E6%89%8B%E5%86%99%E7%9A%84%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%B7%A5%E5%85%B7/</id>
+    <content src="/posts/BurpSuite-Pro-2022.8%E5%92%8C%E7%BB%83%E6%89%8B%E5%86%99%E7%9A%84%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%B7%A5%E5%85%B7/" />
+    <author>
+      <name>may1as</name>
+    </author>
+
+  
+    
+    <category term="瞎折腾" />
+    
+    <category term="BurpSuite" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      文前漫谈
+
+没啥别的想法，纯粹想更新一下了。
+
+我有个毛病，软件和工具总是喜欢最新的，所以刚接触java的时候我的java环境配的就是当时刚出的JDK-17。于是现在我需要为我的这个毛病付出一点代价：）
+
+BP的也由于更新的缘故，记不清从哪个版本开始，注册机也更新了，虽然从我们的角度还是那个熟悉的页面，还是那个熟悉的By h3110w0r1d，但是用旧注册机好像已经不能注册新版本了。
+
+BurpSuite Pro 2022.8
+
+为了方便，直接内嵌了一个jdk17了，整个内容就像这样，bat脚本启动会有cmd窗口（黑窗口），用vbs脚本启动就OK，ico是图标文件，有那点外观要求的能用上，such as me。
+
+BurpLoaderKeygen就是新版注册机，h3110w0r1d出品，burpsuite_pro_v2022.8.4就是官网下的burp主要文件
+
+
+  
+
+
+下载地址...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>BuckeyeCTF-2022-writeup</title>
+    <link href="/posts/BuckeyeCTF-2022-writeup/" rel="alternate" type="text/html" title="BuckeyeCTF-2022-writeup" />
+    <published>2022-11-12T00:00:00+08:00</published>
+  
+    <updated>2022-11-12T00:00:00+08:00</updated>
+  
+    <id>/posts/BuckeyeCTF-2022-writeup/</id>
+    <content src="/posts/BuckeyeCTF-2022-writeup/" />
+    <author>
+      <name>may1as</name>
+    </author>
+
+  
+    
+    <category term="writeup" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      文前漫谈
+
+  比赛地址：https://pwnoh.io/challs
+
+
+Web
+buckeyenotes/beginner
+
+  des：Note taking apps are all the rage lately but turns our they’re harder to make than I thought :/. Even in development buckeyenotes has gotten some traction, Brutus signed up! I think his user name is brutusB3stNut9999. I wonder what kind of notes he writes 🤔 but I don’t have his login….
+https://buckeyenotes.chall.pwnoh.io
+
+
+...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>如何基于volatility2构建“新”版本内核的profile</title>
+    <link href="/posts/%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8Evolatility2%E6%9E%84%E5%BB%BA-%E6%96%B0-%E7%89%88%E6%9C%AC%E5%86%85%E6%A0%B8%E7%9A%84profile/" rel="alternate" type="text/html" title="如何基于volatility2构建“新”版本内核的profile" />
+    <published>2022-11-04T00:00:00+08:00</published>
+  
+    <updated>2022-11-04T00:00:00+08:00</updated>
+  
+    <id>/posts/%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8Evolatility2%E6%9E%84%E5%BB%BA-%E6%96%B0-%E7%89%88%E6%9C%AC%E5%86%85%E6%A0%B8%E7%9A%84profile/</id>
+    <content src="/posts/%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8Evolatility2%E6%9E%84%E5%BB%BA-%E6%96%B0-%E7%89%88%E6%9C%AC%E5%86%85%E6%A0%B8%E7%9A%84profile/" />
+    <author>
+      <name>may1as</name>
+    </author>
+
+  
+    
+    <category term="内存取证" />
+    
+    <category term="volatility" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      
+  文章水在跳跳糖上了
+
+
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>2022蓝帽杯遇见的SUID提权</title>
+    <link href="/posts/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84-SUID-%E6%8F%90%E6%9D%83-%E5%89%AF%E6%9C%AC/" rel="alternate" type="text/html" title="2022蓝帽杯遇见的SUID提权" />
+    <published>2022-10-31T00:00:00+08:00</published>
+  
+    <updated>2022-10-31T00:00:00+08:00</updated>
+  
+    <id>/posts/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84-SUID-%E6%8F%90%E6%9D%83-%E5%89%AF%E6%9C%AC/</id>
+    <content src="/posts/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84-SUID-%E6%8F%90%E6%9D%83-%E5%89%AF%E6%9C%AC/" />
+    <author>
+      <name>may1as</name>
+    </author>
+
+  
+    
+    <category term="提权" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      
+  文章发在跳跳糖上了
+
+
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>CTF中我的USB键盘鼠标流量解密指南和脚本</title>
+    <link href="/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/" rel="alternate" type="text/html" title="CTF中我的USB键盘鼠标流量解密指南和脚本" />
+    <published>2022-10-12T00:00:00+08:00</published>
+  
+    <updated>2022-10-12T00:00:00+08:00</updated>
+  
+    <id>/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/</id>
+    <content src="/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/" />
+    <author>
+      <name>may1as</name>
+    </author>
+
+  
+    
+    <category term="流量分析" />
+    
+    <category term="USB" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      
+  文章首发于freebuf
+
+
+文前漫谈
+对ctf中的USB做一个了断吧，先摆上一些概念性的东西
+
+USB是 UniversalSerial Bus（通用串行总线）的缩写，是一个外部总线标准，用于规范电脑与外部设备的连接和通讯，例如键盘、鼠标、打印机、磁盘或网络适配器等等。通过对该接口流量的监听，我们可以得到取键盘敲击键、鼠标移动与点击、存储设备的铭文传输通信、USB无线网卡网络传输内容等等。
+
+USB的几种用途
+现在USB协议版本有USB2.0, USB3.1,USB3.2, USB4等，目前USB2.0/3.0比较常用，你在淘宝上买U盘的时候可能看见过很多“USB 3.0”。
+闲谈哈，你可能听过USB3.1的概念，是某苹果为了装逼提出来的，跟USB3.0差别不大，但是人家是老大哥啊，所有慢慢都向大哥看齐，都流行说USB3.1
+
+
+  USB UART
+    
+      异...
+    </summary>
+  
+
+  </entry>
+
+</feed>
+
+
