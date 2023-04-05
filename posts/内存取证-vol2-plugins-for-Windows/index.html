@@ -13,22 +13,23 @@
   
 >
 
-  
-<!--
-  The Head
--->
+  <!-- The Head -->
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="referrer" content="never">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta
+    name="viewport"
+    content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover"
+  >
 
   
-
     
 
     
-
   
 
   
@@ -37,14 +38,14 @@
 
   
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<meta name="generator" content="Jekyll v4.3.1" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="内存取证 vol2-plugins-for-Window" />
 <meta name="author" content="may1as" />
 <meta property="og:locale" content="en" />
 <meta name="description" content="文前漫谈 vol2的关于windows的常用命令" />
 <meta property="og:description" content="文前漫谈 vol2的关于windows的常用命令" />
-<link rel="canonical" href="/posts/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-vol2-plugins-for-Windows/" />
-<meta property="og:url" content="/posts/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-vol2-plugins-for-Windows/" />
+<link rel="canonical" href="http://localhost:4000/posts/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-vol2-plugins-for-Windows/" />
+<meta property="og:url" content="http://localhost:4000/posts/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-vol2-plugins-for-Windows/" />
 <meta property="og:site_name" content="may1as’ blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-07-12T00:00:00+08:00" />
@@ -53,7 +54,7 @@
 <meta name="twitter:site" content="@\#" />
 <meta name="twitter:creator" content="@may1as" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-07-12T00:00:00+08:00","datePublished":"2022-07-12T00:00:00+08:00","description":"文前漫谈 vol2的关于windows的常用命令","headline":"内存取证 vol2-plugins-for-Window","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-vol2-plugins-for-Windows/"},"url":"/posts/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-vol2-plugins-for-Windows/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-07-12T00:00:00+08:00","datePublished":"2022-07-12T00:00:00+08:00","description":"文前漫谈 vol2的关于windows的常用命令","headline":"内存取证 vol2-plugins-for-Window","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/posts/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-vol2-plugins-for-Windows/"},"url":"http://localhost:4000/posts/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-vol2-plugins-for-Windows/"}</script>
 <!-- End Jekyll SEO tag -->
 
   
@@ -81,7 +82,6 @@
 
 
   
-
     
       <link rel="preconnect" href="https://fonts.googleapis.com" >
       <link rel="dns-prefetch" href="https://fonts.googleapis.com" >
@@ -97,32 +97,31 @@
     
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap">
-
   
 
   <!-- GA -->
   
 
   <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css">
 
   <link rel="stylesheet" href="/assets/css/style.css">
 
   
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.20.1/dist/tocbot.min.css">
   
 
   
     <!-- Manific Popup -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/magnific-popup.min.css">
   
 
   <!-- JavaScript -->
 
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
 
   
     <!--
@@ -153,13 +152,12 @@
       let self = this;
 
       /* always follow the system prefers */
-      this.sysDarkPrefers.addEventListener("change", () => {
+      this.sysDarkPrefers.addEventListener('change', () => {
         if (self.hasMode) {
           if (self.isDarkMode) {
             if (!self.isSysDarkPrefer) {
               self.setDark();
             }
-
           } else {
             if (self.isSysDarkPrefer) {
               self.setLight();
@@ -170,9 +168,7 @@
         }
 
         self.notify();
-
       });
-
     } /* constructor() */
 
     get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); }
@@ -189,8 +185,7 @@
 
     /* get the current mode on screen */
     get modeStatus() {
-      if (this.isDarkMode
-        || (!this.hasMode && this.isSysDarkPrefer)) {
+      if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) {
         return ModeToggle.DARK_MODE;
       } else {
         return ModeToggle.LIGHT_MODE;
@@ -220,45 +215,41 @@
       }, "*");
     }
 
+    flipMode() {
+      if (this.hasMode) {
+        if (this.isSysDarkPrefer) {
+          if (this.isLightMode) {
+            this.clearMode();
+          } else {
+            this.setLight();
+          }
+        } else {
+          if (this.isDarkMode) {
+            this.clearMode();
+          } else {
+            this.setDark();
+          }
+        }
+      } else {
+        if (this.isSysDarkPrefer) {
+          this.setLight();
+        } else {
+          this.setDark();
+        }
+      }
+
+      this.notify();
+    } /* flipMode() */
   } /* ModeToggle */
 
-  const toggle = new ModeToggle();
-
-  function flipMode() {
-    if (toggle.hasMode) {
-      if (toggle.isSysDarkPrefer) {
-        if (toggle.isLightMode) {
-          toggle.clearMode();
-        } else {
-          toggle.setLight();
-        }
-
-      } else {
-        if (toggle.isDarkMode) {
-          toggle.clearMode();
-        } else {
-          toggle.setDark();
-        }
-      }
-
-    } else {
-      if (toggle.isSysDarkPrefer) {
-        toggle.setLight();
-      } else {
-        toggle.setDark();
-      }
-    }
-
-    toggle.notify();
-
-  } /* flipMode() */
-
+  const modeToggle = new ModeToggle();
 </script>
 
   
 </head>
 
-  <body data-spy="scroll" data-target="#toc" data-topbar-visible="true">
+
+  <body data-topbar-visible="true">
 
     <!--
   The Side Bar
@@ -349,7 +340,17 @@
 
       
       <a href="https://github.com/may1as" aria-label="github"
-        target="_blank" rel="noopener">
+        
+
+        
+          target="_blank"
+          
+        
+
+        
+
+        rel="noopener noreferrer">
+
         <i class="fab fa-github"></i>
       </a>
       
@@ -359,7 +360,17 @@
 
       
       <a href="https://twitter.com/\#" aria-label="twitter"
-        target="_blank" rel="noopener">
+        
+
+        
+          target="_blank"
+          
+        
+
+        
+
+        rel="noopener noreferrer">
+
         <i class="fab fa-twitter"></i>
       </a>
       
@@ -368,9 +379,15 @@
       
 
       
-      <a href="
-          javascript:location.href = 'mailto:' + ['may1asu','foxmail.com'].join('@')" aria-label="email"
+      <a href="javascript:location.href = 'mailto:' + ['may1asu','foxmail.com'].join('@')" aria-label="email"
+        
+
+        
+
+        
+
         >
+
         <i class="fas fa-envelope"></i>
       </a>
       
@@ -380,7 +397,14 @@
 
       
       <a href="/feed.xml" aria-label="rss"
+        
+
+        
+
+        
+
         >
+
         <i class="fas fa-rss"></i>
       </a>
       
@@ -504,6 +528,12 @@
   
   
 
+  <!-- CDN URL -->
+  
+
+  <!-- Add image path -->
+  
+
   
     
       
@@ -512,64 +542,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -577,64 +610,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -642,64 +678,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -707,64 +746,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -772,64 +814,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -837,64 +882,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -902,64 +950,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -967,64 +1018,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1032,64 +1086,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1097,64 +1154,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1162,64 +1222,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1487,14 +1550,6 @@
 
 
 
-<!-- Wrap prompt element of blockquote with the <div> tag -->
-
-
-
-
-
-
-
 <!-- return -->
 
 <h1 data-toc-skip>内存取证 vol2-plugins-for-Window</h1>
@@ -1604,7 +1659,7 @@ plugin：要使用的插件
 <h2 id="查看vol配置插件"><span class="mr-2">查看vol配置插件</span><a href="#查看vol配置插件" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 <p>这里的vol.exe是windows下的，在官网下载，主要是命令行参数
 <code class="language-plaintext highlighter-rouge">--info</code>，查看vol的一些配置信息，和已经安装的插件
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657788660050-b685e891-2698-466d-929e-59f87e14d292.png#clientId=u229eeb32-2f92-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=272&amp;id=u93030605&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=775&amp;originWidth=1516&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=1024128&amp;status=error&amp;style=none&amp;taskId=ue6ef2418-ad4f-470b-8c1e-0fdab956c09&amp;title=&amp;width=532" alt="image.png" data-proofer-ignore></p>
+<a href="532" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657788660050-b685e891-2698-466d-929e-59f87e14d292.png#clientId=u229eeb32-2f92-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=272&amp;id=u93030605&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=775&amp;originWidth=1516&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=1024128&amp;status=error&amp;style=none&amp;taskId=ue6ef2418-ad4f-470b-8c1e-0fdab956c09&amp;title=&amp;width=532" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <h2 id="一切从获取镜像信息开始"><span class="mr-2">一切从获取镜像信息开始</span><a href="#一切从获取镜像信息开始" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 <p>这个命令格式还是很简单的，<code class="language-plaintext highlighter-rouge">imageinfo</code>，这也是个插件，判断该镜像的架构，下面所以操作都基于这一步。</p>
@@ -1617,7 +1672,7 @@ plugin：要使用的插件
 </pre></td></tr></tbody></table></code></div></div>
 <p>下面的<code class="language-plaintext highlighter-rouge">Suggested Profile(s)</code>，探测出多个可能的系统信息，可靠性从前往后排序，一般取第一个，知道系统后，在<code class="language-plaintext highlighter-rouge">--profile=</code>中带上对应的系统架构，继续后面的分析。
 另外，获取系统还有<code class="language-plaintext highlighter-rouge">kdbgscan</code>这个插件，和<code class="language-plaintext highlighter-rouge">imageinfo</code>的效果一样
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657793899739-274f0aad-9a95-46ea-b138-95690c4262bf.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=160&amp;id=u0e350be2&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=502&amp;originWidth=1903&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=433274&amp;status=error&amp;style=none&amp;taskId=u0e40a6c2-53ee-4486-abe2-b7289ba6370&amp;title=&amp;width=606" alt="image.png" data-proofer-ignore></p>
+<a href="606" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657793899739-274f0aad-9a95-46ea-b138-95690c4262bf.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=160&amp;id=u0e350be2&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=502&amp;originWidth=1903&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=433274&amp;status=error&amp;style=none&amp;taskId=u0e40a6c2-53ee-4486-abe2-b7289ba6370&amp;title=&amp;width=606" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <h2 id="插件使用"><span class="mr-2">插件使用</span><a href="#插件使用" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 <p>基础使用还是很简单的，入门已经完成，接下来进入简单进阶了。主要关注插件的使用就行了。</p>
@@ -1630,7 +1685,7 @@ plugin：要使用的插件
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre>vol.py <span class="nt">-f</span> <span class="o">[</span>image] <span class="nt">--profile</span><span class="o">=[</span>profile] printkey <span class="nt">-K</span> <span class="s2">"ControlSet001</span><span class="se">\C</span><span class="s2">ontrol</span><span class="se">\C</span><span class="s2">omputerName</span><span class="se">\C</span><span class="s2">omputerName"</span>
 </pre></td></tr></tbody></table></code></div></div>
-<p><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657798290459-e50b170d-4a91-4f0e-81ae-75d1f014a3f2.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=190&amp;id=Z1Vtx&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=460&amp;originWidth=1459&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=520166&amp;status=error&amp;style=none&amp;taskId=uc2d119b0-6238-47b0-9b0b-ce748969206&amp;title=&amp;width=604" alt="image.png" data-proofer-ignore></p>
+<p><a href="604" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657798290459-e50b170d-4a91-4f0e-81ae-75d1f014a3f2.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=190&amp;id=Z1Vtx&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=460&amp;originWidth=1459&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=520166&amp;status=error&amp;style=none&amp;taskId=uc2d119b0-6238-47b0-9b0b-ce748969206&amp;title=&amp;width=604" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <h3 id="查看系统用户名"><span class="mr-2">查看系统用户名</span><a href="#查看系统用户名" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
 <div class="language-shell highlighter-rouge"><div class="code-header">
@@ -1657,7 +1712,7 @@ plugin：要使用的插件
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre>vol.py <span class="nt">-f</span> <span class="o">[</span>image] <span class="nt">--profile</span><span class="o">=[</span>profile] hashdump
 </pre></td></tr></tbody></table></code></div></div>
-<p><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657799146922-7174b088-60c3-459f-91f6-25c3e258ed3a.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=112&amp;id=u39edf9f5&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=168&amp;originWidth=1356&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=140172&amp;status=error&amp;style=none&amp;taskId=ude6032d8-ab57-437a-a747-877870c8e29&amp;title=&amp;width=904" alt="image.png" data-proofer-ignore>
+<p><a href="904" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657799146922-7174b088-60c3-459f-91f6-25c3e258ed3a.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=112&amp;id=u39edf9f5&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=168&amp;originWidth=1356&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=140172&amp;status=error&amp;style=none&amp;taskId=ude6032d8-ab57-437a-a747-877870c8e29&amp;title=&amp;width=904" alt="image.png" class="lazyload" data-proofer-ignore></a>
 有的出题人可能比较善良，专门找个“解”不了的hash给你，这时候我们可以尝试使用<code class="language-plaintext highlighter-rouge"> John the Ripper </code>或 <code class="language-plaintext highlighter-rouge">Hashcat</code>（或 Google）等工具来破解它，或者我们可以尝试使用<code class="language-plaintext highlighter-rouge">_lsadump_</code>插件从<code class="language-plaintext highlighter-rouge">LSA secrets</code>中提取明文密码</p>
 <div class="language-shell highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
@@ -1668,7 +1723,7 @@ plugin：要使用的插件
 
 并不适合所有的例子，有一定失败率，下面是个成功的例子，MortyIsReallyAnOtter
 </pre></td></tr></tbody></table></code></div></div>
-<p><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657799963790-f663781f-e4b5-41f2-81d4-eb9b09e5ef22.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=210&amp;id=u92350c2d&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=417&amp;originWidth=1339&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=587400&amp;status=error&amp;style=none&amp;taskId=u5d4f8533-d1aa-44d0-a1fb-8518523518d&amp;title=&amp;width=674" alt="image.png" data-proofer-ignore></p>
+<p><a href="674" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657799963790-f663781f-e4b5-41f2-81d4-eb9b09e5ef22.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=210&amp;id=u92350c2d&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=417&amp;originWidth=1339&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=587400&amp;status=error&amp;style=none&amp;taskId=u5d4f8533-d1aa-44d0-a1fb-8518523518d&amp;title=&amp;width=674" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 <h3 id="查看系统进程信息"><span class="mr-2">查看系统进程信息</span><a href="#查看系统进程信息" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
 <p>| 查看进程列表 | Vol.exe -f Win7_SP1_x86.vmem –profile=Win7SP1x86 pslist |
 | — | — |
@@ -1677,17 +1732,17 @@ plugin：要使用的插件
 | 查看进程列表
 psscan 可以找到先前已终止（不活动）的进程以及被rootkit隐藏或解链的进程,pslist和pstree无法检测隐藏或解链的进程 | Vol.exe -f Win7_SP1_x86.vmem –profile=Win7SP1x86 psscan |</p>
 
-<p><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657798855140-59eb1a00-426b-4a75-b1c5-46c87316e230.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=284&amp;id=u68bb4834&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=724&amp;originWidth=1591&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=1007611&amp;status=error&amp;style=none&amp;taskId=u1d77c519-f0c0-4391-93fd-786fa4e900d&amp;title=&amp;width=624" alt="image.png" data-proofer-ignore>
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1663297468436-527a43f3-feb5-4312-886e-e9a2626c067e.png#clientId=u459b111c-2751-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=250&amp;id=uc75a40dd&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=672&amp;originWidth=1677&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=748272&amp;status=done&amp;style=none&amp;taskId=u5817bbee-041a-49b9-98fb-449d32b2693&amp;title=&amp;width=624" alt="image.png" data-proofer-ignore>
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1663297506196-dd3247b1-9985-48b5-8a92-c9fa3cd1be46.png#clientId=u459b111c-2751-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=264&amp;id=udbdfcfde&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=711&amp;originWidth=1685&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=828643&amp;status=done&amp;style=none&amp;taskId=ud6af93fc-52d8-4652-9d6c-3b140f8aec8&amp;title=&amp;width=625" alt="image.png" data-proofer-ignore>
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1663297534545-11dd0934-4bc6-4679-ac33-a16ae45a9b9d.png#clientId=u459b111c-2751-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=329&amp;id=ue075d27e&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=901&amp;originWidth=1702&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=856460&amp;status=done&amp;style=none&amp;taskId=u60931932-d578-4e5d-bc01-ae801277b34&amp;title=&amp;width=622" alt="image.png" data-proofer-ignore></p>
+<p><a href="624" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657798855140-59eb1a00-426b-4a75-b1c5-46c87316e230.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=284&amp;id=u68bb4834&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=724&amp;originWidth=1591&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=1007611&amp;status=error&amp;style=none&amp;taskId=u1d77c519-f0c0-4391-93fd-786fa4e900d&amp;title=&amp;width=624" alt="image.png" class="lazyload" data-proofer-ignore></a>
+<a href="624" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1663297468436-527a43f3-feb5-4312-886e-e9a2626c067e.png#clientId=u459b111c-2751-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=250&amp;id=uc75a40dd&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=672&amp;originWidth=1677&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=748272&amp;status=done&amp;style=none&amp;taskId=u5817bbee-041a-49b9-98fb-449d32b2693&amp;title=&amp;width=624" alt="image.png" class="lazyload" data-proofer-ignore></a>
+<a href="625" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1663297506196-dd3247b1-9985-48b5-8a92-c9fa3cd1be46.png#clientId=u459b111c-2751-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=264&amp;id=udbdfcfde&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=711&amp;originWidth=1685&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=828643&amp;status=done&amp;style=none&amp;taskId=ud6af93fc-52d8-4652-9d6c-3b140f8aec8&amp;title=&amp;width=625" alt="image.png" class="lazyload" data-proofer-ignore></a>
+<a href="622" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1663297534545-11dd0934-4bc6-4679-ac33-a16ae45a9b9d.png#clientId=u459b111c-2751-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=329&amp;id=ue075d27e&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=901&amp;originWidth=1702&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=856460&amp;status=done&amp;style=none&amp;taskId=u60931932-d578-4e5d-bc01-ae801277b34&amp;title=&amp;width=622" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 <h3 id="查看网络进程"><span class="mr-2">查看网络进程</span><a href="#查看网络进程" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
 <div class="language-shell highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre>vol.py <span class="nt">-f</span> <span class="o">[</span>image] <span class="nt">--profile</span><span class="o">=[</span>profile] netscan
 </pre></td></tr></tbody></table></code></div></div>
-<p><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657801631690-13a52b1c-15d5-47cd-9cb9-a3f7b3e2e652.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=510&amp;id=u4361b8cf&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=765&amp;originWidth=1839&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=1013127&amp;status=error&amp;style=none&amp;taskId=ufea5bfde-552c-4dd6-b556-0c989427ecb&amp;title=&amp;width=1226" alt="image.png" data-proofer-ignore></p>
+<p><a href="1226" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657801631690-13a52b1c-15d5-47cd-9cb9-a3f7b3e2e652.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=510&amp;id=u4361b8cf&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=765&amp;originWidth=1839&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=1013127&amp;status=error&amp;style=none&amp;taskId=ufea5bfde-552c-4dd6-b556-0c989427ecb&amp;title=&amp;width=1226" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 <h3 id="查看内存中剪贴板的内容"><span class="mr-2">查看内存中剪贴板的内容</span><a href="#查看内存中剪贴板的内容" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
 <p>vol3中好像还没这个功能</p>
 <div class="language-shell highlighter-rouge"><div class="code-header">
@@ -1739,7 +1794,7 @@ psscan 可以找到先前已终止（不活动）的进程以及被rootkit隐藏
 <span class="nt">-Q</span>：根据filescan得到的参数，就是下图箭头指向
 <span class="nt">-D</span>：导出文件夹 ， ./是当前文件夹
 </pre></td></tr></tbody></table></code></div></div>
-<p><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657812571620-47d5eb2a-6382-430b-804a-2a18388842b1.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=371&amp;id=u13e2f8a6&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=556&amp;originWidth=1796&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=726783&amp;status=error&amp;style=none&amp;taskId=u093076da-a013-4667-b86c-6f9f246edf3&amp;title=&amp;width=1197.3333333333333" alt="image.png" data-proofer-ignore></p>
+<p><a href="1197.3333333333333" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657812571620-47d5eb2a-6382-430b-804a-2a18388842b1.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=371&amp;id=u13e2f8a6&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=556&amp;originWidth=1796&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=726783&amp;status=error&amp;style=none&amp;taskId=u093076da-a013-4667-b86c-6f9f246edf3&amp;title=&amp;width=1197.3333333333333" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 <h2 id="其他常用插件"><span class="mr-2">其他常用插件</span><a href="#其他常用插件" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
 <div class="table-wrapper"><table>
@@ -1861,19 +1916,19 @@ psscan 可以找到先前已终止（不活动）的进程以及被rootkit隐藏
 
     
       
-        <a href="https://twitter.com/intent/tweet?text=%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81+vol2-plugins-for-Window+-+may1as%27+blog&url=%2Fposts%2F%25E5%2586%2585%25E5%25AD%2598%25E5%258F%2596%25E8%25AF%2581-vol2-plugins-for-Windows%2F" data-toggle="tooltip" data-placement="top"
+        <a href="https://twitter.com/intent/tweet?text=%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81%20vol2-plugins-for-Window%20-%20may1as'%20blog&url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2F%25E5%2586%2585%25E5%25AD%2598%25E5%258F%2596%25E8%25AF%2581-vol2-plugins-for-Windows%2F" data-toggle="tooltip" data-placement="top"
           title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
           <i class="fa-fw fab fa-twitter"></i>
         </a>
     
       
-        <a href="https://www.facebook.com/sharer/sharer.php?title=%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81+vol2-plugins-for-Window+-+may1as%27+blog&u=%2Fposts%2F%25E5%2586%2585%25E5%25AD%2598%25E5%258F%2596%25E8%25AF%2581-vol2-plugins-for-Windows%2F" data-toggle="tooltip" data-placement="top"
+        <a href="https://www.facebook.com/sharer/sharer.php?title=%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81%20vol2-plugins-for-Window%20-%20may1as'%20blog&u=http%3A%2F%2Flocalhost%3A4000%2Fposts%2F%25E5%2586%2585%25E5%25AD%2598%25E5%258F%2596%25E8%25AF%2581-vol2-plugins-for-Windows%2F" data-toggle="tooltip" data-placement="top"
           title="Facebook" target="_blank" rel="noopener" aria-label="Facebook">
           <i class="fa-fw fab fa-facebook-square"></i>
         </a>
     
       
-        <a href="https://t.me/share/url?url=%2Fposts%2F%25E5%2586%2585%25E5%25AD%2598%25E5%258F%2596%25E8%25AF%2581-vol2-plugins-for-Windows%2F&text=%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81+vol2-plugins-for-Window+-+may1as%27+blog" data-toggle="tooltip" data-placement="top"
+        <a href="https://t.me/share/url?url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2F%25E5%2586%2585%25E5%25AD%2598%25E5%258F%2596%25E8%25AF%2581-vol2-plugins-for-Windows%2F&text=%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81%20vol2-plugins-for-Window%20-%20may1as'%20blog" data-toggle="tooltip" data-placement="top"
           title="Telegram" target="_blank" rel="noopener" aria-label="Telegram">
           <i class="fa-fw fab fa-telegram"></i>
         </a>
@@ -2223,13 +2278,13 @@ psscan 可以找到先前已终止（不活动）的进程以及被rootkit隐藏
 
 
 
-<!-- BS-toc.js will be loaded at medium priority -->
-<script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script>
+  <div id="toc-wrapper" class="pl-0 pr-4 mb-5">
+    <div class="panel-heading pl-3 pt-2 mb-2">Contents</div>
+    <nav id="toc"></nav>
+  </div>
 
-<div id="toc-wrapper" class="pl-0 pr-4 mb-5">
-  <div class="panel-heading pl-3 pt-2 mb-2">Contents</div>
-  <nav id="toc" data-toggle="toc"></nav>
-</div>
+  <!-- toc.js will be loaded at medium priority -->
+  <script src="https://cdn.jsdelivr.net/npm/tocbot@4.20.1/dist/tocbot.min.js"></script>
 
 
     
@@ -2915,17 +2970,7 @@ buckeyenotes/beginner
       </div>
 
       <div class="footer-right">
-        <p class="mb-0">
-
-          
-
-          
-
-          Powered by 
-          <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a>
-           with 
-          <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a>
-           theme.
+        <p class="mb-0">Using the <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> theme <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a>.
         </p>
       </div>
     </div>
@@ -2997,9 +3042,7 @@ SimpleJekyllSearch({
 </script>
 
 
-    <!--
-  JS selector for site.
--->
+    <!-- JS selector for site. -->
 
 <!-- layout specified -->
 
@@ -3047,9 +3090,7 @@ SimpleJekyllSearch({
 
 
 
-  <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script>
-
-
+  <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/lazysizes@5.3.2/lazysizes.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
 
 
 
@@ -3104,8 +3145,7 @@ SimpleJekyllSearch({
 
 
 
-  <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/en.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1.11.6/dayjs.min.js,npm/dayjs@1.11.6/locale/en.min.js,npm/dayjs@1.11.6/plugin/relativeTime.min.js,npm/dayjs@1.11.6/plugin/localizedFormat.min.js"></script>
 
 
 
@@ -3119,7 +3159,7 @@ SimpleJekyllSearch({
 
 <!-- commons -->
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 
 

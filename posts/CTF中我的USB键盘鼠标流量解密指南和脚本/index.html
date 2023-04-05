@@ -13,22 +13,23 @@
   
 >
 
-  
-<!--
-  The Head
--->
+  <!-- The Head -->
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="referrer" content="never">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta
+    name="viewport"
+    content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover"
+  >
 
   
-
     
 
     
-
   
 
   
@@ -37,14 +38,14 @@
 
   
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<meta name="generator" content="Jekyll v4.3.1" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="CTF中我的USB键盘鼠标流量解密指南和脚本" />
 <meta name="author" content="may1as" />
 <meta property="og:locale" content="en" />
-<meta name="description" content="文章首发于freebuf 文前漫谈 对ctf中的USB做一个了断吧，先摆上一些概念性的东西 USB是 UniversalSerial Bus（通用串行总线）的缩写，是一个外部总线标准，用于规范电脑与外部设备的连接和通讯，例如键盘、鼠标、打印机、磁盘或网络适配器等等。通过对该接口流量的监听，我们可以得到取键盘敲击键、鼠标移动与点击、存储设备的铭文传输通信、USB无线网卡网络传输内容等等。 USB的几种用途 现在USB协议版本有USB2.0, USB3.1,USB3.2, USB4等，目前USB2.0/3.0比较常用，你在淘宝上买U盘的时候可能看见过很多“USB 3.0”。 闲谈哈，你可能听过USB3.1的概念，是某苹果为了装逼提出来的，跟USB3.0差别不大，但是人家是老大哥啊，所有慢慢都向大哥看齐，都流行说USB3.1 USB UART 异步串行通信口(UART)就是我们在嵌入式中常说的串口，它还是一种通用的数据通信协议。这种方式下，设备只是简单的将 USB 用于接受和发射数据，除此之外就再没有其他通讯功能了。 USB HID（Human Interface Device） HID（Human Interface Device，人机接口设备）是USB设备中常用的设备类型，是直接与人交互的USB设备，例如键盘、鼠标与游戏杆等。在USB设备中，HID设备的成本较低。另外，HID设备并不一定要有人机交互功能，只要符合HID类别规范的设备都是HID设备。 USB Memory USB Memory是数据存储 每一个 USB 设备（尤其是 HID 或者 Memory ）都有一个供应商 ID（Vendor ID） 和产品识别码（Product Id） 。 Vendor ID 是用来标记哪个厂商生产了这个 USB 设备。 Product ID 则用来标记不同的产品。 lsusb命令 lsusb命令用于显示本机的USB设备列表，以及USB设备的详细信息。 Bus 002：指明设备连接到哪条总线 Device 002：表明这是连接到总线上的第二台设备 ID：设备的ID VMware, Inc. Virtual Mouse：生产商名字和设备名 Tshark常用参数 这里就放几个处理流量包时常用的 1 2 3 4 -r:设置tshark分析的输入文件 -T:设置解码结果输出的格式，包括fileds,text,ps,psml和pdml，默认为text -e:导出协议字段 -Y:对应过滤器的过滤条件 键盘流量 以往接触到的，USB协议数据部分在Leftover Capture Data域中，数据长度为8个字节。 击键信息集中在第3个字节，每次击键都会产生一个数据包。所以如果看到给出的数据包中的信息都是 8 个字节，并且只有第 3 个字节不为 0000，那么几乎可以肯定是一个键盘流量了。 现在在比赛中常见的（2021国赛初赛有个例题），是这种，Leftover Capture Data——&gt;HID Data 这个改变需要注意什么呢，需要注意tshark导出数据时的过滤器字段，看这个对应的过滤器字段，去wireshark的英文文档里找。 1 2 3 4 5 6 tshark -r 数据包文件 -T fields -e 过滤器字段 tshark -r demo.pcap -T fields -e usb.capdata 这个usb.capdata就是Leftover Capture Data的field name（字段名） tshark -r demo.pcap -T fields -e usbhid.data 同样的，这个usbhid.data就是HID data的field name 导出数据之后，就用python对应字典的数据写脚本解密就行，映射表是类似下面。 数据部分详解： 字节下标（我还没发现这个在哪儿） 0 : 修改键(组合键) 1 : OEM 保留 2~7 : 按键码 BYTE1 bit0: Left Control 是否按下，按下为 1 bit1: Left Shift 是否按下，按下为 1 bit2: Left Alt 是否按下，按下为 1 bit3: Left WIN/GUI 是否按下，按下为 1 bit4: Right Control 是否按下，按下为 1 bit5: Right Shift 是否按下，按下为 1 bit6: Right Alt 是否按下，按下为 1 bit7: Right WIN/GUI 是否按下，按下为 1 BYTE2 - 暂不清楚，有的地方说是保留位 BYTE3-BYTE8 - 这六个为普通按键 0b10（0x02） 和 0b100000（0x20）都是按下了shift键 例如： 键盘发送 02 00 0e 00 00 00 00 00，表示同时按下了 Left Shift + ‘k’，即大写 K。 具体键位对应 Universal Serial Bus HID Usage Tables - USB-IF 53页~59页 我的键盘流量解密脚本 https://github.com/may1as/UsbKeyboardDataexp 根据wangyihang大佬的脚本改的，主要增加了个协议字段的选项 放在GitHub上了，用2021国赛初赛的举个例子吧 1 python .\UsbKeyboardDataexp.py -f .\example\ez_usb.pcapng -e usbhid.data -Y &quot;usb.src==2.8.1&quot; 鼠标流量 鼠标流量同样，Leftover Capture Data——&gt;HID Data可能是不同版本协议导致的（我还没去考证哈，别全信） 数据部分详解： 与键盘击键的离散性不一样，鼠标移动时表现为连续性，不过实际上鼠标动作所产生的数据包也是离散的 鼠标数据包的数据长度为4个字节。 第一个字节代表按键，当取 0x00 时，代表没有按键、为 0x01 时，代表按左键，为 0x02 时，代表当前按键为右键。 第二个字节可以看成是一个 signed byte 类型，其最高位为符号位，当这个值为正（小于127）时，代表鼠标水平右移多少像素，为负（补码负数，大于127小于255）时，代表水平左移多少像素。 第三个字节与第二字节类似，代表垂直上下移动的偏移。 第四个是扩展字节，关于滚轮的操作记录 0 - 没有滚轮运动 1 - 垂直向上滚动一下 0xFF - 垂直向下滚动一下 2 - 水平滚动右键一下 0xFE - 水平滚动左键单击一下 例如： 鼠标发送 00 01 fc 00，表示鼠标右移 01 像素，垂直向下移动 124 像素。 就这么多知识，剩下的就是写脚本了 我的鼠标流量解密脚本 https://github.com/may1as/UsbMiceDataexp 很多朋友使用wangyihang大佬的鼠标流量解密脚本，出现无法成功显示图片的问题。原因是tshark早前的版本导出数据带冒号，形如这样：00:00:04:00:00:00:00:00，而现在是00000000ffff0000，并不带冒号，导致处理数据时出现问题。 这里就处理了一下导出数据格式，增加了命令行里协议字段的选项 1 python .\UsbMiceDataExp.py -f .\example\usb.capdata.pcapng -e usb.capdata -a LEFT 参考文章# https://www.usb.org/document-library/device-class-definition-hid-111" />
-<meta property="og:description" content="文章首发于freebuf 文前漫谈 对ctf中的USB做一个了断吧，先摆上一些概念性的东西 USB是 UniversalSerial Bus（通用串行总线）的缩写，是一个外部总线标准，用于规范电脑与外部设备的连接和通讯，例如键盘、鼠标、打印机、磁盘或网络适配器等等。通过对该接口流量的监听，我们可以得到取键盘敲击键、鼠标移动与点击、存储设备的铭文传输通信、USB无线网卡网络传输内容等等。 USB的几种用途 现在USB协议版本有USB2.0, USB3.1,USB3.2, USB4等，目前USB2.0/3.0比较常用，你在淘宝上买U盘的时候可能看见过很多“USB 3.0”。 闲谈哈，你可能听过USB3.1的概念，是某苹果为了装逼提出来的，跟USB3.0差别不大，但是人家是老大哥啊，所有慢慢都向大哥看齐，都流行说USB3.1 USB UART 异步串行通信口(UART)就是我们在嵌入式中常说的串口，它还是一种通用的数据通信协议。这种方式下，设备只是简单的将 USB 用于接受和发射数据，除此之外就再没有其他通讯功能了。 USB HID（Human Interface Device） HID（Human Interface Device，人机接口设备）是USB设备中常用的设备类型，是直接与人交互的USB设备，例如键盘、鼠标与游戏杆等。在USB设备中，HID设备的成本较低。另外，HID设备并不一定要有人机交互功能，只要符合HID类别规范的设备都是HID设备。 USB Memory USB Memory是数据存储 每一个 USB 设备（尤其是 HID 或者 Memory ）都有一个供应商 ID（Vendor ID） 和产品识别码（Product Id） 。 Vendor ID 是用来标记哪个厂商生产了这个 USB 设备。 Product ID 则用来标记不同的产品。 lsusb命令 lsusb命令用于显示本机的USB设备列表，以及USB设备的详细信息。 Bus 002：指明设备连接到哪条总线 Device 002：表明这是连接到总线上的第二台设备 ID：设备的ID VMware, Inc. Virtual Mouse：生产商名字和设备名 Tshark常用参数 这里就放几个处理流量包时常用的 1 2 3 4 -r:设置tshark分析的输入文件 -T:设置解码结果输出的格式，包括fileds,text,ps,psml和pdml，默认为text -e:导出协议字段 -Y:对应过滤器的过滤条件 键盘流量 以往接触到的，USB协议数据部分在Leftover Capture Data域中，数据长度为8个字节。 击键信息集中在第3个字节，每次击键都会产生一个数据包。所以如果看到给出的数据包中的信息都是 8 个字节，并且只有第 3 个字节不为 0000，那么几乎可以肯定是一个键盘流量了。 现在在比赛中常见的（2021国赛初赛有个例题），是这种，Leftover Capture Data——&gt;HID Data 这个改变需要注意什么呢，需要注意tshark导出数据时的过滤器字段，看这个对应的过滤器字段，去wireshark的英文文档里找。 1 2 3 4 5 6 tshark -r 数据包文件 -T fields -e 过滤器字段 tshark -r demo.pcap -T fields -e usb.capdata 这个usb.capdata就是Leftover Capture Data的field name（字段名） tshark -r demo.pcap -T fields -e usbhid.data 同样的，这个usbhid.data就是HID data的field name 导出数据之后，就用python对应字典的数据写脚本解密就行，映射表是类似下面。 数据部分详解： 字节下标（我还没发现这个在哪儿） 0 : 修改键(组合键) 1 : OEM 保留 2~7 : 按键码 BYTE1 bit0: Left Control 是否按下，按下为 1 bit1: Left Shift 是否按下，按下为 1 bit2: Left Alt 是否按下，按下为 1 bit3: Left WIN/GUI 是否按下，按下为 1 bit4: Right Control 是否按下，按下为 1 bit5: Right Shift 是否按下，按下为 1 bit6: Right Alt 是否按下，按下为 1 bit7: Right WIN/GUI 是否按下，按下为 1 BYTE2 - 暂不清楚，有的地方说是保留位 BYTE3-BYTE8 - 这六个为普通按键 0b10（0x02） 和 0b100000（0x20）都是按下了shift键 例如： 键盘发送 02 00 0e 00 00 00 00 00，表示同时按下了 Left Shift + ‘k’，即大写 K。 具体键位对应 Universal Serial Bus HID Usage Tables - USB-IF 53页~59页 我的键盘流量解密脚本 https://github.com/may1as/UsbKeyboardDataexp 根据wangyihang大佬的脚本改的，主要增加了个协议字段的选项 放在GitHub上了，用2021国赛初赛的举个例子吧 1 python .\UsbKeyboardDataexp.py -f .\example\ez_usb.pcapng -e usbhid.data -Y &quot;usb.src==2.8.1&quot; 鼠标流量 鼠标流量同样，Leftover Capture Data——&gt;HID Data可能是不同版本协议导致的（我还没去考证哈，别全信） 数据部分详解： 与键盘击键的离散性不一样，鼠标移动时表现为连续性，不过实际上鼠标动作所产生的数据包也是离散的 鼠标数据包的数据长度为4个字节。 第一个字节代表按键，当取 0x00 时，代表没有按键、为 0x01 时，代表按左键，为 0x02 时，代表当前按键为右键。 第二个字节可以看成是一个 signed byte 类型，其最高位为符号位，当这个值为正（小于127）时，代表鼠标水平右移多少像素，为负（补码负数，大于127小于255）时，代表水平左移多少像素。 第三个字节与第二字节类似，代表垂直上下移动的偏移。 第四个是扩展字节，关于滚轮的操作记录 0 - 没有滚轮运动 1 - 垂直向上滚动一下 0xFF - 垂直向下滚动一下 2 - 水平滚动右键一下 0xFE - 水平滚动左键单击一下 例如： 鼠标发送 00 01 fc 00，表示鼠标右移 01 像素，垂直向下移动 124 像素。 就这么多知识，剩下的就是写脚本了 我的鼠标流量解密脚本 https://github.com/may1as/UsbMiceDataexp 很多朋友使用wangyihang大佬的鼠标流量解密脚本，出现无法成功显示图片的问题。原因是tshark早前的版本导出数据带冒号，形如这样：00:00:04:00:00:00:00:00，而现在是00000000ffff0000，并不带冒号，导致处理数据时出现问题。 这里就处理了一下导出数据格式，增加了命令行里协议字段的选项 1 python .\UsbMiceDataExp.py -f .\example\usb.capdata.pcapng -e usb.capdata -a LEFT 参考文章# https://www.usb.org/document-library/device-class-definition-hid-111" />
-<link rel="canonical" href="/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/" />
-<meta property="og:url" content="/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/" />
+<meta name="description" content="文章首发于freebuf" />
+<meta property="og:description" content="文章首发于freebuf" />
+<link rel="canonical" href="http://localhost:4000/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/" />
+<meta property="og:url" content="http://localhost:4000/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/" />
 <meta property="og:site_name" content="may1as’ blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-10-12T00:00:00+08:00" />
@@ -53,7 +54,7 @@
 <meta name="twitter:site" content="@\#" />
 <meta name="twitter:creator" content="@may1as" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-10-12T00:00:00+08:00","datePublished":"2022-10-12T00:00:00+08:00","description":"文章首发于freebuf 文前漫谈 对ctf中的USB做一个了断吧，先摆上一些概念性的东西 USB是 UniversalSerial Bus（通用串行总线）的缩写，是一个外部总线标准，用于规范电脑与外部设备的连接和通讯，例如键盘、鼠标、打印机、磁盘或网络适配器等等。通过对该接口流量的监听，我们可以得到取键盘敲击键、鼠标移动与点击、存储设备的铭文传输通信、USB无线网卡网络传输内容等等。 USB的几种用途 现在USB协议版本有USB2.0, USB3.1,USB3.2, USB4等，目前USB2.0/3.0比较常用，你在淘宝上买U盘的时候可能看见过很多“USB 3.0”。 闲谈哈，你可能听过USB3.1的概念，是某苹果为了装逼提出来的，跟USB3.0差别不大，但是人家是老大哥啊，所有慢慢都向大哥看齐，都流行说USB3.1 USB UART 异步串行通信口(UART)就是我们在嵌入式中常说的串口，它还是一种通用的数据通信协议。这种方式下，设备只是简单的将 USB 用于接受和发射数据，除此之外就再没有其他通讯功能了。 USB HID（Human Interface Device） HID（Human Interface Device，人机接口设备）是USB设备中常用的设备类型，是直接与人交互的USB设备，例如键盘、鼠标与游戏杆等。在USB设备中，HID设备的成本较低。另外，HID设备并不一定要有人机交互功能，只要符合HID类别规范的设备都是HID设备。 USB Memory USB Memory是数据存储 每一个 USB 设备（尤其是 HID 或者 Memory ）都有一个供应商 ID（Vendor ID） 和产品识别码（Product Id） 。 Vendor ID 是用来标记哪个厂商生产了这个 USB 设备。 Product ID 则用来标记不同的产品。 lsusb命令 lsusb命令用于显示本机的USB设备列表，以及USB设备的详细信息。 Bus 002：指明设备连接到哪条总线 Device 002：表明这是连接到总线上的第二台设备 ID：设备的ID VMware, Inc. Virtual Mouse：生产商名字和设备名 Tshark常用参数 这里就放几个处理流量包时常用的 1 2 3 4 -r:设置tshark分析的输入文件 -T:设置解码结果输出的格式，包括fileds,text,ps,psml和pdml，默认为text -e:导出协议字段 -Y:对应过滤器的过滤条件 键盘流量 以往接触到的，USB协议数据部分在Leftover Capture Data域中，数据长度为8个字节。 击键信息集中在第3个字节，每次击键都会产生一个数据包。所以如果看到给出的数据包中的信息都是 8 个字节，并且只有第 3 个字节不为 0000，那么几乎可以肯定是一个键盘流量了。 现在在比赛中常见的（2021国赛初赛有个例题），是这种，Leftover Capture Data——&gt;HID Data 这个改变需要注意什么呢，需要注意tshark导出数据时的过滤器字段，看这个对应的过滤器字段，去wireshark的英文文档里找。 1 2 3 4 5 6 tshark -r 数据包文件 -T fields -e 过滤器字段 tshark -r demo.pcap -T fields -e usb.capdata 这个usb.capdata就是Leftover Capture Data的field name（字段名） tshark -r demo.pcap -T fields -e usbhid.data 同样的，这个usbhid.data就是HID data的field name 导出数据之后，就用python对应字典的数据写脚本解密就行，映射表是类似下面。 数据部分详解： 字节下标（我还没发现这个在哪儿） 0 : 修改键(组合键) 1 : OEM 保留 2~7 : 按键码 BYTE1 bit0: Left Control 是否按下，按下为 1 bit1: Left Shift 是否按下，按下为 1 bit2: Left Alt 是否按下，按下为 1 bit3: Left WIN/GUI 是否按下，按下为 1 bit4: Right Control 是否按下，按下为 1 bit5: Right Shift 是否按下，按下为 1 bit6: Right Alt 是否按下，按下为 1 bit7: Right WIN/GUI 是否按下，按下为 1 BYTE2 - 暂不清楚，有的地方说是保留位 BYTE3-BYTE8 - 这六个为普通按键 0b10（0x02） 和 0b100000（0x20）都是按下了shift键 例如： 键盘发送 02 00 0e 00 00 00 00 00，表示同时按下了 Left Shift + ‘k’，即大写 K。 具体键位对应 Universal Serial Bus HID Usage Tables - USB-IF 53页~59页 我的键盘流量解密脚本 https://github.com/may1as/UsbKeyboardDataexp 根据wangyihang大佬的脚本改的，主要增加了个协议字段的选项 放在GitHub上了，用2021国赛初赛的举个例子吧 1 python .\\UsbKeyboardDataexp.py -f .\\example\\ez_usb.pcapng -e usbhid.data -Y &quot;usb.src==2.8.1&quot; 鼠标流量 鼠标流量同样，Leftover Capture Data——&gt;HID Data可能是不同版本协议导致的（我还没去考证哈，别全信） 数据部分详解： 与键盘击键的离散性不一样，鼠标移动时表现为连续性，不过实际上鼠标动作所产生的数据包也是离散的 鼠标数据包的数据长度为4个字节。 第一个字节代表按键，当取 0x00 时，代表没有按键、为 0x01 时，代表按左键，为 0x02 时，代表当前按键为右键。 第二个字节可以看成是一个 signed byte 类型，其最高位为符号位，当这个值为正（小于127）时，代表鼠标水平右移多少像素，为负（补码负数，大于127小于255）时，代表水平左移多少像素。 第三个字节与第二字节类似，代表垂直上下移动的偏移。 第四个是扩展字节，关于滚轮的操作记录 0 - 没有滚轮运动 1 - 垂直向上滚动一下 0xFF - 垂直向下滚动一下 2 - 水平滚动右键一下 0xFE - 水平滚动左键单击一下 例如： 鼠标发送 00 01 fc 00，表示鼠标右移 01 像素，垂直向下移动 124 像素。 就这么多知识，剩下的就是写脚本了 我的鼠标流量解密脚本 https://github.com/may1as/UsbMiceDataexp 很多朋友使用wangyihang大佬的鼠标流量解密脚本，出现无法成功显示图片的问题。原因是tshark早前的版本导出数据带冒号，形如这样：00:00:04:00:00:00:00:00，而现在是00000000ffff0000，并不带冒号，导致处理数据时出现问题。 这里就处理了一下导出数据格式，增加了命令行里协议字段的选项 1 python .\\UsbMiceDataExp.py -f .\\example\\usb.capdata.pcapng -e usb.capdata -a LEFT 参考文章# https://www.usb.org/document-library/device-class-definition-hid-111","headline":"CTF中我的USB键盘鼠标流量解密指南和脚本","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/"},"url":"/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-10-12T00:00:00+08:00","datePublished":"2022-10-12T00:00:00+08:00","description":"文章首发于freebuf","headline":"CTF中我的USB键盘鼠标流量解密指南和脚本","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/"},"url":"http://localhost:4000/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/"}</script>
 <!-- End Jekyll SEO tag -->
 
   
@@ -81,7 +82,6 @@
 
 
   
-
     
       <link rel="preconnect" href="https://fonts.googleapis.com" >
       <link rel="dns-prefetch" href="https://fonts.googleapis.com" >
@@ -97,32 +97,31 @@
     
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap">
-
   
 
   <!-- GA -->
   
 
   <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css">
 
   <link rel="stylesheet" href="/assets/css/style.css">
 
   
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.20.1/dist/tocbot.min.css">
   
 
   
     <!-- Manific Popup -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/magnific-popup.min.css">
   
 
   <!-- JavaScript -->
 
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
 
   
     <!--
@@ -153,13 +152,12 @@
       let self = this;
 
       /* always follow the system prefers */
-      this.sysDarkPrefers.addEventListener("change", () => {
+      this.sysDarkPrefers.addEventListener('change', () => {
         if (self.hasMode) {
           if (self.isDarkMode) {
             if (!self.isSysDarkPrefer) {
               self.setDark();
             }
-
           } else {
             if (self.isSysDarkPrefer) {
               self.setLight();
@@ -170,9 +168,7 @@
         }
 
         self.notify();
-
       });
-
     } /* constructor() */
 
     get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); }
@@ -189,8 +185,7 @@
 
     /* get the current mode on screen */
     get modeStatus() {
-      if (this.isDarkMode
-        || (!this.hasMode && this.isSysDarkPrefer)) {
+      if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) {
         return ModeToggle.DARK_MODE;
       } else {
         return ModeToggle.LIGHT_MODE;
@@ -220,45 +215,41 @@
       }, "*");
     }
 
+    flipMode() {
+      if (this.hasMode) {
+        if (this.isSysDarkPrefer) {
+          if (this.isLightMode) {
+            this.clearMode();
+          } else {
+            this.setLight();
+          }
+        } else {
+          if (this.isDarkMode) {
+            this.clearMode();
+          } else {
+            this.setDark();
+          }
+        }
+      } else {
+        if (this.isSysDarkPrefer) {
+          this.setLight();
+        } else {
+          this.setDark();
+        }
+      }
+
+      this.notify();
+    } /* flipMode() */
   } /* ModeToggle */
 
-  const toggle = new ModeToggle();
-
-  function flipMode() {
-    if (toggle.hasMode) {
-      if (toggle.isSysDarkPrefer) {
-        if (toggle.isLightMode) {
-          toggle.clearMode();
-        } else {
-          toggle.setLight();
-        }
-
-      } else {
-        if (toggle.isDarkMode) {
-          toggle.clearMode();
-        } else {
-          toggle.setDark();
-        }
-      }
-
-    } else {
-      if (toggle.isSysDarkPrefer) {
-        toggle.setLight();
-      } else {
-        toggle.setDark();
-      }
-    }
-
-    toggle.notify();
-
-  } /* flipMode() */
-
+  const modeToggle = new ModeToggle();
 </script>
 
   
 </head>
 
-  <body data-spy="scroll" data-target="#toc" data-topbar-visible="true">
+
+  <body data-topbar-visible="true">
 
     <!--
   The Side Bar
@@ -349,7 +340,17 @@
 
       
       <a href="https://github.com/may1as" aria-label="github"
-        target="_blank" rel="noopener">
+        
+
+        
+          target="_blank"
+          
+        
+
+        
+
+        rel="noopener noreferrer">
+
         <i class="fab fa-github"></i>
       </a>
       
@@ -359,7 +360,17 @@
 
       
       <a href="https://twitter.com/\#" aria-label="twitter"
-        target="_blank" rel="noopener">
+        
+
+        
+          target="_blank"
+          
+        
+
+        
+
+        rel="noopener noreferrer">
+
         <i class="fab fa-twitter"></i>
       </a>
       
@@ -368,9 +379,15 @@
       
 
       
-      <a href="
-          javascript:location.href = 'mailto:' + ['may1asu','foxmail.com'].join('@')" aria-label="email"
+      <a href="javascript:location.href = 'mailto:' + ['may1asu','foxmail.com'].join('@')" aria-label="email"
+        
+
+        
+
+        
+
         >
+
         <i class="fas fa-envelope"></i>
       </a>
       
@@ -380,7 +397,14 @@
 
       
       <a href="/feed.xml" aria-label="rss"
+        
+
+        
+
+        
+
         >
+
         <i class="fas fa-rss"></i>
       </a>
       
@@ -504,6 +528,12 @@
   
   
 
+  <!-- CDN URL -->
+  
+
+  <!-- Add image path -->
+  
+
   
     
       
@@ -512,64 +542,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -577,64 +610,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -642,64 +678,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -707,64 +746,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -772,64 +814,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -837,64 +882,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -902,64 +950,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -967,64 +1018,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1133,14 +1187,6 @@
   
 
   
-
-
-
-
-<!-- Wrap prompt element of blockquote with the <div> tag -->
-
-
-
 
 
 
@@ -1261,7 +1307,7 @@
 
 <h2 id="lsusb命令"><span class="mr-2">lsusb命令</span><a href="#lsusb命令" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 <p>lsusb命令用于显示本机的USB设备列表，以及USB设备的详细信息。
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1665025904282-e20efb08-50d0-4f7d-97a9-54d63fe47ae3.png#averageHue=%23282d39&amp;clientId=ub4d9316d-a99a-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=265&amp;id=uc2f4d387&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=397&amp;originWidth=1229&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=178006&amp;status=error&amp;style=none&amp;taskId=u8e032a4d-1114-4a25-b14c-99c23786526&amp;title=&amp;width=819.3333333333334" alt="image.png" data-proofer-ignore></p>
+<a href="819.3333333333334" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1665025904282-e20efb08-50d0-4f7d-97a9-54d63fe47ae3.png#averageHue=%23282d39&amp;clientId=ub4d9316d-a99a-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=265&amp;id=uc2f4d387&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=397&amp;originWidth=1229&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=178006&amp;status=error&amp;style=none&amp;taskId=u8e032a4d-1114-4a25-b14c-99c23786526&amp;title=&amp;width=819.3333333333334" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 <blockquote>
   <p>Bus 002：指明设备连接到哪条总线
 Device 002：表明这是连接到总线上的第二台设备
@@ -1286,7 +1332,7 @@ VMware, Inc. Virtual Mouse：生产商名字和设备名</p>
 <h1 id="键盘流量">键盘流量</h1>
 <p>以往接触到的，USB协议数据部分在<code class="language-plaintext highlighter-rouge">Leftover Capture Data</code>域中，数据长度为<code class="language-plaintext highlighter-rouge">8</code>个字节。
 击键信息集中在第<code class="language-plaintext highlighter-rouge">3</code>个字节，每次击键都会产生一个数据包。所以如果看到给出的数据包中的信息都是<code class="language-plaintext highlighter-rouge"> 8 </code>个字节，并且只有第 3 个字节不为 <code class="language-plaintext highlighter-rouge">0000</code>，那么几乎可以肯定是一个键盘流量了。
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1665470926400-a36e5c48-2c14-4e4c-bbdc-b24221dba0d2.png#averageHue=%23f5f2f1&amp;clientId=u2aee5c05-52f0-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=442&amp;id=u1671f706&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=663&amp;originWidth=2543&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=262481&amp;status=error&amp;style=none&amp;taskId=uf4ff94c6-836c-4639-b440-89ab9fa14b0&amp;title=&amp;width=1695.3333333333333" alt="image.png" data-proofer-ignore>
+<a href="1695.3333333333333" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1665470926400-a36e5c48-2c14-4e4c-bbdc-b24221dba0d2.png#averageHue=%23f5f2f1&amp;clientId=u2aee5c05-52f0-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=442&amp;id=u1671f706&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=663&amp;originWidth=2543&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=262481&amp;status=error&amp;style=none&amp;taskId=uf4ff94c6-836c-4639-b440-89ab9fa14b0&amp;title=&amp;width=1695.3333333333333" alt="image.png" class="lazyload" data-proofer-ignore></a>
 现在在比赛中常见的（2021国赛初赛有个例题），是这种，<code class="language-plaintext highlighter-rouge">Leftover Capture Data</code>——&gt;<code class="language-plaintext highlighter-rouge">HID Data</code>
 这个改变需要注意什么呢，需要注意<strong>tshark</strong>导出数据时的过滤器字段，看这个对应的过滤器字段，去wireshark的英文文档里找。</p>
 <div class="language-powershell highlighter-rouge"><div class="code-header">
@@ -1304,9 +1350,9 @@ VMware, Inc. Virtual Mouse：生产商名字和设备名</p>
 </span><span class="n">tshark</span><span class="w"> </span><span class="nt">-r</span><span class="w"> </span><span class="nx">demo.pcap</span><span class="w"> </span><span class="nt">-T</span><span class="w"> </span><span class="nx">fields</span><span class="w"> </span><span class="nt">-e</span><span class="w"> </span><span class="nx">usbhid.data</span><span class="w">
 </span><span class="err">同样的，这个</span><span class="n">usbhid.data</span><span class="err">就是</span><span class="nx">HID</span><span class="w"> </span><span class="nx">data</span><span class="err">的</span><span class="nx">field</span><span class="w"> </span><span class="nx">name</span><span class="w"> 
 </span></pre></td></tr></tbody></table></code></div></div>
-<p><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1665471086209-8db3074f-d4db-448c-8ce9-1cc6428990f3.png#averageHue=%23f4f3f2&amp;clientId=u2aee5c05-52f0-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=391&amp;id=uf529833e&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=586&amp;originWidth=2539&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=76648&amp;status=error&amp;style=none&amp;taskId=u5200201c-d9a2-4636-b2a9-232c80ae3b2&amp;title=&amp;width=1692.6666666666667" alt="image.png" data-proofer-ignore>
+<p><a href="1692.6666666666667" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1665471086209-8db3074f-d4db-448c-8ce9-1cc6428990f3.png#averageHue=%23f4f3f2&amp;clientId=u2aee5c05-52f0-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=391&amp;id=uf529833e&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=586&amp;originWidth=2539&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=76648&amp;status=error&amp;style=none&amp;taskId=u5200201c-d9a2-4636-b2a9-232c80ae3b2&amp;title=&amp;width=1692.6666666666667" alt="image.png" class="lazyload" data-proofer-ignore></a>
 导出数据之后，就用python对应字典的数据写脚本解密就行，映射表是类似下面。
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1665474843724-8aa72b85-1c14-4cbe-8661-d1ecbd507bec.png#averageHue=%23f6f5f4&amp;clientId=u6e9cad9c-8054-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;id=u4f27d2ff&amp;margin=%5Bobject%20Object%5D&amp;originHeight=805&amp;originWidth=1183&amp;originalType=url&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=error&amp;style=none&amp;taskId=u6ef013b7-4a52-41d4-835d-8d70227bc06&amp;title=" alt="" data-proofer-ignore></p>
+<a href="u6ef013b7-4a52-41d4-835d-8d70227bc06&amp;title" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1665474843724-8aa72b85-1c14-4cbe-8661-d1ecbd507bec.png#averageHue=%23f6f5f4&amp;clientId=u6e9cad9c-8054-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;id=u4f27d2ff&amp;margin=%5Bobject%20Object%5D&amp;originHeight=805&amp;originWidth=1183&amp;originalType=url&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=error&amp;style=none&amp;taskId=u6ef013b7-4a52-41d4-835d-8d70227bc06&amp;title=" alt="" class="lazyload" data-proofer-ignore></a></p>
 
 <h2 id="数据部分详解"><span class="mr-2">数据部分详解：</span><a href="#数据部分详解" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 <blockquote>
@@ -1349,11 +1395,11 @@ VMware, Inc. Virtual Mouse：生产商名字和设备名</p>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre><span class="n">python</span> <span class="p">.</span>\<span class="n">UsbKeyboardDataexp</span><span class="p">.</span><span class="n">py</span> <span class="o">-</span><span class="n">f</span> <span class="p">.</span>\<span class="n">example</span>\<span class="n">ez_usb</span><span class="p">.</span><span class="n">pcapng</span> <span class="o">-</span><span class="n">e</span> <span class="n">usbhid</span><span class="p">.</span><span class="n">data</span> <span class="o">-</span><span class="n">Y</span> <span class="s">"usb.src==2.8.1"</span>
 </pre></td></tr></tbody></table></code></div></div>
-<p><img data-src="https://cdn.nlark.com/yuque/0/2022/jpeg/22999319/1667723923061-c079798e-57bc-4d06-a9d1-8be18d73e4a4.jpeg#averageHue=%23302d29&amp;clientId=ud764483f-221b-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;id=uf54f3a22&amp;margin=%5Bobject%20Object%5D&amp;originHeight=420&amp;originWidth=690&amp;originalType=url&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;taskId=u0d8ea361-5c0c-47a9-9ada-8c37623f224&amp;title=" alt="" data-proofer-ignore></p>
+<p><a href="u0d8ea361-5c0c-47a9-9ada-8c37623f224&amp;title" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/jpeg/22999319/1667723923061-c079798e-57bc-4d06-a9d1-8be18d73e4a4.jpeg#averageHue=%23302d29&amp;clientId=ud764483f-221b-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;id=uf54f3a22&amp;margin=%5Bobject%20Object%5D&amp;originHeight=420&amp;originWidth=690&amp;originalType=url&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;taskId=u0d8ea361-5c0c-47a9-9ada-8c37623f224&amp;title=" alt="" class="lazyload" data-proofer-ignore></a></p>
 <h1 id="鼠标流量">鼠标流量</h1>
 <p>鼠标流量同样，<code class="language-plaintext highlighter-rouge">Leftover Capture Data</code>——&gt;<code class="language-plaintext highlighter-rouge">HID Data</code>可能是不同版本协议导致的（我还没去考证哈，别全信）
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1665482043970-71d9aa09-d5ca-4d29-9474-3b9075541633.png#averageHue=%23f5f3f2&amp;clientId=u0b35c892-43d9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=433&amp;id=u3505ed08&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=649&amp;originWidth=2543&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=238977&amp;status=error&amp;style=none&amp;taskId=u15510f5d-6831-454e-a3a1-fbcc7079d34&amp;title=&amp;width=1695.3333333333333" alt="image.png" data-proofer-ignore>
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1665482011828-2d4e37e6-18e4-4683-b833-4d2c241273b3.png#averageHue=%23f4f2f1&amp;clientId=u0b35c892-43d9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=360&amp;id=uc4180133&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=540&amp;originWidth=2541&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=69620&amp;status=error&amp;style=none&amp;taskId=u801f7d6c-2831-45a1-abc7-1587ed7d368&amp;title=&amp;width=1694" alt="image.png" data-proofer-ignore></p>
+<a href="1695.3333333333333" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1665482043970-71d9aa09-d5ca-4d29-9474-3b9075541633.png#averageHue=%23f5f3f2&amp;clientId=u0b35c892-43d9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=433&amp;id=u3505ed08&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=649&amp;originWidth=2543&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=238977&amp;status=error&amp;style=none&amp;taskId=u15510f5d-6831-454e-a3a1-fbcc7079d34&amp;title=&amp;width=1695.3333333333333" alt="image.png" class="lazyload" data-proofer-ignore></a>
+<a href="1694" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1665482011828-2d4e37e6-18e4-4683-b833-4d2c241273b3.png#averageHue=%23f4f2f1&amp;clientId=u0b35c892-43d9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=360&amp;id=uc4180133&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=540&amp;originWidth=2541&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=69620&amp;status=error&amp;style=none&amp;taskId=u801f7d6c-2831-45a1-abc7-1587ed7d368&amp;title=&amp;width=1694" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <h2 id="数据部分详解-1"><span class="mr-2">数据部分详解：</span><a href="#数据部分详解-1" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 <p>与键盘击键的离散性不一样，鼠标移动时表现为连续性，不过实际上鼠标动作所产生的数据包也是离散的
@@ -1386,7 +1432,7 @@ VMware, Inc. Virtual Mouse：生产商名字和设备名</p>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre> <span class="n">python</span> <span class="p">.</span>\<span class="n">UsbMiceDataExp</span><span class="p">.</span><span class="n">py</span> <span class="o">-</span><span class="n">f</span> <span class="p">.</span>\<span class="n">example</span>\<span class="n">usb</span><span class="p">.</span><span class="n">capdata</span><span class="p">.</span><span class="n">pcapng</span> <span class="o">-</span><span class="n">e</span> <span class="n">usb</span><span class="p">.</span><span class="n">capdata</span> <span class="o">-</span><span class="n">a</span> <span class="n">LEFT</span>
 </pre></td></tr></tbody></table></code></div></div>
-<p><img data-src="https://cdn.nlark.com/yuque/0/2022/jpeg/22999319/1667723998234-40e1cec4-2a97-4239-b293-792752d5aa3d.jpeg#averageHue=%23c0bdbc&amp;clientId=ud764483f-221b-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=355&amp;id=u219efff4&amp;margin=%5Bobject%20Object%5D&amp;originHeight=500&amp;originWidth=690&amp;originalType=url&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;taskId=u4c925ca9-c2d0-4fea-a576-1bf6eafe8cf&amp;title=&amp;width=490" alt="" data-proofer-ignore></p>
+<p><a href="490" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/jpeg/22999319/1667723998234-40e1cec4-2a97-4239-b293-792752d5aa3d.jpeg#averageHue=%23c0bdbc&amp;clientId=ud764483f-221b-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=355&amp;id=u219efff4&amp;margin=%5Bobject%20Object%5D&amp;originHeight=500&amp;originWidth=690&amp;originalType=url&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;taskId=u4c925ca9-c2d0-4fea-a576-1bf6eafe8cf&amp;title=&amp;width=490" alt="" class="lazyload" data-proofer-ignore></a></p>
 
 <h1 id="参考文章">参考文章#</h1>
 <p><a href="https://www.usb.org/document-library/device-class-definition-hid-111">https://www.usb.org/document-library/device-class-definition-hid-111</a></p>
@@ -1447,19 +1493,19 @@ VMware, Inc. Virtual Mouse：生产商名字和设备名</p>
 
     
       
-        <a href="https://twitter.com/intent/tweet?text=CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC+-+may1as%27+blog&url=%2Fposts%2FCTF%25E4%25B8%25AD%25E6%2588%2591%25E7%259A%2584USB%25E9%2594%25AE%25E7%259B%2598%25E9%25BC%25A0%25E6%25A0%2587%25E6%25B5%2581%25E9%2587%258F%25E8%25A7%25A3%25E5%25AF%2586%25E6%258C%2587%25E5%258D%2597%25E5%2592%258C%25E8%2584%259A%25E6%259C%25AC%2F" data-toggle="tooltip" data-placement="top"
+        <a href="https://twitter.com/intent/tweet?text=CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC%20-%20may1as'%20blog&url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2FCTF%25E4%25B8%25AD%25E6%2588%2591%25E7%259A%2584USB%25E9%2594%25AE%25E7%259B%2598%25E9%25BC%25A0%25E6%25A0%2587%25E6%25B5%2581%25E9%2587%258F%25E8%25A7%25A3%25E5%25AF%2586%25E6%258C%2587%25E5%258D%2597%25E5%2592%258C%25E8%2584%259A%25E6%259C%25AC%2F" data-toggle="tooltip" data-placement="top"
           title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
           <i class="fa-fw fab fa-twitter"></i>
         </a>
     
       
-        <a href="https://www.facebook.com/sharer/sharer.php?title=CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC+-+may1as%27+blog&u=%2Fposts%2FCTF%25E4%25B8%25AD%25E6%2588%2591%25E7%259A%2584USB%25E9%2594%25AE%25E7%259B%2598%25E9%25BC%25A0%25E6%25A0%2587%25E6%25B5%2581%25E9%2587%258F%25E8%25A7%25A3%25E5%25AF%2586%25E6%258C%2587%25E5%258D%2597%25E5%2592%258C%25E8%2584%259A%25E6%259C%25AC%2F" data-toggle="tooltip" data-placement="top"
+        <a href="https://www.facebook.com/sharer/sharer.php?title=CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC%20-%20may1as'%20blog&u=http%3A%2F%2Flocalhost%3A4000%2Fposts%2FCTF%25E4%25B8%25AD%25E6%2588%2591%25E7%259A%2584USB%25E9%2594%25AE%25E7%259B%2598%25E9%25BC%25A0%25E6%25A0%2587%25E6%25B5%2581%25E9%2587%258F%25E8%25A7%25A3%25E5%25AF%2586%25E6%258C%2587%25E5%258D%2597%25E5%2592%258C%25E8%2584%259A%25E6%259C%25AC%2F" data-toggle="tooltip" data-placement="top"
           title="Facebook" target="_blank" rel="noopener" aria-label="Facebook">
           <i class="fa-fw fab fa-facebook-square"></i>
         </a>
     
       
-        <a href="https://t.me/share/url?url=%2Fposts%2FCTF%25E4%25B8%25AD%25E6%2588%2591%25E7%259A%2584USB%25E9%2594%25AE%25E7%259B%2598%25E9%25BC%25A0%25E6%25A0%2587%25E6%25B5%2581%25E9%2587%258F%25E8%25A7%25A3%25E5%25AF%2586%25E6%258C%2587%25E5%258D%2597%25E5%2592%258C%25E8%2584%259A%25E6%259C%25AC%2F&text=CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC+-+may1as%27+blog" data-toggle="tooltip" data-placement="top"
+        <a href="https://t.me/share/url?url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2FCTF%25E4%25B8%25AD%25E6%2588%2591%25E7%259A%2584USB%25E9%2594%25AE%25E7%259B%2598%25E9%25BC%25A0%25E6%25A0%2587%25E6%25B5%2581%25E9%2587%258F%25E8%25A7%25A3%25E5%25AF%2586%25E6%258C%2587%25E5%258D%2597%25E5%2592%258C%25E8%2584%259A%25E6%259C%25AC%2F&text=CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC%20-%20may1as'%20blog" data-toggle="tooltip" data-placement="top"
           title="Telegram" target="_blank" rel="noopener" aria-label="Telegram">
           <i class="fa-fw fab fa-telegram"></i>
         </a>
@@ -1809,13 +1855,13 @@ VMware, Inc. Virtual Mouse：生产商名字和设备名</p>
 
 
 
-<!-- BS-toc.js will be loaded at medium priority -->
-<script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script>
+  <div id="toc-wrapper" class="pl-0 pr-4 mb-5">
+    <div class="panel-heading pl-3 pt-2 mb-2">Contents</div>
+    <nav id="toc"></nav>
+  </div>
 
-<div id="toc-wrapper" class="pl-0 pr-4 mb-5">
-  <div class="panel-heading pl-3 pt-2 mb-2">Contents</div>
-  <nav id="toc" data-toggle="toc"></nav>
-</div>
+  <!-- toc.js will be loaded at medium priority -->
+  <script src="https://cdn.jsdelivr.net/npm/tocbot@4.20.1/dist/tocbot.min.js"></script>
 
 
     
@@ -2511,17 +2557,7 @@ buckeyenotes/beginner
       </div>
 
       <div class="footer-right">
-        <p class="mb-0">
-
-          
-
-          
-
-          Powered by 
-          <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a>
-           with 
-          <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a>
-           theme.
+        <p class="mb-0">Using the <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> theme <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a>.
         </p>
       </div>
     </div>
@@ -2593,9 +2629,7 @@ SimpleJekyllSearch({
 </script>
 
 
-    <!--
-  JS selector for site.
--->
+    <!-- JS selector for site. -->
 
 <!-- layout specified -->
 
@@ -2643,9 +2677,7 @@ SimpleJekyllSearch({
 
 
 
-  <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script>
-
-
+  <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/lazysizes@5.3.2/lazysizes.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
 
 
 
@@ -2700,8 +2732,7 @@ SimpleJekyllSearch({
 
 
 
-  <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/en.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1.11.6/dayjs.min.js,npm/dayjs@1.11.6/locale/en.min.js,npm/dayjs@1.11.6/plugin/relativeTime.min.js,npm/dayjs@1.11.6/plugin/localizedFormat.min.js"></script>
 
 
 
@@ -2715,7 +2746,7 @@ SimpleJekyllSearch({
 
 <!-- commons -->
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 
 

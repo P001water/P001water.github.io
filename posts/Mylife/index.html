@@ -13,22 +13,23 @@
   
 >
 
-  
-<!--
-  The Head
--->
+  <!-- The Head -->
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="referrer" content="never">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta
+    name="viewport"
+    content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover"
+  >
 
   
-
     
 
     
-
   
 
   
@@ -37,14 +38,14 @@
 
   
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<meta name="generator" content="Jekyll v4.3.1" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="My Life" />
 <meta name="author" content="may1as" />
 <meta property="og:locale" content="en" />
 <meta name="description" content="一些生活里的碎片" />
 <meta property="og:description" content="一些生活里的碎片" />
-<link rel="canonical" href="/posts/Mylife/" />
-<meta property="og:url" content="/posts/Mylife/" />
+<link rel="canonical" href="http://localhost:4000/posts/Mylife/" />
+<meta property="og:url" content="http://localhost:4000/posts/Mylife/" />
 <meta property="og:site_name" content="may1as’ blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-08-01T00:00:00+08:00" />
@@ -53,7 +54,7 @@
 <meta name="twitter:site" content="@\#" />
 <meta name="twitter:creator" content="@may1as" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-08-01T00:00:00+08:00","datePublished":"2022-08-01T00:00:00+08:00","description":"一些生活里的碎片","headline":"My Life","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/Mylife/"},"url":"/posts/Mylife/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-08-01T00:00:00+08:00","datePublished":"2022-08-01T00:00:00+08:00","description":"一些生活里的碎片","headline":"My Life","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/posts/Mylife/"},"url":"http://localhost:4000/posts/Mylife/"}</script>
 <!-- End Jekyll SEO tag -->
 
   
@@ -81,7 +82,6 @@
 
 
   
-
     
       <link rel="preconnect" href="https://fonts.googleapis.com" >
       <link rel="dns-prefetch" href="https://fonts.googleapis.com" >
@@ -97,32 +97,31 @@
     
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap">
-
   
 
   <!-- GA -->
   
 
   <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css">
 
   <link rel="stylesheet" href="/assets/css/style.css">
 
   
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.20.1/dist/tocbot.min.css">
   
 
   
     <!-- Manific Popup -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/magnific-popup.min.css">
   
 
   <!-- JavaScript -->
 
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
 
   
     <!--
@@ -153,13 +152,12 @@
       let self = this;
 
       /* always follow the system prefers */
-      this.sysDarkPrefers.addEventListener("change", () => {
+      this.sysDarkPrefers.addEventListener('change', () => {
         if (self.hasMode) {
           if (self.isDarkMode) {
             if (!self.isSysDarkPrefer) {
               self.setDark();
             }
-
           } else {
             if (self.isSysDarkPrefer) {
               self.setLight();
@@ -170,9 +168,7 @@
         }
 
         self.notify();
-
       });
-
     } /* constructor() */
 
     get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); }
@@ -189,8 +185,7 @@
 
     /* get the current mode on screen */
     get modeStatus() {
-      if (this.isDarkMode
-        || (!this.hasMode && this.isSysDarkPrefer)) {
+      if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) {
         return ModeToggle.DARK_MODE;
       } else {
         return ModeToggle.LIGHT_MODE;
@@ -220,45 +215,41 @@
       }, "*");
     }
 
+    flipMode() {
+      if (this.hasMode) {
+        if (this.isSysDarkPrefer) {
+          if (this.isLightMode) {
+            this.clearMode();
+          } else {
+            this.setLight();
+          }
+        } else {
+          if (this.isDarkMode) {
+            this.clearMode();
+          } else {
+            this.setDark();
+          }
+        }
+      } else {
+        if (this.isSysDarkPrefer) {
+          this.setLight();
+        } else {
+          this.setDark();
+        }
+      }
+
+      this.notify();
+    } /* flipMode() */
   } /* ModeToggle */
 
-  const toggle = new ModeToggle();
-
-  function flipMode() {
-    if (toggle.hasMode) {
-      if (toggle.isSysDarkPrefer) {
-        if (toggle.isLightMode) {
-          toggle.clearMode();
-        } else {
-          toggle.setLight();
-        }
-
-      } else {
-        if (toggle.isDarkMode) {
-          toggle.clearMode();
-        } else {
-          toggle.setDark();
-        }
-      }
-
-    } else {
-      if (toggle.isSysDarkPrefer) {
-        toggle.setLight();
-      } else {
-        toggle.setDark();
-      }
-    }
-
-    toggle.notify();
-
-  } /* flipMode() */
-
+  const modeToggle = new ModeToggle();
 </script>
 
   
 </head>
 
-  <body data-spy="scroll" data-target="#toc" data-topbar-visible="true">
+
+  <body data-topbar-visible="true">
 
     <!--
   The Side Bar
@@ -349,7 +340,17 @@
 
       
       <a href="https://github.com/may1as" aria-label="github"
-        target="_blank" rel="noopener">
+        
+
+        
+          target="_blank"
+          
+        
+
+        
+
+        rel="noopener noreferrer">
+
         <i class="fab fa-github"></i>
       </a>
       
@@ -359,7 +360,17 @@
 
       
       <a href="https://twitter.com/\#" aria-label="twitter"
-        target="_blank" rel="noopener">
+        
+
+        
+          target="_blank"
+          
+        
+
+        
+
+        rel="noopener noreferrer">
+
         <i class="fab fa-twitter"></i>
       </a>
       
@@ -368,9 +379,15 @@
       
 
       
-      <a href="
-          javascript:location.href = 'mailto:' + ['may1asu','foxmail.com'].join('@')" aria-label="email"
+      <a href="javascript:location.href = 'mailto:' + ['may1asu','foxmail.com'].join('@')" aria-label="email"
+        
+
+        
+
+        
+
         >
+
         <i class="fas fa-envelope"></i>
       </a>
       
@@ -380,7 +397,14 @@
 
       
       <a href="/feed.xml" aria-label="rss"
+        
+
+        
+
+        
+
         >
+
         <i class="fas fa-rss"></i>
       </a>
       
@@ -504,6 +528,12 @@
   
   
 
+  <!-- CDN URL -->
+  
+
+  <!-- Add image path -->
+  
+
   
     
       
@@ -512,77 +542,76 @@
 
     
     
-    
 
-    
     
 
     
     
+
+    
+    
+    
     
 
     
       
-      
 
       
-      
-
-      
-
-      
-    
       
       
 
       
-      
-
-      
-
-      
-    
-      
-      
-
-      
-      
-
-      
-
-      
-    
-      
-      
-        
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -590,77 +619,76 @@
 
     
     
-    
 
-    
     
 
     
     
+
+    
+    
+    
     
 
     
       
-      
 
       
-      
-
-      
-
-      
-    
       
       
 
       
-      
-
-      
-
-      
-    
-      
-      
-
-      
-      
-
-      
-
-      
-    
-      
-      
-        
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -668,66 +696,76 @@
 
     
     
-    
 
-    
     
 
     
     
+
+    
+    
+    
     
 
     
       
-      
 
       
-      
-
-      
-
-      
-    
       
       
 
       
-      
-
-      
-
-      
-    
-      
-      
-
-      
-      
-
-      
-
-      
-    
-      
-      
-        
 
     
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -735,74 +773,76 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -810,74 +850,76 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -885,64 +927,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -950,63 +995,76 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
     
 
     
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1014,63 +1072,76 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
     
 
     
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1108,14 +1179,6 @@
   
 
   
-
-
-
-
-<!-- Wrap prompt element of blockquote with the <div> tag -->
-
-
-
 
 
 
@@ -1225,7 +1288,7 @@
 <p>没有人永远emo，但永远有人正emo着<br />
 —— 致暗恋的青春</p>
 
-<p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/22999319/1674829859320-e18c2436-e66a-4c84-9a8b-b4e76c7c29a7.png#averageHue=%23f3f2f2&amp;clientId=u8d3e8c01-8143-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=drop&amp;height=372&amp;id=udb64e21a&amp;name=image-20230127215730133.png&amp;originHeight=1792&amp;originWidth=828&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=799427&amp;status=done&amp;style=none&amp;taskId=u37190897-8b0e-4645-876b-3d0a25daddc&amp;title=&amp;width=172" alt="image-20230127215730133.png" style="zoom: 25%;" data-proofer-ignore></p>
+<p><a href="172" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2023/png/22999319/1674829859320-e18c2436-e66a-4c84-9a8b-b4e76c7c29a7.png#averageHue=%23f3f2f2&amp;clientId=u8d3e8c01-8143-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=drop&amp;height=372&amp;id=udb64e21a&amp;name=image-20230127215730133.png&amp;originHeight=1792&amp;originWidth=828&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=799427&amp;status=done&amp;style=none&amp;taskId=u37190897-8b0e-4645-876b-3d0a25daddc&amp;title=&amp;width=172" alt="image-20230127215730133.png" style="zoom: 25%;" class="lazyload" data-proofer-ignore></a></p>
 
 <p><br />
 <br /></p>
@@ -1246,7 +1309,7 @@
 
 <p>找了个实习，想想脑子里还是空空，还是等暑假或者大三吧                                                                               <br />
 烫了个tou，括弧锡纸烫，但是还没想当渣男哈哈<br />
-<img data-src="https://cdn.nlark.com/yuque/0/2023/png/22999319/1674829904899-df0a56e4-189e-4938-866e-0b5647aeb026.png#averageHue=%23a7a08e&amp;clientId=u8d3e8c01-8143-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=drop&amp;id=u97a7d000&amp;name=image-20230127220210316.png&amp;originHeight=541&amp;originWidth=307&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=140912&amp;status=done&amp;style=none&amp;taskId=udbb7215e-72aa-4e3b-919a-b2ce779462a&amp;title=" alt="image-20230127220210316.png" style="zoom: 50%;" data-proofer-ignore></p>
+<a href="udbb7215e-72aa-4e3b-919a-b2ce779462a&amp;title" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2023/png/22999319/1674829904899-df0a56e4-189e-4938-866e-0b5647aeb026.png#averageHue=%23a7a08e&amp;clientId=u8d3e8c01-8143-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=drop&amp;id=u97a7d000&amp;name=image-20230127220210316.png&amp;originHeight=541&amp;originWidth=307&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=140912&amp;status=done&amp;style=none&amp;taskId=udbb7215e-72aa-4e3b-919a-b2ce779462a&amp;title=" alt="image-20230127220210316.png" style="zoom: 50%;" class="lazyload" data-proofer-ignore></a></p>
 
 <p><br />
 <br /></p>
@@ -1295,7 +1358,7 @@
 
 <p>趴着的是老表，我在躺着</p>
 
-<p><img data-src="https://cdn.nlark.com/yuque/0/2023/jpeg/22999319/1674893375150-e575990e-2104-4a15-8251-5aec9ea73082.jpeg" alt="486daf4fb7012d399b47cbaf21080dc.jpg" style="zoom: 33%;" data-proofer-ignore></p>
+<p><a href="https://cdn.nlark.com/yuque/0/2023/jpeg/22999319/1674893375150-e575990e-2104-4a15-8251-5aec9ea73082.jpeg" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2023/jpeg/22999319/1674893375150-e575990e-2104-4a15-8251-5aec9ea73082.jpeg" alt="486daf4fb7012d399b47cbaf21080dc.jpg" style="zoom: 33%;" class="lazyload" data-proofer-ignore></a></p>
 
 <p><br />
 <br /></p>
@@ -1317,7 +1380,7 @@
 
 <p>突然想起来高中毕业那会儿的一时兴起，注册的中国诗歌网的账号，甚至混上了“蓝V诗人”，听说挺水的。</p>
 
-<p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/22999319/1675440586249-639c135c-8ccb-45be-a50d-2f6d85d9dabb.png#averageHue=%23f5f5f5&amp;clientId=ube01ac04-d906-4&amp;from=paste&amp;height=589&amp;id=u54d10bb4&amp;name=image.png&amp;originHeight=1176&amp;originWidth=855&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=60116&amp;status=done&amp;style=none&amp;taskId=u4e3ef738-0100-42ee-9d63-14b070fed03&amp;title=&amp;width=428" alt="image.png" style="zoom:33%;" data-proofer-ignore></p>
+<p><a href="428" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2023/png/22999319/1675440586249-639c135c-8ccb-45be-a50d-2f6d85d9dabb.png#averageHue=%23f5f5f5&amp;clientId=ube01ac04-d906-4&amp;from=paste&amp;height=589&amp;id=u54d10bb4&amp;name=image.png&amp;originHeight=1176&amp;originWidth=855&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=60116&amp;status=done&amp;style=none&amp;taskId=u4e3ef738-0100-42ee-9d63-14b070fed03&amp;title=&amp;width=428" alt="image.png" style="zoom:33%;" class="lazyload" data-proofer-ignore></a></p>
 
 <p>当时为了混500稿费，搜肠刮肚出来的诗。还有两个长辈点赞，这上面的人都是实打实的叔姨们，不过也都是老一辈的人了</p>
 
@@ -1325,13 +1388,13 @@
 
 <p><br /></p>
 
-<p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/22999319/1675441246001-014ac9b9-cf6e-41ca-8367-605081498d53.png#averageHue=%23e0ded2&amp;clientId=ube01ac04-d906-4&amp;from=paste&amp;height=602&amp;id=uce4e0ccb&amp;name=image.png&amp;originHeight=1149&amp;originWidth=548&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=131122&amp;status=done&amp;style=none&amp;taskId=ucc9ba2cf-af82-4b8d-bdfd-53d805f797e&amp;title=&amp;width=287" alt="image.png" style="zoom:33%;" data-proofer-ignore></p>
+<p><a href="287" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2023/png/22999319/1675441246001-014ac9b9-cf6e-41ca-8367-605081498d53.png#averageHue=%23e0ded2&amp;clientId=ube01ac04-d906-4&amp;from=paste&amp;height=602&amp;id=uce4e0ccb&amp;name=image.png&amp;originHeight=1149&amp;originWidth=548&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=131122&amp;status=done&amp;style=none&amp;taskId=ucc9ba2cf-af82-4b8d-bdfd-53d805f797e&amp;title=&amp;width=287" alt="image.png" style="zoom:33%;" class="lazyload" data-proofer-ignore></a></p>
 
 <p>这可还是我的粉丝，记得还有个南大的教授也关注我了，迄今为止我也只写了那一首，：）和张继一样</p>
 
 <p><br /></p>
 
-<p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/22999319/1675441376788-41079df9-ac63-4040-a641-4c08fa5e088f.png#averageHue=%23fdfdfd&amp;clientId=ube01ac04-d906-4&amp;from=paste&amp;height=107&amp;id=uda7a31c2&amp;name=image.png&amp;originHeight=161&amp;originWidth=1239&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=8107&amp;status=done&amp;style=none&amp;taskId=u7498678f-ad43-41b7-bee0-8f9f5dde43a&amp;title=&amp;width=826" alt="image.png" data-proofer-ignore></p>
+<p><a href="826" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2023/png/22999319/1675441376788-41079df9-ac63-4040-a641-4c08fa5e088f.png#averageHue=%23fdfdfd&amp;clientId=ube01ac04-d906-4&amp;from=paste&amp;height=107&amp;id=uda7a31c2&amp;name=image.png&amp;originHeight=161&amp;originWidth=1239&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=8107&amp;status=done&amp;style=none&amp;taskId=u7498678f-ad43-41b7-bee0-8f9f5dde43a&amp;title=&amp;width=826" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <p>有个阿姨搁我主页的评论，记得当时我的签名是“ <em>生而倜傥</em>，<em>博学能文</em>，<em>滑稽多智</em>，<em>蕴藉风流</em>，<em>何时为一时之冠</em>。”</p>
 
@@ -1357,7 +1420,7 @@
 
 <p>前两天水的CNVD过了</p>
 
-<p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/22999319/1676119575874-06fe4e2f-0ef3-4aa9-b3e2-aa898b2f8197.png" alt="image-20230211200705618" style="zoom:80%;" data-proofer-ignore></p>
+<p><a href="https://cdn.nlark.com/yuque/0/2023/png/22999319/1676119575874-06fe4e2f-0ef3-4aa9-b3e2-aa898b2f8197.png" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2023/png/22999319/1676119575874-06fe4e2f-0ef3-4aa9-b3e2-aa898b2f8197.png" alt="image-20230211200705618" style="zoom:80%;" class="lazyload" data-proofer-ignore></a></p>
 
 <p>可惜，事件型好像没有证书，哈哈</p>
 
@@ -1399,7 +1462,7 @@
 <br />
 <br /></p>
 
-<p><img data-src="https://cdn.nlark.com/yuque/0/2023/png/22999319/1676546509315-34f40d5d-b094-4891-8aeb-1c5b4505d2b2.png" alt="image-20230216191757747" style="zoom:80%;" data-proofer-ignore></p>
+<p><a href="https://cdn.nlark.com/yuque/0/2023/png/22999319/1676546509315-34f40d5d-b094-4891-8aeb-1c5b4505d2b2.png" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2023/png/22999319/1676546509315-34f40d5d-b094-4891-8aeb-1c5b4505d2b2.png" alt="image-20230216191757747" style="zoom:80%;" class="lazyload" data-proofer-ignore></a></p>
 
 <p>又水一个，有听说两个事件型高危好像都有证书，这个也是我以前拿不下的一个站</p>
 
@@ -1475,19 +1538,19 @@
 
     
       
-        <a href="https://twitter.com/intent/tweet?text=My+Life+-+may1as%27+blog&url=%2Fposts%2FMylife%2F" data-toggle="tooltip" data-placement="top"
+        <a href="https://twitter.com/intent/tweet?text=My%20Life%20-%20may1as'%20blog&url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2FMylife%2F" data-toggle="tooltip" data-placement="top"
           title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
           <i class="fa-fw fab fa-twitter"></i>
         </a>
     
       
-        <a href="https://www.facebook.com/sharer/sharer.php?title=My+Life+-+may1as%27+blog&u=%2Fposts%2FMylife%2F" data-toggle="tooltip" data-placement="top"
+        <a href="https://www.facebook.com/sharer/sharer.php?title=My%20Life%20-%20may1as'%20blog&u=http%3A%2F%2Flocalhost%3A4000%2Fposts%2FMylife%2F" data-toggle="tooltip" data-placement="top"
           title="Facebook" target="_blank" rel="noopener" aria-label="Facebook">
           <i class="fa-fw fab fa-facebook-square"></i>
         </a>
     
       
-        <a href="https://t.me/share/url?url=%2Fposts%2FMylife%2F&text=My+Life+-+may1as%27+blog" data-toggle="tooltip" data-placement="top"
+        <a href="https://t.me/share/url?url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2FMylife%2F&text=My%20Life%20-%20may1as'%20blog" data-toggle="tooltip" data-placement="top"
           title="Telegram" target="_blank" rel="noopener" aria-label="Telegram">
           <i class="fa-fw fab fa-telegram"></i>
         </a>
@@ -2548,17 +2611,7 @@ Bu...
       </div>
 
       <div class="footer-right">
-        <p class="mb-0">
-
-          
-
-          
-
-          Powered by 
-          <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a>
-           with 
-          <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a>
-           theme.
+        <p class="mb-0">Using the <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> theme <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a>.
         </p>
       </div>
     </div>
@@ -2630,9 +2683,7 @@ SimpleJekyllSearch({
 </script>
 
 
-    <!--
-  JS selector for site.
--->
+    <!-- JS selector for site. -->
 
 <!-- layout specified -->
 
@@ -2680,9 +2731,7 @@ SimpleJekyllSearch({
 
 
 
-  <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script>
-
-
+  <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/lazysizes@5.3.2/lazysizes.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
 
 
 
@@ -2737,8 +2786,7 @@ SimpleJekyllSearch({
 
 
 
-  <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/en.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1.11.6/dayjs.min.js,npm/dayjs@1.11.6/locale/en.min.js,npm/dayjs@1.11.6/plugin/relativeTime.min.js,npm/dayjs@1.11.6/plugin/localizedFormat.min.js"></script>
 
 
 
@@ -2752,7 +2800,7 @@ SimpleJekyllSearch({
 
 <!-- commons -->
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 
 

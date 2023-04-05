@@ -13,22 +13,23 @@
   
 >
 
-  
-<!--
-  The Head
--->
+  <!-- The Head -->
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="referrer" content="never">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta
+    name="viewport"
+    content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover"
+  >
 
   
-
     
 
     
-
   
 
   
@@ -37,14 +38,14 @@
 
   
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<meta name="generator" content="Jekyll v4.3.1" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="My CheatSheet" />
 <meta name="author" content="may1as" />
 <meta property="og:locale" content="en" />
 <meta name="description" content="正则表达式速查卡" />
 <meta property="og:description" content="正则表达式速查卡" />
-<link rel="canonical" href="/posts/CheatSheet/" />
-<meta property="og:url" content="/posts/CheatSheet/" />
+<link rel="canonical" href="http://localhost:4000/posts/CheatSheet/" />
+<meta property="og:url" content="http://localhost:4000/posts/CheatSheet/" />
 <meta property="og:site_name" content="may1as’ blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-08-10T00:00:00+08:00" />
@@ -53,7 +54,7 @@
 <meta name="twitter:site" content="@\#" />
 <meta name="twitter:creator" content="@may1as" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-08-10T00:00:00+08:00","datePublished":"2022-08-10T00:00:00+08:00","description":"正则表达式速查卡","headline":"My CheatSheet","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/CheatSheet/"},"url":"/posts/CheatSheet/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-08-10T00:00:00+08:00","datePublished":"2022-08-10T00:00:00+08:00","description":"正则表达式速查卡","headline":"My CheatSheet","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/posts/CheatSheet/"},"url":"http://localhost:4000/posts/CheatSheet/"}</script>
 <!-- End Jekyll SEO tag -->
 
   
@@ -81,7 +82,6 @@
 
 
   
-
     
       <link rel="preconnect" href="https://fonts.googleapis.com" >
       <link rel="dns-prefetch" href="https://fonts.googleapis.com" >
@@ -97,32 +97,31 @@
     
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap">
-
   
 
   <!-- GA -->
   
 
   <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css">
 
   <link rel="stylesheet" href="/assets/css/style.css">
 
   
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.20.1/dist/tocbot.min.css">
   
 
   
     <!-- Manific Popup -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/magnific-popup.min.css">
   
 
   <!-- JavaScript -->
 
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
 
   
     <!--
@@ -153,13 +152,12 @@
       let self = this;
 
       /* always follow the system prefers */
-      this.sysDarkPrefers.addEventListener("change", () => {
+      this.sysDarkPrefers.addEventListener('change', () => {
         if (self.hasMode) {
           if (self.isDarkMode) {
             if (!self.isSysDarkPrefer) {
               self.setDark();
             }
-
           } else {
             if (self.isSysDarkPrefer) {
               self.setLight();
@@ -170,9 +168,7 @@
         }
 
         self.notify();
-
       });
-
     } /* constructor() */
 
     get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); }
@@ -189,8 +185,7 @@
 
     /* get the current mode on screen */
     get modeStatus() {
-      if (this.isDarkMode
-        || (!this.hasMode && this.isSysDarkPrefer)) {
+      if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) {
         return ModeToggle.DARK_MODE;
       } else {
         return ModeToggle.LIGHT_MODE;
@@ -220,45 +215,41 @@
       }, "*");
     }
 
+    flipMode() {
+      if (this.hasMode) {
+        if (this.isSysDarkPrefer) {
+          if (this.isLightMode) {
+            this.clearMode();
+          } else {
+            this.setLight();
+          }
+        } else {
+          if (this.isDarkMode) {
+            this.clearMode();
+          } else {
+            this.setDark();
+          }
+        }
+      } else {
+        if (this.isSysDarkPrefer) {
+          this.setLight();
+        } else {
+          this.setDark();
+        }
+      }
+
+      this.notify();
+    } /* flipMode() */
   } /* ModeToggle */
 
-  const toggle = new ModeToggle();
-
-  function flipMode() {
-    if (toggle.hasMode) {
-      if (toggle.isSysDarkPrefer) {
-        if (toggle.isLightMode) {
-          toggle.clearMode();
-        } else {
-          toggle.setLight();
-        }
-
-      } else {
-        if (toggle.isDarkMode) {
-          toggle.clearMode();
-        } else {
-          toggle.setDark();
-        }
-      }
-
-    } else {
-      if (toggle.isSysDarkPrefer) {
-        toggle.setLight();
-      } else {
-        toggle.setDark();
-      }
-    }
-
-    toggle.notify();
-
-  } /* flipMode() */
-
+  const modeToggle = new ModeToggle();
 </script>
 
   
 </head>
 
-  <body data-spy="scroll" data-target="#toc" data-topbar-visible="true">
+
+  <body data-topbar-visible="true">
 
     <!--
   The Side Bar
@@ -349,7 +340,17 @@
 
       
       <a href="https://github.com/may1as" aria-label="github"
-        target="_blank" rel="noopener">
+        
+
+        
+          target="_blank"
+          
+        
+
+        
+
+        rel="noopener noreferrer">
+
         <i class="fab fa-github"></i>
       </a>
       
@@ -359,7 +360,17 @@
 
       
       <a href="https://twitter.com/\#" aria-label="twitter"
-        target="_blank" rel="noopener">
+        
+
+        
+          target="_blank"
+          
+        
+
+        
+
+        rel="noopener noreferrer">
+
         <i class="fab fa-twitter"></i>
       </a>
       
@@ -368,9 +379,15 @@
       
 
       
-      <a href="
-          javascript:location.href = 'mailto:' + ['may1asu','foxmail.com'].join('@')" aria-label="email"
+      <a href="javascript:location.href = 'mailto:' + ['may1asu','foxmail.com'].join('@')" aria-label="email"
+        
+
+        
+
+        
+
         >
+
         <i class="fas fa-envelope"></i>
       </a>
       
@@ -380,7 +397,14 @@
 
       
       <a href="/feed.xml" aria-label="rss"
+        
+
+        
+
+        
+
         >
+
         <i class="fas fa-rss"></i>
       </a>
       
@@ -504,6 +528,12 @@
   
   
 
+  <!-- CDN URL -->
+  
+
+  <!-- Add image path -->
+  
+
   
     
       
@@ -512,67 +542,67 @@
 
     
     
-    
 
-    
     
 
     
     
+
+    
+    
+    
     
 
     
       
-      
 
       
-      
-
-      
-
-      
-    
       
       
 
       
-      
-
-      
-
-      
-    
-      
-      
-        
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
-
       
-
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -580,64 +610,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -645,64 +678,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -710,64 +746,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -805,14 +844,6 @@
   
 
   
-
-
-
-
-<!-- Wrap prompt element of blockquote with the <div> tag -->
-
-
-
 
 
 
@@ -901,11 +932,11 @@
 <div class="post-content">
   <h1 id="正则表达式速查卡">正则表达式速查卡</h1>
 
-<p><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1669819613663-1edfd357-3eb0-445a-80d2-945b4fd8adbe.png#averageHue=%23f6f6f6&amp;clientId=u3bca4281-ce50-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=ui&amp;id=ub79c62c6&amp;margin=%5Bobject%20Object%5D&amp;name=FixclxAUUAAxJoX%20%281%29.png&amp;originHeight=1754&amp;originWidth=1241&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=191314&amp;status=done&amp;style=none&amp;taskId=u301004a4-66e8-4e0b-ab95-6172fa6b8ba&amp;title=" alt="FixclxAUUAAxJoX (1).png" data-proofer-ignore></p>
+<p><a href="u301004a4-66e8-4e0b-ab95-6172fa6b8ba&amp;title" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1669819613663-1edfd357-3eb0-445a-80d2-945b4fd8adbe.png#averageHue=%23f6f6f6&amp;clientId=u3bca4281-ce50-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=ui&amp;id=ub79c62c6&amp;margin=%5Bobject%20Object%5D&amp;name=FixclxAUUAAxJoX%20%281%29.png&amp;originHeight=1754&amp;originWidth=1241&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=191314&amp;status=done&amp;style=none&amp;taskId=u301004a4-66e8-4e0b-ab95-6172fa6b8ba&amp;title=" alt="FixclxAUUAAxJoX (1).png" class="lazyload" data-proofer-ignore></a></p>
 
 <h1 id="basic-linux-commands">Basic Linux Commands</h1>
 
-<p><img data-src="https://cdn.nlark.com/yuque/0/2022/jpeg/22999319/1671455400420-68f51942-c02b-4604-8dda-79d13519996c.jpeg#averageHue=%2313161a&amp;clientId=u92532781-2be7-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=drop&amp;id=u9461362e&amp;margin=%5Bobject%20Object%5D&amp;name=FkVSI3IXwAE-ozq.jpg&amp;originHeight=1248&amp;originWidth=1039&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=221363&amp;status=done&amp;style=none&amp;taskId=ua9b8343c-dec5-4077-8231-afce0e47033&amp;title=" alt="FkVSI3IXwAE-ozq.jpg" data-proofer-ignore></p>
+<p><a href="ua9b8343c-dec5-4077-8231-afce0e47033&amp;title" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/jpeg/22999319/1671455400420-68f51942-c02b-4604-8dda-79d13519996c.jpeg#averageHue=%2313161a&amp;clientId=u92532781-2be7-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=drop&amp;id=u9461362e&amp;margin=%5Bobject%20Object%5D&amp;name=FkVSI3IXwAE-ozq.jpg&amp;originHeight=1248&amp;originWidth=1039&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=221363&amp;status=done&amp;style=none&amp;taskId=ua9b8343c-dec5-4077-8231-afce0e47033&amp;title=" alt="FkVSI3IXwAE-ozq.jpg" class="lazyload" data-proofer-ignore></a></p>
 
 <h1 id="website-collect">Website collect</h1>
 
@@ -1058,7 +1089,7 @@ source ~/.bashrc
 <div class="language-python highlighter-rouge"><div class="code-header">
         <span data-label-text="Python"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre><span class="k">print</span><span class="p">(</span>\<span class="mi">033</span><span class="p">[</span><span class="n">显示方式</span><span class="p">;</span><span class="n">前景色</span><span class="p">;</span><span class="n">背景色m输出内容</span>\<span class="mi">033</span><span class="p">[</span><span class="mi">0</span><span class="n">m</span><span class="p">)</span>
+</pre></td><td class="rouge-code"><pre><span class="nf">print</span><span class="p">(</span>\<span class="mi">033</span><span class="p">[</span><span class="n">显示方式</span><span class="p">;</span><span class="n">前景色</span><span class="p">;</span><span class="n">背景色m输出内容</span>\<span class="mi">033</span><span class="p">[</span><span class="mi">0</span><span class="n">m</span><span class="p">)</span>
 </pre></td></tr></tbody></table></code></div></div>
 
 <div class="table-wrapper"><table>
@@ -1145,7 +1176,7 @@ source ~/.bashrc
 </table></div>
 
 <h1 id="kerberos-protocol">Kerberos Protocol</h1>
-<p><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1667652570562-bfa5a710-ae42-4810-8112-70da97855db8.png#averageHue=%23f9f9f8&amp;clientId=u2a6dc1be-8b36-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=417&amp;id=uae4011c8&amp;margin=%5Bobject%20Object%5D&amp;originHeight=458&amp;originWidth=543&amp;originalType=url&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;taskId=ud46a8058-41a5-429b-b152-a76cce9bc4a&amp;title=&amp;width=494" alt="" data-proofer-ignore></p>
+<p><a href="494" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1667652570562-bfa5a710-ae42-4810-8112-70da97855db8.png#averageHue=%23f9f9f8&amp;clientId=u2a6dc1be-8b36-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=417&amp;id=uae4011c8&amp;margin=%5Bobject%20Object%5D&amp;originHeight=458&amp;originWidth=543&amp;originalType=url&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;taskId=ud46a8058-41a5-429b-b152-a76cce9bc4a&amp;title=&amp;width=494" alt="" class="lazyload" data-proofer-ignore></a></p>
 
 <h1 id="python-requests-general-headers">Python requests General Headers</h1>
 <div class="language-python highlighter-rouge"><div class="code-header">
@@ -1197,7 +1228,7 @@ source ~/.bashrc
 </blockquote>
 
 <h1 id="xss-get-cookie">xss get cookie</h1>
-<p><img data-src="https://cdn.nlark.com/yuque/0/2022/jpeg/22999319/1668786596594-5d604f91-441b-46d8-b8ea-4f43f87f74ab.jpeg#averageHue=%23303059&amp;clientId=u88fbcc4a-7a9e-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=597&amp;id=u36168493&amp;margin=%5Bobject%20Object%5D&amp;name=%40T12MTN61X~DSNCSRPK785V.jpg&amp;originHeight=896&amp;originWidth=1430&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=106009&amp;status=done&amp;style=none&amp;taskId=u72aa842e-9fca-455c-b584-6004973121d&amp;title=&amp;width=953.3333333333334" alt="@T12MTN61X~DSNCSRPK785V.jpg" data-proofer-ignore></p>
+<p><a href="953.3333333333334" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/jpeg/22999319/1668786596594-5d604f91-441b-46d8-b8ea-4f43f87f74ab.jpeg#averageHue=%23303059&amp;clientId=u88fbcc4a-7a9e-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=597&amp;id=u36168493&amp;margin=%5Bobject%20Object%5D&amp;name=%40T12MTN61X~DSNCSRPK785V.jpg&amp;originHeight=896&amp;originWidth=1430&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=106009&amp;status=done&amp;style=none&amp;taskId=u72aa842e-9fca-455c-b584-6004973121d&amp;title=&amp;width=953.3333333333334" alt="@T12MTN61X~DSNCSRPK785V.jpg" class="lazyload" data-proofer-ignore></a></p>
 
 </div>
 
@@ -1254,19 +1285,19 @@ source ~/.bashrc
 
     
       
-        <a href="https://twitter.com/intent/tweet?text=My+CheatSheet+-+may1as%27+blog&url=%2Fposts%2FCheatSheet%2F" data-toggle="tooltip" data-placement="top"
+        <a href="https://twitter.com/intent/tweet?text=My%20CheatSheet%20-%20may1as'%20blog&url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2FCheatSheet%2F" data-toggle="tooltip" data-placement="top"
           title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
           <i class="fa-fw fab fa-twitter"></i>
         </a>
     
       
-        <a href="https://www.facebook.com/sharer/sharer.php?title=My+CheatSheet+-+may1as%27+blog&u=%2Fposts%2FCheatSheet%2F" data-toggle="tooltip" data-placement="top"
+        <a href="https://www.facebook.com/sharer/sharer.php?title=My%20CheatSheet%20-%20may1as'%20blog&u=http%3A%2F%2Flocalhost%3A4000%2Fposts%2FCheatSheet%2F" data-toggle="tooltip" data-placement="top"
           title="Facebook" target="_blank" rel="noopener" aria-label="Facebook">
           <i class="fa-fw fab fa-facebook-square"></i>
         </a>
     
       
-        <a href="https://t.me/share/url?url=%2Fposts%2FCheatSheet%2F&text=My+CheatSheet+-+may1as%27+blog" data-toggle="tooltip" data-placement="top"
+        <a href="https://t.me/share/url?url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2FCheatSheet%2F&text=My%20CheatSheet%20-%20may1as'%20blog" data-toggle="tooltip" data-placement="top"
           title="Telegram" target="_blank" rel="noopener" aria-label="Telegram">
           <i class="fa-fw fab fa-telegram"></i>
         </a>
@@ -2325,17 +2356,7 @@ Bu...
       </div>
 
       <div class="footer-right">
-        <p class="mb-0">
-
-          
-
-          
-
-          Powered by 
-          <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a>
-           with 
-          <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a>
-           theme.
+        <p class="mb-0">Using the <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> theme <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a>.
         </p>
       </div>
     </div>
@@ -2407,9 +2428,7 @@ SimpleJekyllSearch({
 </script>
 
 
-    <!--
-  JS selector for site.
--->
+    <!-- JS selector for site. -->
 
 <!-- layout specified -->
 
@@ -2457,9 +2476,7 @@ SimpleJekyllSearch({
 
 
 
-  <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script>
-
-
+  <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/lazysizes@5.3.2/lazysizes.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
 
 
 
@@ -2514,8 +2531,7 @@ SimpleJekyllSearch({
 
 
 
-  <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/en.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1.11.6/dayjs.min.js,npm/dayjs@1.11.6/locale/en.min.js,npm/dayjs@1.11.6/plugin/relativeTime.min.js,npm/dayjs@1.11.6/plugin/localizedFormat.min.js"></script>
 
 
 
@@ -2529,7 +2545,7 @@ SimpleJekyllSearch({
 
 <!-- commons -->
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 
 

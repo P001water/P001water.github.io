@@ -13,22 +13,23 @@
   
 >
 
-  
-<!--
-  The Head
--->
+  <!-- The Head -->
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="referrer" content="never">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta
+    name="viewport"
+    content="width=device-width, user-scalable=no initial-scale=1, shrink-to-fit=no, viewport-fit=cover"
+  >
 
   
-
     
 
     
-
   
 
   
@@ -37,14 +38,14 @@
 
   
     <!-- Begin Jekyll SEO tag v2.8.0 -->
-<meta name="generator" content="Jekyll v4.3.1" />
+<meta name="generator" content="Jekyll v4.3.2" />
 <meta property="og:title" content="BuckeyeCTF-2022-writeup" />
 <meta name="author" content="may1as" />
 <meta property="og:locale" content="en" />
 <meta name="description" content="文前漫谈 比赛地址：https://pwnoh.io/challs" />
 <meta property="og:description" content="文前漫谈 比赛地址：https://pwnoh.io/challs" />
-<link rel="canonical" href="/posts/BuckeyeCTF-2022-writeup/" />
-<meta property="og:url" content="/posts/BuckeyeCTF-2022-writeup/" />
+<link rel="canonical" href="http://localhost:4000/posts/BuckeyeCTF-2022-writeup/" />
+<meta property="og:url" content="http://localhost:4000/posts/BuckeyeCTF-2022-writeup/" />
 <meta property="og:site_name" content="may1as’ blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-11-12T00:00:00+08:00" />
@@ -53,7 +54,7 @@
 <meta name="twitter:site" content="@\#" />
 <meta name="twitter:creator" content="@may1as" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-11-12T00:00:00+08:00","datePublished":"2022-11-12T00:00:00+08:00","description":"文前漫谈 比赛地址：https://pwnoh.io/challs","headline":"BuckeyeCTF-2022-writeup","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/BuckeyeCTF-2022-writeup/"},"url":"/posts/BuckeyeCTF-2022-writeup/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-11-12T00:00:00+08:00","datePublished":"2022-11-12T00:00:00+08:00","description":"文前漫谈 比赛地址：https://pwnoh.io/challs","headline":"BuckeyeCTF-2022-writeup","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/posts/BuckeyeCTF-2022-writeup/"},"url":"http://localhost:4000/posts/BuckeyeCTF-2022-writeup/"}</script>
 <!-- End Jekyll SEO tag -->
 
   
@@ -81,7 +82,6 @@
 
 
   
-
     
       <link rel="preconnect" href="https://fonts.googleapis.com" >
       <link rel="dns-prefetch" href="https://fonts.googleapis.com" >
@@ -97,32 +97,31 @@
     
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato&family=Source+Sans+Pro:wght@400;600;700;900&display=swap">
-
   
 
   <!-- GA -->
   
 
   <!-- Bootstrap -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 
   <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/all.min.css">
 
   <link rel="stylesheet" href="/assets/css/style.css">
 
   
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tocbot@4.20.1/dist/tocbot.min.css">
   
 
   
     <!-- Manific Popup -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1/dist/magnific-popup.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/magnific-popup@1.1.0/dist/magnific-popup.min.css">
   
 
   <!-- JavaScript -->
 
-  <script src="https://cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.1/dist/jquery.min.js"></script>
 
   
     <!--
@@ -153,13 +152,12 @@
       let self = this;
 
       /* always follow the system prefers */
-      this.sysDarkPrefers.addEventListener("change", () => {
+      this.sysDarkPrefers.addEventListener('change', () => {
         if (self.hasMode) {
           if (self.isDarkMode) {
             if (!self.isSysDarkPrefer) {
               self.setDark();
             }
-
           } else {
             if (self.isSysDarkPrefer) {
               self.setLight();
@@ -170,9 +168,7 @@
         }
 
         self.notify();
-
       });
-
     } /* constructor() */
 
     get sysDarkPrefers() { return window.matchMedia("(prefers-color-scheme: dark)"); }
@@ -189,8 +185,7 @@
 
     /* get the current mode on screen */
     get modeStatus() {
-      if (this.isDarkMode
-        || (!this.hasMode && this.isSysDarkPrefer)) {
+      if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) {
         return ModeToggle.DARK_MODE;
       } else {
         return ModeToggle.LIGHT_MODE;
@@ -220,45 +215,41 @@
       }, "*");
     }
 
+    flipMode() {
+      if (this.hasMode) {
+        if (this.isSysDarkPrefer) {
+          if (this.isLightMode) {
+            this.clearMode();
+          } else {
+            this.setLight();
+          }
+        } else {
+          if (this.isDarkMode) {
+            this.clearMode();
+          } else {
+            this.setDark();
+          }
+        }
+      } else {
+        if (this.isSysDarkPrefer) {
+          this.setLight();
+        } else {
+          this.setDark();
+        }
+      }
+
+      this.notify();
+    } /* flipMode() */
   } /* ModeToggle */
 
-  const toggle = new ModeToggle();
-
-  function flipMode() {
-    if (toggle.hasMode) {
-      if (toggle.isSysDarkPrefer) {
-        if (toggle.isLightMode) {
-          toggle.clearMode();
-        } else {
-          toggle.setLight();
-        }
-
-      } else {
-        if (toggle.isDarkMode) {
-          toggle.clearMode();
-        } else {
-          toggle.setDark();
-        }
-      }
-
-    } else {
-      if (toggle.isSysDarkPrefer) {
-        toggle.setLight();
-      } else {
-        toggle.setDark();
-      }
-    }
-
-    toggle.notify();
-
-  } /* flipMode() */
-
+  const modeToggle = new ModeToggle();
 </script>
 
   
 </head>
 
-  <body data-spy="scroll" data-target="#toc" data-topbar-visible="true">
+
+  <body data-topbar-visible="true">
 
     <!--
   The Side Bar
@@ -349,7 +340,17 @@
 
       
       <a href="https://github.com/may1as" aria-label="github"
-        target="_blank" rel="noopener">
+        
+
+        
+          target="_blank"
+          
+        
+
+        
+
+        rel="noopener noreferrer">
+
         <i class="fab fa-github"></i>
       </a>
       
@@ -359,7 +360,17 @@
 
       
       <a href="https://twitter.com/\#" aria-label="twitter"
-        target="_blank" rel="noopener">
+        
+
+        
+          target="_blank"
+          
+        
+
+        
+
+        rel="noopener noreferrer">
+
         <i class="fab fa-twitter"></i>
       </a>
       
@@ -368,9 +379,15 @@
       
 
       
-      <a href="
-          javascript:location.href = 'mailto:' + ['may1asu','foxmail.com'].join('@')" aria-label="email"
+      <a href="javascript:location.href = 'mailto:' + ['may1asu','foxmail.com'].join('@')" aria-label="email"
+        
+
+        
+
+        
+
         >
+
         <i class="fas fa-envelope"></i>
       </a>
       
@@ -380,7 +397,14 @@
 
       
       <a href="/feed.xml" aria-label="rss"
+        
+
+        
+
+        
+
         >
+
         <i class="fas fa-rss"></i>
       </a>
       
@@ -504,6 +528,12 @@
   
   
 
+  <!-- CDN URL -->
+  
+
+  <!-- Add image path -->
+  
+
   
     
       
@@ -512,64 +542,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -577,64 +610,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -642,64 +678,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -707,64 +746,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -772,64 +814,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -837,64 +882,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -902,64 +950,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -967,64 +1018,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1032,64 +1086,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1097,64 +1154,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1162,64 +1222,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1227,64 +1290,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1292,64 +1358,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1357,64 +1426,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1422,64 +1494,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1487,64 +1562,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1552,64 +1630,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1617,64 +1698,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1682,64 +1766,67 @@
 
     
     
-    
 
-    
     
 
     
     
-    
 
     
-      
-      
-
-      
-      
-
-      
-
-      
     
-      
-      
-
-      
-      
-
-      
-
-      
+    
     
 
     
       
 
-        <!-- Add CDN URL -->
-        
-
-        <!-- Add image path -->
-        
-
-        
-        
+      
+      
+      
 
       
 
-      <!-- lazy-load images <https://github.com/ApoorvSaxena/lozad.js#usage> -->
+    
+      
+
+      
+      
+      
 
       
 
     
 
-    <!-- Add SVG placehoder to prevent layout reflow -->
+    <!-- take out classes -->
+    
 
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
     
 
     <!-- Bypass the HTML-proofer test -->
     
 
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
     
 
   
@@ -1875,14 +1962,6 @@
 
 
 
-<!-- Wrap prompt element of blockquote with the <div> tag -->
-
-
-
-
-
-
-
 <!-- return -->
 
 <h1 data-toc-skip>BuckeyeCTF-2022-writeup</h1>
@@ -1978,11 +2057,11 @@
 </blockquote>
 
 <p>来看看国际友人的题目，登录界面，题目说了Brutus的用户名是brutusB3stNut9999
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668186755508-73ec6483-4391-4684-ac7d-fef64b81379e.png#averageHue=%23e1b77b&amp;clientId=u17c9685a-5f1c-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=310&amp;id=u225b7c18&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=465&amp;originWidth=1400&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=31319&amp;status=done&amp;style=none&amp;taskId=uf7d65e2c-9941-4fb9-a0fa-75fb5a322c4&amp;title=&amp;width=933.3333333333334" alt="image.png" data-proofer-ignore>很自然想到sql注入了，于是对比一下输入回显，发现可能真的存在注入了
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668186975870-1b149cad-f59a-4633-8fd7-13fe20e1e939.png#averageHue=%23fdfdfd&amp;clientId=u17c9685a-5f1c-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=221&amp;id=u2a5d7bd6&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=331&amp;originWidth=1013&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=12601&amp;status=done&amp;style=none&amp;taskId=uf780ebaf-1808-4d85-a8d7-ef0211679fc&amp;title=&amp;width=675.3333333333334" alt="image.png" data-proofer-ignore>
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668187027657-7d7551c4-cf4a-48ea-a46c-17fbd88be2d0.png#averageHue=%23fefefd&amp;clientId=u17c9685a-5f1c-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=225&amp;id=u6b27edc8&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=338&amp;originWidth=1357&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=14058&amp;status=done&amp;style=none&amp;taskId=uc0764901-6829-43f0-ab9a-7b386ec0707&amp;title=&amp;width=904.6666666666666" alt="image.png" data-proofer-ignore>
+<a href="933.3333333333334" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668186755508-73ec6483-4391-4684-ac7d-fef64b81379e.png#averageHue=%23e1b77b&amp;clientId=u17c9685a-5f1c-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=310&amp;id=u225b7c18&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=465&amp;originWidth=1400&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=31319&amp;status=done&amp;style=none&amp;taskId=uf7d65e2c-9941-4fb9-a0fa-75fb5a322c4&amp;title=&amp;width=933.3333333333334" alt="image.png" class="lazyload" data-proofer-ignore></a>很自然想到sql注入了，于是对比一下输入回显，发现可能真的存在注入了
+<a href="675.3333333333334" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668186975870-1b149cad-f59a-4633-8fd7-13fe20e1e939.png#averageHue=%23fdfdfd&amp;clientId=u17c9685a-5f1c-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=221&amp;id=u2a5d7bd6&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=331&amp;originWidth=1013&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=12601&amp;status=done&amp;style=none&amp;taskId=uf780ebaf-1808-4d85-a8d7-ef0211679fc&amp;title=&amp;width=675.3333333333334" alt="image.png" class="lazyload" data-proofer-ignore></a>
+<a href="904.6666666666666" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668187027657-7d7551c4-cf4a-48ea-a46c-17fbd88be2d0.png#averageHue=%23fefefd&amp;clientId=u17c9685a-5f1c-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=225&amp;id=u6b27edc8&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=338&amp;originWidth=1357&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=14058&amp;status=done&amp;style=none&amp;taskId=uc0764901-6829-43f0-ab9a-7b386ec0707&amp;title=&amp;width=904.6666666666666" alt="image.png" class="lazyload" data-proofer-ignore></a>
 然后一番折腾发现了这个，意思应该是过滤了等号。那就直接<code class="language-plaintext highlighter-rouge">1' or 1 -- -</code>
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668187138169-441068c0-df5d-4ff0-a4b1-8d0f1d08e046.png#averageHue=%23dcb373&amp;clientId=u17c9685a-5f1c-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=170&amp;id=u360c9431&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=364&amp;originWidth=1162&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=44132&amp;status=done&amp;style=none&amp;taskId=ucbe79d5e-d9a8-44b2-b22e-90fae6843f7&amp;title=&amp;width=544" alt="image.png" data-proofer-ignore><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668217217370-280a5e5e-ce84-490b-a8b7-fae917fbd9e7.png#averageHue=%23fdfdfd&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=248&amp;id=u1ff164a4&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=372&amp;originWidth=1085&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=13157&amp;status=done&amp;style=none&amp;taskId=u192e0464-cbff-4b23-b585-551368dd14c&amp;title=&amp;width=723.3333333333334" alt="image.png" data-proofer-ignore>
+<a href="544" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668187138169-441068c0-df5d-4ff0-a4b1-8d0f1d08e046.png#averageHue=%23dcb373&amp;clientId=u17c9685a-5f1c-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=170&amp;id=u360c9431&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=364&amp;originWidth=1162&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=44132&amp;status=done&amp;style=none&amp;taskId=ucbe79d5e-d9a8-44b2-b22e-90fae6843f7&amp;title=&amp;width=544" alt="image.png" class="lazyload" data-proofer-ignore></a><a href="723.3333333333334" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668217217370-280a5e5e-ce84-490b-a8b7-fae917fbd9e7.png#averageHue=%23fdfdfd&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=248&amp;id=u1ff164a4&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=372&amp;originWidth=1085&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=13157&amp;status=done&amp;style=none&amp;taskId=u192e0464-cbff-4b23-b585-551368dd14c&amp;title=&amp;width=723.3333333333334" alt="image.png" class="lazyload" data-proofer-ignore></a>
 应该是已经成功查询了，然后想着限制一下查询数量看看，也是试了不少次</p>
 <div class="language-sql highlighter-rouge"><div class="code-header">
         <span data-label-text="Sql"><i class="fas fa-code small"></i></span>
@@ -1991,11 +2070,11 @@
 </pre></td><td class="rouge-code"><pre><span class="s1">' or 1 limit 1, 2-- -
 过滤了等号
 </span></pre></td></tr></tbody></table></code></div></div>
-<p>直接就出了<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668187714872-57a5229b-b60d-469f-b95f-a2b5eded9cfd.png#averageHue=%23fdfdfc&amp;clientId=u17c9685a-5f1c-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=229&amp;id=ufb60dc2a&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=344&amp;originWidth=979&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=16623&amp;status=done&amp;style=none&amp;taskId=u579616bb-c797-47a8-a301-d4361daa81c&amp;title=&amp;width=652.6666666666666" alt="image.png" data-proofer-ignore></p>
+<p>直接就出了<a href="652.6666666666666" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668187714872-57a5229b-b60d-469f-b95f-a2b5eded9cfd.png#averageHue=%23fdfdfc&amp;clientId=u17c9685a-5f1c-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=229&amp;id=ufb60dc2a&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=344&amp;originWidth=979&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=16623&amp;status=done&amp;style=none&amp;taskId=u579616bb-c797-47a8-a301-d4361daa81c&amp;title=&amp;width=652.6666666666666" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 <h3 id="view-source"><span class="mr-2">View source</span><a href="#view-source" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
-<p><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668219706177-39d02000-ec08-4ca4-b2b7-e9de0b8a2adc.png#averageHue=%232a2e40&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=295&amp;id=ua800c5b3&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=443&amp;originWidth=1656&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=70761&amp;status=done&amp;style=none&amp;taskId=ud673b059-4f48-496d-beeb-becbdca199f&amp;title=&amp;width=1104" alt="image.png" data-proofer-ignore>
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668219721836-0f42e7dc-94ab-4158-96cb-c29b43fb8901.png#averageHue=%232a2e40&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=211&amp;id=u414b36bf&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=317&amp;originWidth=1578&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=49409&amp;status=done&amp;style=none&amp;taskId=u0145ddb0-a8a2-403c-994d-06aa3917dfe&amp;title=&amp;width=1052" alt="image.png" data-proofer-ignore>
-用的是sqlite数据库<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668219859301-9c5a8940-2e95-4279-ba69-9abec10ecb71.png#averageHue=%23f9f8f8&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=232&amp;id=uc0605c18&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=348&amp;originWidth=1149&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=23405&amp;status=done&amp;style=none&amp;taskId=u1603b8cc-5460-4d9e-ad2c-b9ae89d7355&amp;title=&amp;width=766" alt="image.png" data-proofer-ignore>
+<p><a href="1104" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668219706177-39d02000-ec08-4ca4-b2b7-e9de0b8a2adc.png#averageHue=%232a2e40&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=295&amp;id=ua800c5b3&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=443&amp;originWidth=1656&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=70761&amp;status=done&amp;style=none&amp;taskId=ud673b059-4f48-496d-beeb-becbdca199f&amp;title=&amp;width=1104" alt="image.png" class="lazyload" data-proofer-ignore></a>
+<a href="1052" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668219721836-0f42e7dc-94ab-4158-96cb-c29b43fb8901.png#averageHue=%232a2e40&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=211&amp;id=u414b36bf&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=317&amp;originWidth=1578&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=49409&amp;status=done&amp;style=none&amp;taskId=u0145ddb0-a8a2-403c-994d-06aa3917dfe&amp;title=&amp;width=1052" alt="image.png" class="lazyload" data-proofer-ignore></a>
+用的是sqlite数据库<a href="766" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668219859301-9c5a8940-2e95-4279-ba69-9abec10ecb71.png#averageHue=%23f9f8f8&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=232&amp;id=uc0605c18&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=348&amp;originWidth=1149&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=23405&amp;status=done&amp;style=none&amp;taskId=u1603b8cc-5460-4d9e-ad2c-b9ae89d7355&amp;title=&amp;width=766" alt="image.png" class="lazyload" data-proofer-ignore></a>
 代码逻辑要求sql语句中查询的结果是<code class="language-plaintext highlighter-rouge">brutusB3stNut9999</code>，如果是则<code class="language-plaintext highlighter-rouge">$authenticated = true;</code>得到flag，呜呜呜，要是有密码，直接输密码就行。索性这里只过滤了个=，我们只要limit限制查询结果就OK，也就是</p>
 <div class="language-sql highlighter-rouge"><div class="code-header">
         <span data-label-text="Sql"><i class="fas fa-code small"></i></span>
@@ -2003,7 +2082,7 @@
 </pre></td><td class="rouge-code"><pre><span class="s1">' or 1 limit 1, 2-- -
 </span></pre></td></tr></tbody></table></code></div></div>
 <p>但是不知道为什么<code class="language-plaintext highlighter-rouge">' or 1 limit 1, 1-- -</code>不行，这点暂时没想明白
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668220642017-b86f7179-0338-4956-a2e7-d0a6731d6a96.png#averageHue=%23fdfdfd&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=0.8379&amp;from=paste&amp;height=300&amp;id=ud2835ba5&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=450&amp;originWidth=1237&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=13192&amp;status=done&amp;style=none&amp;taskId=u4d365121-db1a-4502-a3df-6108b93da3e&amp;title=&amp;width=825" alt="image.png" data-proofer-ignore></p>
+<a href="825" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668220642017-b86f7179-0338-4956-a2e7-d0a6731d6a96.png#averageHue=%23fdfdfd&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=0.8379&amp;from=paste&amp;height=300&amp;id=ud2835ba5&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=450&amp;originWidth=1237&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=13192&amp;status=done&amp;style=none&amp;taskId=u4d365121-db1a-4502-a3df-6108b93da3e&amp;title=&amp;width=825" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <h2 id="pongbeginner"><span class="mr-2">pong/beginner</span><a href="#pongbeginner" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 <blockquote>
@@ -2157,8 +2236,8 @@
 141
 142
 </pre></td><td class="rouge-code"><pre><span class="o">&lt;</span><span class="nx">script</span><span class="o">&gt;</span>
-<span class="kd">const</span> <span class="nx">socket</span> <span class="o">=</span> <span class="nx">io</span><span class="p">();</span>
-<span class="kd">const</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">game</span><span class="dl">"</span><span class="p">);</span>
+<span class="kd">const</span> <span class="nx">socket</span> <span class="o">=</span> <span class="nf">io</span><span class="p">();</span>
+<span class="kd">const</span> <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nf">getElementById</span><span class="p">(</span><span class="dl">"</span><span class="s2">game</span><span class="dl">"</span><span class="p">);</span>
 <span class="kd">const</span> <span class="nx">pl</span> <span class="o">=</span> <span class="p">.</span><span class="mi">16</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">pw</span> <span class="o">=</span> <span class="p">.</span><span class="mi">02</span><span class="p">;</span>
 <span class="kd">const</span> <span class="nx">bs</span> <span class="o">=</span> <span class="p">.</span><span class="mi">04</span><span class="p">;</span>
@@ -2176,13 +2255,13 @@
 <span class="kd">var</span> <span class="nx">s1</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="kd">var</span> <span class="nx">s2</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 
-<span class="kd">function</span> <span class="nx">reset</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span> <span class="p">{</span>
-  <span class="nx">ctx</span><span class="p">.</span><span class="nx">resetTransform</span><span class="p">();</span>
-  <span class="nx">ctx</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">);</span>
+<span class="kd">function</span> <span class="nf">reset</span><span class="p">(</span><span class="nx">ctx</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nf">resetTransform</span><span class="p">();</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nf">translate</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">);</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">lineWidth</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="kd">set</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nf">set</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">bx</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">;</span>
   <span class="nx">by</span> <span class="o">=</span> <span class="mf">0.5</span><span class="p">;</span>
   <span class="nx">bvx</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
@@ -2191,109 +2270,109 @@
   <span class="nx">spin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">draw</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nf">draw</span><span class="p">()</span> <span class="p">{</span>
   <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">clientWidth</span><span class="p">;</span>
   <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">clientHeight</span><span class="p">;</span>
   <span class="kd">const</span> <span class="nx">w</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">;</span>
   <span class="kd">const</span> <span class="nx">h</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">;</span>
-  <span class="kd">const</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="dl">"</span><span class="s2">2d</span><span class="dl">"</span><span class="p">);</span>
-  <span class="nx">reset</span><span class="p">(</span><span class="nx">ctx</span><span class="p">);</span>
+  <span class="kd">const</span> <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nf">getContext</span><span class="p">(</span><span class="dl">"</span><span class="s2">2d</span><span class="dl">"</span><span class="p">);</span>
+  <span class="nf">reset</span><span class="p">(</span><span class="nx">ctx</span><span class="p">);</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">#FFFFFF</span><span class="dl">"</span><span class="p">;</span>
-  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nf">fillRect</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">h</span><span class="p">);</span>
 
   <span class="c1">// field lines</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">#aaaaaa</span><span class="dl">"</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">y</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">y</span> <span class="o">+=</span> <span class="p">.</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="nx">w</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">5</span><span class="p">,</span> <span class="p">(</span><span class="nx">y</span> <span class="o">+</span> <span class="p">.</span><span class="mi">025</span><span class="p">)</span> <span class="o">*</span> <span class="nx">h</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="p">.</span><span class="mi">05</span> <span class="o">*</span> <span class="nx">h</span><span class="p">);</span>
+  <span class="nf">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">y</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">y</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">y</span> <span class="o">+=</span> <span class="p">.</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nf">fillRect</span><span class="p">(</span><span class="nx">w</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">5</span><span class="p">,</span> <span class="p">(</span><span class="nx">y</span> <span class="o">+</span> <span class="p">.</span><span class="mi">025</span><span class="p">)</span> <span class="o">*</span> <span class="nx">h</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="p">.</span><span class="mi">05</span> <span class="o">*</span> <span class="nx">h</span><span class="p">);</span>
   <span class="p">}</span>
 
   <span class="c1">// ball</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">#000000</span><span class="dl">"</span><span class="p">;</span>
-  <span class="nx">ctx</span><span class="p">.</span><span class="nx">translate</span><span class="p">(</span><span class="nx">bx</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">by</span> <span class="o">*</span> <span class="nx">h</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nf">translate</span><span class="p">(</span><span class="nx">bx</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">by</span> <span class="o">*</span> <span class="nx">h</span><span class="p">);</span>
   <span class="nx">bt</span> <span class="o">+=</span> <span class="nx">spin</span><span class="p">;</span>
-  <span class="k">while</span><span class="p">(</span><span class="nx">bt</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="nx">bt</span> <span class="o">+=</span> <span class="mi">360</span><span class="p">;</span>
-  <span class="k">while</span><span class="p">(</span><span class="nx">bt</span> <span class="o">&gt;</span> <span class="mi">359</span><span class="p">)</span> <span class="nx">bt</span> <span class="o">-=</span> <span class="mi">360</span><span class="p">;</span>
-  <span class="nx">ctx</span><span class="p">.</span><span class="nx">rotate</span><span class="p">(</span><span class="nx">bt</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">/</span> <span class="mi">180</span><span class="p">);</span>
+  <span class="nf">while</span><span class="p">(</span><span class="nx">bt</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="nx">bt</span> <span class="o">+=</span> <span class="mi">360</span><span class="p">;</span>
+  <span class="nf">while</span><span class="p">(</span><span class="nx">bt</span> <span class="o">&gt;</span> <span class="mi">359</span><span class="p">)</span> <span class="nx">bt</span> <span class="o">-=</span> <span class="mi">360</span><span class="p">;</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nf">rotate</span><span class="p">(</span><span class="nx">bt</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span> <span class="o">/</span> <span class="mi">180</span><span class="p">);</span>
 
-  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="nx">bs</span> <span class="o">*</span> <span class="nx">h</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="nx">bs</span> <span class="o">*</span> <span class="nx">h</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">bs</span> <span class="o">*</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">bs</span> <span class="o">*</span> <span class="nx">h</span><span class="p">);</span>
-  <span class="nx">reset</span><span class="p">(</span><span class="nx">ctx</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nf">fillRect</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="nx">bs</span> <span class="o">*</span> <span class="nx">h</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="o">-</span><span class="p">(</span><span class="nx">bs</span> <span class="o">*</span> <span class="nx">h</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="nx">bs</span> <span class="o">*</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">bs</span> <span class="o">*</span> <span class="nx">h</span><span class="p">);</span>
+  <span class="nf">reset</span><span class="p">(</span><span class="nx">ctx</span><span class="p">);</span>
 
   <span class="c1">// paddles</span>
   <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillStyle</span> <span class="o">=</span> <span class="dl">"</span><span class="s2">#000000</span><span class="dl">"</span><span class="p">;</span>
-  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="nx">pw</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="p">(</span><span class="nx">p1</span> <span class="o">-</span> <span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">pw</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">pl</span> <span class="o">*</span> <span class="nx">h</span><span class="p">);</span>
-  <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="nx">pw</span><span class="p">)</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="p">(</span><span class="nx">p2</span> <span class="o">-</span> <span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">pw</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">pl</span> <span class="o">*</span> <span class="nx">h</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nf">fillRect</span><span class="p">(</span><span class="nx">pw</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="p">(</span><span class="nx">p1</span> <span class="o">-</span> <span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">pw</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">pl</span> <span class="o">*</span> <span class="nx">h</span><span class="p">);</span>
+  <span class="nx">ctx</span><span class="p">.</span><span class="nf">fillRect</span><span class="p">((</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">2</span> <span class="o">*</span> <span class="nx">pw</span><span class="p">)</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="p">(</span><span class="nx">p2</span> <span class="o">-</span> <span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="nx">h</span><span class="p">,</span> <span class="nx">pw</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="nx">pl</span> <span class="o">*</span> <span class="nx">h</span><span class="p">);</span>
 
   <span class="c1">// scores</span>
-  <span class="k">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">;</span> <span class="nx">x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">ctx</span><span class="p">.</span><span class="nx">beginPath</span><span class="p">();</span>
-    <span class="nx">ctx</span><span class="p">.</span><span class="nx">rect</span><span class="p">(</span><span class="nx">x</span> <span class="o">*</span> <span class="p">.</span><span class="mi">05</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">.</span><span class="mi">05</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="nx">h</span><span class="p">);</span>
-    <span class="nx">ctx</span><span class="p">.</span><span class="nx">stroke</span><span class="p">();</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">s1</span><span class="p">)</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="nx">x</span> <span class="o">*</span> <span class="p">.</span><span class="mi">05</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">.</span><span class="mi">05</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="nx">h</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">x</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="o">&amp;&amp;</span> <span class="nx">s2</span> <span class="o">&gt;</span> <span class="mi">19</span> <span class="o">-</span> <span class="nx">x</span><span class="p">)</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">fillRect</span><span class="p">(</span><span class="nx">x</span> <span class="o">*</span> <span class="p">.</span><span class="mi">05</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">.</span><span class="mi">05</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="nx">h</span><span class="p">);</span>
+  <span class="nf">for</span><span class="p">(</span><span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">;</span> <span class="nx">x</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nf">beginPath</span><span class="p">();</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nf">rect</span><span class="p">(</span><span class="nx">x</span> <span class="o">*</span> <span class="p">.</span><span class="mi">05</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">.</span><span class="mi">05</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="nx">h</span><span class="p">);</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nf">stroke</span><span class="p">();</span>
+    <span class="nf">if</span><span class="p">(</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">s1</span><span class="p">)</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">fillRect</span><span class="p">(</span><span class="nx">x</span> <span class="o">*</span> <span class="p">.</span><span class="mi">05</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">.</span><span class="mi">05</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="nx">h</span><span class="p">);</span>
+    <span class="nf">if</span><span class="p">(</span><span class="nx">x</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="o">&amp;&amp;</span> <span class="nx">s2</span> <span class="o">&gt;</span> <span class="mi">19</span> <span class="o">-</span> <span class="nx">x</span><span class="p">)</span> <span class="nx">ctx</span><span class="p">.</span><span class="nf">fillRect</span><span class="p">(</span><span class="nx">x</span> <span class="o">*</span> <span class="p">.</span><span class="mi">05</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="p">.</span><span class="mi">05</span> <span class="o">*</span> <span class="nx">w</span><span class="p">,</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="nx">h</span><span class="p">);</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">tick</span><span class="p">()</span> <span class="p">{</span>
+<span class="kd">function</span> <span class="nf">tick</span><span class="p">()</span> <span class="p">{</span>
   <span class="kd">const</span> <span class="nx">w</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span><span class="p">;</span>
   <span class="kd">const</span> <span class="nx">h</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span><span class="p">;</span>
 
   <span class="c1">// controls</span>
-  <span class="k">if</span><span class="p">(</span><span class="nx">p1</span> <span class="o">-</span> <span class="nx">up</span> <span class="o">*</span> <span class="p">.</span><span class="mi">01</span> <span class="o">&gt;</span> <span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="nx">p1</span> <span class="o">-=</span> <span class="nx">up</span> <span class="o">*</span> <span class="p">.</span><span class="mi">01</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span><span class="nx">p1</span> <span class="o">+</span> <span class="nx">down</span> <span class="o">*</span> <span class="p">.</span><span class="mi">01</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="o">-</span> <span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="nx">p1</span> <span class="o">+=</span> <span class="nx">down</span> <span class="o">*</span> <span class="p">.</span><span class="mi">01</span><span class="p">;</span>
+  <span class="nf">if</span><span class="p">(</span><span class="nx">p1</span> <span class="o">-</span> <span class="nx">up</span> <span class="o">*</span> <span class="p">.</span><span class="mi">01</span> <span class="o">&gt;</span> <span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="nx">p1</span> <span class="o">-=</span> <span class="nx">up</span> <span class="o">*</span> <span class="p">.</span><span class="mi">01</span><span class="p">;</span>
+  <span class="nf">if</span><span class="p">(</span><span class="nx">p1</span> <span class="o">+</span> <span class="nx">down</span> <span class="o">*</span> <span class="p">.</span><span class="mi">01</span> <span class="o">&lt;</span> <span class="mi">1</span> <span class="o">-</span> <span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="nx">p1</span> <span class="o">+=</span> <span class="nx">down</span> <span class="o">*</span> <span class="p">.</span><span class="mi">01</span><span class="p">;</span>
   <span class="nx">p2</span> <span class="o">=</span> <span class="nx">by</span><span class="p">;</span>
 
   <span class="c1">// ball</span>
-  <span class="k">if</span><span class="p">(</span><span class="nx">bvx</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="nx">spin</span> <span class="o">=</span> <span class="nx">bvy</span> <span class="o">/</span> <span class="nx">bvx</span> <span class="o">*</span> <span class="mi">5</span><span class="p">;</span>
+  <span class="nf">if</span><span class="p">(</span><span class="nx">bvx</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="nx">spin</span> <span class="o">=</span> <span class="nx">bvy</span> <span class="o">/</span> <span class="nx">bvx</span> <span class="o">*</span> <span class="mi">5</span><span class="p">;</span>
   <span class="nx">bx</span> <span class="o">+=</span> <span class="nx">bvx</span><span class="p">;</span>
   <span class="nx">by</span> <span class="o">+=</span> <span class="nx">bvy</span><span class="p">;</span>
-  <span class="k">if</span><span class="p">(</span><span class="nx">by</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">by</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="nx">bvy</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="c1">// v bounce</span>
-  <span class="k">if</span><span class="p">(</span><span class="nx">bx</span> <span class="o">&lt;</span> <span class="nx">pw</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">if</span><span class="p">(</span><span class="nx">by</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="nx">by</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">)</span> <span class="nx">bvy</span> <span class="o">*=</span> <span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="c1">// v bounce</span>
+  <span class="nf">if</span><span class="p">(</span><span class="nx">bx</span> <span class="o">&lt;</span> <span class="nx">pw</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// left paddle bounce</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">by</span> <span class="o">&gt;</span> <span class="nx">p1</span> <span class="o">-</span> <span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="nx">by</span> <span class="o">&lt;</span> <span class="nx">p1</span> <span class="o">+</span> <span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">if</span><span class="p">(</span><span class="nx">by</span> <span class="o">&gt;</span> <span class="nx">p1</span> <span class="o">-</span> <span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="nx">by</span> <span class="o">&lt;</span> <span class="nx">p1</span> <span class="o">+</span> <span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
       <span class="kd">let</span> <span class="nx">diff</span> <span class="o">=</span> <span class="nx">by</span> <span class="o">-</span> <span class="nx">p1</span><span class="p">;</span>
       <span class="nx">bvy</span> <span class="o">=</span> <span class="p">.</span><span class="mi">015</span> <span class="o">*</span> <span class="nx">diff</span> <span class="o">/</span> <span class="p">(</span><span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
-      <span class="nx">bvx</span> <span class="o">=</span> <span class="p">.</span><span class="mi">015</span> <span class="o">-</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">bvy</span><span class="p">);</span>
+      <span class="nx">bvx</span> <span class="o">=</span> <span class="p">.</span><span class="mi">015</span> <span class="o">-</span> <span class="nb">Math</span><span class="p">.</span><span class="nf">abs</span><span class="p">(</span><span class="nx">bvy</span><span class="p">);</span>
     <span class="p">}</span>
   <span class="p">}</span>
-  <span class="k">if</span><span class="p">(</span><span class="nx">bx</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">-</span> <span class="nx">pw</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nf">if</span><span class="p">(</span><span class="nx">bx</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="o">-</span> <span class="nx">pw</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
     <span class="c1">// right paddle bounce</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">by</span> <span class="o">&gt;</span> <span class="nx">p2</span> <span class="o">-</span> <span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="nx">by</span> <span class="o">&lt;</span> <span class="nx">p2</span> <span class="o">+</span> <span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">if</span><span class="p">(</span><span class="nx">by</span> <span class="o">&gt;</span> <span class="nx">p2</span> <span class="o">-</span> <span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">&amp;&amp;</span> <span class="nx">by</span> <span class="o">&lt;</span> <span class="nx">p2</span> <span class="o">+</span> <span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span> <span class="p">{</span>
       <span class="kd">let</span> <span class="nx">diff</span> <span class="o">=</span> <span class="nx">by</span> <span class="o">-</span> <span class="nx">p2</span><span class="p">;</span>
       <span class="nx">bvy</span> <span class="o">=</span> <span class="p">.</span><span class="mi">015</span> <span class="o">*</span> <span class="nx">diff</span> <span class="o">/</span> <span class="p">(</span><span class="nx">pl</span> <span class="o">/</span> <span class="mi">2</span><span class="p">);</span>
-      <span class="nx">bvx</span> <span class="o">=</span> <span class="o">-</span><span class="p">(.</span><span class="mi">015</span> <span class="o">-</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">abs</span><span class="p">(</span><span class="nx">bvy</span><span class="p">));</span>
+      <span class="nx">bvx</span> <span class="o">=</span> <span class="o">-</span><span class="p">(.</span><span class="mi">015</span> <span class="o">-</span> <span class="nb">Math</span><span class="p">.</span><span class="nf">abs</span><span class="p">(</span><span class="nx">bvy</span><span class="p">));</span>
     <span class="p">}</span>   
   <span class="p">}</span>
 
-  <span class="k">if</span><span class="p">(</span><span class="nx">bx</span> <span class="o">&lt;</span> <span class="o">-</span><span class="p">.</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">bx</span> <span class="o">&gt;</span> <span class="mf">1.1</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="dl">"</span><span class="s2">score</span><span class="dl">"</span><span class="p">,</span> <span class="nx">bx</span><span class="p">);</span>
+  <span class="nf">if</span><span class="p">(</span><span class="nx">bx</span> <span class="o">&lt;</span> <span class="o">-</span><span class="p">.</span><span class="mi">1</span> <span class="o">||</span> <span class="nx">bx</span> <span class="o">&gt;</span> <span class="mf">1.1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">socket</span><span class="p">.</span><span class="nf">emit</span><span class="p">(</span><span class="dl">"</span><span class="s2">score</span><span class="dl">"</span><span class="p">,</span> <span class="nx">bx</span><span class="p">);</span>
   <span class="p">}</span>
 
-  <span class="nx">draw</span><span class="p">();</span>
+  <span class="nf">draw</span><span class="p">();</span>
 <span class="p">}</span>
 
-<span class="kd">function</span> <span class="nx">init</span><span class="p">()</span> <span class="p">{</span>
-  <span class="nx">draw</span><span class="p">();</span>
-  <span class="nx">setInterval</span><span class="p">(</span><span class="nx">tick</span><span class="p">,</span> <span class="mi">13</span><span class="p">);</span>
-  <span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">keydown</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">w</span><span class="dl">"</span><span class="p">)</span> <span class="nx">up</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">s</span><span class="dl">"</span><span class="p">)</span> <span class="nx">down</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">p</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
-      <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="dl">"</span><span class="s2">begin</span><span class="dl">"</span><span class="p">);</span>
+<span class="kd">function</span> <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nf">draw</span><span class="p">();</span>
+  <span class="nf">setInterval</span><span class="p">(</span><span class="nx">tick</span><span class="p">,</span> <span class="mi">13</span><span class="p">);</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nf">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">keydown</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nf">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">w</span><span class="dl">"</span><span class="p">)</span> <span class="nx">up</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="nf">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">s</span><span class="dl">"</span><span class="p">)</span> <span class="nx">down</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="nf">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">p</span><span class="dl">"</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">socket</span><span class="p">.</span><span class="nf">emit</span><span class="p">(</span><span class="dl">"</span><span class="s2">begin</span><span class="dl">"</span><span class="p">);</span>
     <span class="p">}</span>
   <span class="p">});</span>
-  <span class="nb">document</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">keyup</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">w</span><span class="dl">"</span><span class="p">)</span> <span class="nx">up</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">s</span><span class="dl">"</span><span class="p">)</span> <span class="nx">down</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nf">addEventListener</span><span class="p">(</span><span class="dl">"</span><span class="s2">keyup</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+    <span class="nf">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">w</span><span class="dl">"</span><span class="p">)</span> <span class="nx">up</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="nf">if</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">key</span> <span class="o">==</span> <span class="dl">"</span><span class="s2">s</span><span class="dl">"</span><span class="p">)</span> <span class="nx">down</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
   <span class="p">});</span>
 <span class="p">}</span>
 
-<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">alert</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">alert</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
-<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">begin</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">params</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nf">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">alert</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nf">alert</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nf">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">begin</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">params</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
   <span class="nx">bvx</span> <span class="o">=</span> <span class="nx">params</span><span class="p">.</span><span class="nx">bvx</span><span class="p">;</span>
   <span class="nx">bvy</span> <span class="o">=</span> <span class="nx">params</span><span class="p">.</span><span class="nx">bvy</span><span class="p">;</span>
 <span class="p">});</span>
-<span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">set</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">scores</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
-  <span class="kd">set</span><span class="p">();</span>
+<span class="nx">socket</span><span class="p">.</span><span class="nf">on</span><span class="p">(</span><span class="dl">"</span><span class="s2">set</span><span class="dl">"</span><span class="p">,</span> <span class="p">(</span><span class="nx">scores</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+  <span class="nf">set</span><span class="p">();</span>
   <span class="nx">s1</span> <span class="o">=</span> <span class="nx">scores</span><span class="p">.</span><span class="nx">sx1</span><span class="p">;</span>
   <span class="nx">s2</span> <span class="o">=</span> <span class="nx">scores</span><span class="p">.</span><span class="nx">sx2</span><span class="p">;</span>
 <span class="p">});</span>
@@ -2305,9 +2384,9 @@
 
 <p>So 大意就是我们可以在开发者工具的控制台中控制这些变量，尽管看不太懂js，但大概能知道s1和s2是分数，而s1是我的分数，s2是对手的分数，于是可以在控制台中修改变量。
 但是没啥用啊。但是这样打开了思路，可以找其他变量试试，最后发现了<code class="language-plaintext highlighter-rouge">bx</code>这个变量，是ball在x坐标上的位置，于是我们可以自己控制球的位置
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668224732500-cfc4c798-5ef6-4c62-95e0-0b5bfd5e9b54.png#averageHue=%23202124&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=137&amp;id=u6406f77a&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=206&amp;originWidth=1044&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=4826&amp;status=done&amp;style=none&amp;taskId=u3120ced5-366b-44d6-a985-e7e3034013c&amp;title=&amp;width=696" alt="image.png" data-proofer-ignore>
+<a href="696" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668224732500-cfc4c798-5ef6-4c62-95e0-0b5bfd5e9b54.png#averageHue=%23202124&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=137&amp;id=u6406f77a&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=206&amp;originWidth=1044&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=4826&amp;status=done&amp;style=none&amp;taskId=u3120ced5-366b-44d6-a985-e7e3034013c&amp;title=&amp;width=696" alt="image.png" class="lazyload" data-proofer-ignore></a>
 最后令bx等于1.5，球就越过了对手的防线(超出了屏幕)，we win ！，就得到了flag
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668224705181-57d0a30f-11b1-4939-977c-c04bac2e13d1.png#averageHue=%23999998&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=173&amp;id=u7e685b2b&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=260&amp;originWidth=972&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=19431&amp;status=done&amp;style=none&amp;taskId=u1134502d-58cf-4084-875f-7e7c0a2c155&amp;title=&amp;width=648" alt="image.png" data-proofer-ignore></p>
+<a href="648" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668224705181-57d0a30f-11b1-4939-977c-c04bac2e13d1.png#averageHue=%23999998&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=173&amp;id=u7e685b2b&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=260&amp;originWidth=972&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=19431&amp;status=done&amp;style=none&amp;taskId=u1134502d-58cf-4084-875f-7e7c0a2c155&amp;title=&amp;width=648" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <h1 id="misc">Misc</h1>
 <h2 id="what-you-see-is-what-you-gitbeginner"><span class="mr-2">what-you-see-is-what-you-git/beginner</span><a href="#what-you-see-is-what-you-gitbeginner" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
@@ -2316,7 +2395,7 @@
 </blockquote>
 
 <p>git相关的题目，关键还是logs日志文件，HEAD中有些线索
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668250367571-0ab3f7e3-071f-4737-a7fa-c70008d7ef67.png#averageHue=%2338352f&amp;clientId=u381ece55-2730-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=375&amp;id=ua3d81ad3&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=562&amp;originWidth=1894&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=373020&amp;status=done&amp;style=none&amp;taskId=u453a60c5-7dbf-4b88-b1bb-2444bdcc563&amp;title=&amp;width=1262.6666666666667" alt="image.png" data-proofer-ignore>
+<a href="1262.6666666666667" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668250367571-0ab3f7e3-071f-4737-a7fa-c70008d7ef67.png#averageHue=%2338352f&amp;clientId=u381ece55-2730-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=375&amp;id=ua3d81ad3&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=562&amp;originWidth=1894&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=373020&amp;status=done&amp;style=none&amp;taskId=u453a60c5-7dbf-4b88-b1bb-2444bdcc563&amp;title=&amp;width=1262.6666666666667" alt="image.png" class="lazyload" data-proofer-ignore></a>
 然后恢复Hid the flag提交的暂存区</p>
 <blockquote>
   <p>git reset –hard 7ae8453a76a41d40bdfcc7992175390f70ba9fdf
@@ -2330,7 +2409,7 @@
 </blockquote>
 
 <p>得到flag
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668252918384-917496f3-9664-4a97-8bd0-56d35a447bee.png#averageHue=%232d2a27&amp;clientId=u381ece55-2730-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=564&amp;id=ua92949ea&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=846&amp;originWidth=1258&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=490677&amp;status=done&amp;style=none&amp;taskId=ub1aea956-09c9-407b-a4eb-7b9a6122a08&amp;title=&amp;width=838.6666666666666" alt="image.png" data-proofer-ignore></p>
+<a href="838.6666666666666" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668252918384-917496f3-9664-4a97-8bd0-56d35a447bee.png#averageHue=%232d2a27&amp;clientId=u381ece55-2730-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=564&amp;id=ua92949ea&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=846&amp;originWidth=1258&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=490677&amp;status=done&amp;style=none&amp;taskId=ub1aea956-09c9-407b-a4eb-7b9a6122a08&amp;title=&amp;width=838.6666666666666" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <h2 id="suseasy"><span class="mr-2">sus/easy</span><a href="#suseasy" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 <blockquote>
@@ -2357,22 +2436,22 @@ Hint: The crackling in the audio should tell you that something’s wrong.</p>
 14
 15
 </pre></td><td class="rouge-code"><pre><span class="k">import</span> <span class="nx">wave</span>
-<span class="nx">song</span> <span class="o">=</span> <span class="nx">wave</span><span class="p">.</span><span class="nx">open</span><span class="p">(</span><span class="dl">"</span><span class="s2">sus.wav</span><span class="dl">"</span><span class="p">,</span> <span class="nx">mode</span><span class="o">=</span><span class="dl">'</span><span class="s1">rb</span><span class="dl">'</span><span class="p">)</span>
+<span class="nx">song</span> <span class="o">=</span> <span class="nx">wave</span><span class="p">.</span><span class="nf">open</span><span class="p">(</span><span class="dl">"</span><span class="s2">sus.wav</span><span class="dl">"</span><span class="p">,</span> <span class="nx">mode</span><span class="o">=</span><span class="dl">'</span><span class="s1">rb</span><span class="dl">'</span><span class="p">)</span>
 <span class="err">#</span> <span class="nx">Convert</span> <span class="nx">audio</span> <span class="nx">to</span> <span class="nx">byte</span> <span class="nx">array</span>
-<span class="nx">frame_bytes</span> <span class="o">=</span> <span class="nx">bytearray</span><span class="p">(</span><span class="nx">list</span><span class="p">(</span><span class="nx">song</span><span class="p">.</span><span class="nx">readframes</span><span class="p">(</span><span class="nx">song</span><span class="p">.</span><span class="nx">getnframes</span><span class="p">())))</span>
+<span class="nx">frame_bytes</span> <span class="o">=</span> <span class="nf">bytearray</span><span class="p">(</span><span class="nf">list</span><span class="p">(</span><span class="nx">song</span><span class="p">.</span><span class="nf">readframes</span><span class="p">(</span><span class="nx">song</span><span class="p">.</span><span class="nf">getnframes</span><span class="p">())))</span>
 
 <span class="err">#</span> <span class="nx">Extract</span> <span class="nx">the</span> <span class="nx">LSB</span> <span class="k">of</span> <span class="nx">each</span> <span class="nx">byte</span>
-<span class="nx">extracted</span> <span class="o">=</span> <span class="p">[</span><span class="nx">frame_bytes</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mi">1</span> <span class="k">for</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">range</span><span class="p">(</span><span class="nx">len</span><span class="p">(</span><span class="nx">frame_bytes</span><span class="p">))]</span>
+<span class="nx">extracted</span> <span class="o">=</span> <span class="p">[</span><span class="nx">frame_bytes</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mi">1</span> <span class="k">for</span> <span class="nx">i</span> <span class="k">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="nx">frame_bytes</span><span class="p">))]</span>
 <span class="err">#</span> <span class="nx">Convert</span> <span class="nx">byte</span> <span class="nx">array</span> <span class="nx">back</span> <span class="nx">to</span> <span class="nx">string</span>
-<span class="nx">string</span> <span class="o">=</span> <span class="dl">""</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">chr</span><span class="p">(</span><span class="nx">int</span><span class="p">(</span><span class="dl">""</span><span class="p">.</span><span class="nx">join</span><span class="p">(</span><span class="nx">map</span><span class="p">(</span><span class="nx">str</span><span class="p">,</span><span class="nx">extracted</span><span class="p">[</span><span class="nx">i</span><span class="p">:</span><span class="nx">i</span><span class="o">+</span><span class="mi">8</span><span class="p">])),</span><span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="nx">i</span> <span class="k">in</span> <span class="nx">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nx">len</span><span class="p">(</span><span class="nx">extracted</span><span class="p">),</span><span class="mi">8</span><span class="p">))</span>
+<span class="nx">string</span> <span class="o">=</span> <span class="dl">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nf">chr</span><span class="p">(</span><span class="nf">int</span><span class="p">(</span><span class="dl">""</span><span class="p">.</span><span class="nf">join</span><span class="p">(</span><span class="nf">map</span><span class="p">(</span><span class="nx">str</span><span class="p">,</span><span class="nx">extracted</span><span class="p">[</span><span class="nx">i</span><span class="p">:</span><span class="nx">i</span><span class="o">+</span><span class="mi">8</span><span class="p">])),</span><span class="mi">2</span><span class="p">))</span> <span class="k">for</span> <span class="nx">i</span> <span class="k">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="nf">len</span><span class="p">(</span><span class="nx">extracted</span><span class="p">),</span><span class="mi">8</span><span class="p">))</span>
 <span class="err">#</span> <span class="nx">Cut</span> <span class="nx">off</span> <span class="nx">at</span> <span class="nx">the</span> <span class="nx">filler</span> <span class="nx">characters</span>
-<span class="nx">decoded</span> <span class="o">=</span> <span class="nx">string</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="dl">"</span><span class="s2">###</span><span class="dl">"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="nx">decoded</span> <span class="o">=</span> <span class="nx">string</span><span class="p">.</span><span class="nf">split</span><span class="p">(</span><span class="dl">"</span><span class="s2">###</span><span class="dl">"</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="err">#</span> <span class="nx">Print</span> <span class="nx">the</span> <span class="nx">extracted</span> <span class="nx">text</span>
-<span class="nx">print</span><span class="p">(</span><span class="dl">"</span><span class="s2">Sucessfully decoded: </span><span class="dl">"</span><span class="o">+</span><span class="nx">decoded</span><span class="p">)</span>
-<span class="nx">song</span><span class="p">.</span><span class="nx">close</span><span class="p">()</span>
+<span class="nf">print</span><span class="p">(</span><span class="dl">"</span><span class="s2">Sucessfully decoded: </span><span class="dl">"</span><span class="o">+</span><span class="nx">decoded</span><span class="p">)</span>
+<span class="nx">song</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
 </pre></td></tr></tbody></table></code></div></div>
-<p><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668257881655-ef7555c3-23ca-4987-be82-07ebd661026c.png#averageHue=%23423e3a&amp;clientId=u381ece55-2730-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=264&amp;id=u02e3b1c6&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=396&amp;originWidth=1099&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=347522&amp;status=done&amp;style=none&amp;taskId=u6b8db589-3f22-4504-92c5-44d534e6ac0&amp;title=&amp;width=732.6666666666666" alt="image.png" data-proofer-ignore></p>
+<p><a href="732.6666666666666" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668257881655-ef7555c3-23ca-4987-be82-07ebd661026c.png#averageHue=%23423e3a&amp;clientId=u381ece55-2730-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=264&amp;id=u02e3b1c6&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=396&amp;originWidth=1099&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=347522&amp;status=done&amp;style=none&amp;taskId=u6b8db589-3f22-4504-92c5-44d534e6ac0&amp;title=&amp;width=732.6666666666666" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <h2 id="keyboardwarriormedium"><span class="mr-2">keyboardwarrior/medium</span><a href="#keyboardwarriormedium" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 <blockquote>
@@ -2381,14 +2460,14 @@ Flag format: buckeyectf{}</p>
 </blockquote>
 
 <p><em>相对平时的蓝牙流量，是很新的题目（协议）了。HCI_EVT和ATT协议，关于协议懒得去深究了，反正和一般的键盘数据数据段相同。	_
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668233632166-827e07bf-6117-4547-b648-f0fb092efe8a.png#averageHue=%2388c89c&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=385&amp;id=u7e5e41e8&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=577&amp;originWidth=2518&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=167464&amp;status=done&amp;style=none&amp;taskId=u0437f91d-8983-44fb-be29-3fa4ce0b53e&amp;title=&amp;width=1678.6666666666667" alt="image.png" data-proofer-ignore>
+<a href="1678.6666666666667" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668233632166-827e07bf-6117-4547-b648-f0fb092efe8a.png#averageHue=%2388c89c&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=385&amp;id=u7e5e41e8&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=577&amp;originWidth=2518&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=167464&amp;status=done&amp;style=none&amp;taskId=u0437f91d-8983-44fb-be29-3fa4ce0b53e&amp;title=&amp;width=1678.6666666666667" alt="image.png" class="lazyload" data-proofer-ignore></a>
 一大堆数据中只有第三个字节不同，于是把以前写的脚本换个导出字段，改改就行
 <a href="https://github.com/may1as/UsbMiceDataexp">https://github.com/may1as/UsbMiceDataexp</a>
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668233934352-8ec22e62-ca7c-47bb-8fd5-dfba6ee69d47.png#averageHue=%23efedec&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=297&amp;id=u86da962a&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=445&amp;originWidth=1563&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=79974&amp;status=done&amp;style=none&amp;taskId=ubedbf63e-3950-487d-84c7-c61eca18b9f&amp;title=&amp;width=1042" alt="image.png" data-proofer-ignore>
+<a href="1042" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668233934352-8ec22e62-ca7c-47bb-8fd5-dfba6ee69d47.png#averageHue=%23efedec&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=297&amp;id=u86da962a&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=445&amp;originWidth=1563&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=79974&amp;status=done&amp;style=none&amp;taskId=ubedbf63e-3950-487d-84c7-c61eca18b9f&amp;title=&amp;width=1042" alt="image.png" class="lazyload" data-proofer-ignore></a>
 那个value的过滤器字段如下，然后-e替换成btatt.value即可
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668234317623-55a54416-d43a-49b8-be81-f67060b610c1.png#averageHue=%23fefcfb&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=204&amp;id=u3b7ec34a&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=306&amp;originWidth=2179&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=45564&amp;status=done&amp;style=none&amp;taskId=u236e7b85-66d0-42a4-be54-5d741f5b510&amp;title=&amp;width=1452.6666666666667" alt="image.png" data-proofer-ignore>
+<a href="1452.6666666666667" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668234317623-55a54416-d43a-49b8-be81-f67060b610c1.png#averageHue=%23fefcfb&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=204&amp;id=u3b7ec34a&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=306&amp;originWidth=2179&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=45564&amp;status=done&amp;style=none&amp;taskId=u236e7b85-66d0-42a4-be54-5d741f5b510&amp;title=&amp;width=1452.6666666666667" alt="image.png" class="lazyload" data-proofer-ignore></a>
 _但是这里还有个坑，得把</em><code class="language-plaintext highlighter-rouge">_[]_</code><em>换成</em><code class="language-plaintext highlighter-rouge">_{}_</code><em>，</em><code class="language-plaintext highlighter-rouge">_-_</code><em>换成</em><code class="language-plaintext highlighter-rouge">___</code><em>，符号不同可能是字典不一致导致的，但是这里无伤大雅</em>
-<img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668239199020-ad70732e-dc4a-4c4c-8fc0-3ea2258f0413.png#averageHue=%23312d2a&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=504&amp;id=u97a08891&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=756&amp;originWidth=1777&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=628350&amp;status=done&amp;style=none&amp;taskId=u50a7d481-6318-4bab-8ed3-6539a106fef&amp;title=&amp;width=1184.6666666666667" alt="image.png" data-proofer-ignore></p>
+<a href="1184.6666666666667" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668239199020-ad70732e-dc4a-4c4c-8fc0-3ea2258f0413.png#averageHue=%23312d2a&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=504&amp;id=u97a08891&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=756&amp;originWidth=1777&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=628350&amp;status=done&amp;style=none&amp;taskId=u50a7d481-6318-4bab-8ed3-6539a106fef&amp;title=&amp;width=1184.6666666666667" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <h1 id="一些小工具">一些小工具</h1>
 <p>file command for windows</p>
@@ -2456,19 +2535,19 @@ _但是这里还有个坑，得把</em><code class="language-plaintext highlight
 
     
       
-        <a href="https://twitter.com/intent/tweet?text=BuckeyeCTF-2022-writeup+-+may1as%27+blog&url=%2Fposts%2FBuckeyeCTF-2022-writeup%2F" data-toggle="tooltip" data-placement="top"
+        <a href="https://twitter.com/intent/tweet?text=BuckeyeCTF-2022-writeup%20-%20may1as'%20blog&url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2FBuckeyeCTF-2022-writeup%2F" data-toggle="tooltip" data-placement="top"
           title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
           <i class="fa-fw fab fa-twitter"></i>
         </a>
     
       
-        <a href="https://www.facebook.com/sharer/sharer.php?title=BuckeyeCTF-2022-writeup+-+may1as%27+blog&u=%2Fposts%2FBuckeyeCTF-2022-writeup%2F" data-toggle="tooltip" data-placement="top"
+        <a href="https://www.facebook.com/sharer/sharer.php?title=BuckeyeCTF-2022-writeup%20-%20may1as'%20blog&u=http%3A%2F%2Flocalhost%3A4000%2Fposts%2FBuckeyeCTF-2022-writeup%2F" data-toggle="tooltip" data-placement="top"
           title="Facebook" target="_blank" rel="noopener" aria-label="Facebook">
           <i class="fa-fw fab fa-facebook-square"></i>
         </a>
     
       
-        <a href="https://t.me/share/url?url=%2Fposts%2FBuckeyeCTF-2022-writeup%2F&text=BuckeyeCTF-2022-writeup+-+may1as%27+blog" data-toggle="tooltip" data-placement="top"
+        <a href="https://t.me/share/url?url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2FBuckeyeCTF-2022-writeup%2F&text=BuckeyeCTF-2022-writeup%20-%20may1as'%20blog" data-toggle="tooltip" data-placement="top"
           title="Telegram" target="_blank" rel="noopener" aria-label="Telegram">
           <i class="fa-fw fab fa-telegram"></i>
         </a>
@@ -2818,13 +2897,13 @@ _但是这里还有个坑，得把</em><code class="language-plaintext highlight
 
 
 
-<!-- BS-toc.js will be loaded at medium priority -->
-<script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@1.0.1/dist/bootstrap-toc.min.js"></script>
+  <div id="toc-wrapper" class="pl-0 pr-4 mb-5">
+    <div class="panel-heading pl-3 pt-2 mb-2">Contents</div>
+    <nav id="toc"></nav>
+  </div>
 
-<div id="toc-wrapper" class="pl-0 pr-4 mb-5">
-  <div class="panel-heading pl-3 pt-2 mb-2">Contents</div>
-  <nav id="toc" data-toggle="toc"></nav>
-</div>
+  <!-- toc.js will be loaded at medium priority -->
+  <script src="https://cdn.jsdelivr.net/npm/tocbot@4.20.1/dist/tocbot.min.js"></script>
 
 
     
@@ -3518,17 +3597,7 @@ Bu...
       </div>
 
       <div class="footer-right">
-        <p class="mb-0">
-
-          
-
-          
-
-          Powered by 
-          <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a>
-           with 
-          <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a>
-           theme.
+        <p class="mb-0">Using the <a href="https://jekyllrb.com" target="_blank" rel="noopener">Jekyll</a> theme <a href="https://github.com/cotes2020/jekyll-theme-chirpy" target="_blank" rel="noopener">Chirpy</a>.
         </p>
       </div>
     </div>
@@ -3600,9 +3669,7 @@ SimpleJekyllSearch({
 </script>
 
 
-    <!--
-  JS selector for site.
--->
+    <!-- JS selector for site. -->
 
 <!-- layout specified -->
 
@@ -3650,9 +3717,7 @@ SimpleJekyllSearch({
 
 
 
-  <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1/dist/jquery.magnific-popup.min.js,npm/lozad/dist/lozad.min.js,npm/clipboard@2/dist/clipboard.min.js"></script>
-
-
+  <script src="https://cdn.jsdelivr.net/combine/npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/lazysizes@5.3.2/lazysizes.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js"></script>
 
 
 
@@ -3707,8 +3772,7 @@ SimpleJekyllSearch({
 
 
 
-  <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1/dayjs.min.js,npm/dayjs@1/locale/en.min.js,npm/dayjs@1/plugin/relativeTime.min.js,npm/dayjs@1/plugin/localizedFormat.min.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/combine/npm/dayjs@1.11.6/dayjs.min.js,npm/dayjs@1.11.6/locale/en.min.js,npm/dayjs@1.11.6/plugin/relativeTime.min.js,npm/dayjs@1.11.6/plugin/localizedFormat.min.js"></script>
 
 
 
@@ -3722,7 +3786,7 @@ SimpleJekyllSearch({
 
 <!-- commons -->
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 
 
 
