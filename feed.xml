@@ -1,17 +1,17 @@
 
 
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <id>http://localhost:4000/</id>
+  <id>/</id>
   <title>may1as' blog</title>
   <subtitle>SEC, may1as, nyist .</subtitle>
-  <updated>2023-04-05T17:43:00+08:00</updated>
+  <updated>2023-04-05T17:45:08+08:00</updated>
   <author>
     <name>may1as</name>
-    <uri>http://localhost:4000/</uri>
+    <uri>/</uri>
   </author>
-  <link rel="self" type="application/atom+xml" href="http://localhost:4000/feed.xml"/>
+  <link rel="self" type="application/atom+xml" href="/feed.xml"/>
   <link rel="alternate" type="text/html" hreflang="en"
-    href="http://localhost:4000/"/>
+    href="/"/>
   <generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator>
   <rights> © 2023 may1as </rights>
   <icon>/assets/img/favicons/favicon.ico</icon>
@@ -21,13 +21,13 @@
   
   <entry>
     <title>BurpSuite Pro 2022.8和练手写的一个小工具</title>
-    <link href="http://localhost:4000/posts/BurpSuite-Pro-2022.8%E5%92%8C%E7%BB%83%E6%89%8B%E5%86%99%E7%9A%84%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%B7%A5%E5%85%B7/" rel="alternate" type="text/html" title="BurpSuite Pro 2022.8和练手写的一个小工具" />
+    <link href="/posts/BurpSuite-Pro-2022.8%E5%92%8C%E7%BB%83%E6%89%8B%E5%86%99%E7%9A%84%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%B7%A5%E5%85%B7/" rel="alternate" type="text/html" title="BurpSuite Pro 2022.8和练手写的一个小工具" />
     <published>2022-12-01T00:00:00+08:00</published>
   
     <updated>2022-12-01T00:00:00+08:00</updated>
   
-    <id>http://localhost:4000/posts/BurpSuite-Pro-2022.8%E5%92%8C%E7%BB%83%E6%89%8B%E5%86%99%E7%9A%84%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%B7%A5%E5%85%B7/</id>
-    <content src="http://localhost:4000/posts/BurpSuite-Pro-2022.8%E5%92%8C%E7%BB%83%E6%89%8B%E5%86%99%E7%9A%84%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%B7%A5%E5%85%B7/" />
+    <id>/posts/BurpSuite-Pro-2022.8%E5%92%8C%E7%BB%83%E6%89%8B%E5%86%99%E7%9A%84%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%B7%A5%E5%85%B7/</id>
+    <content src="/posts/BurpSuite-Pro-2022.8%E5%92%8C%E7%BB%83%E6%89%8B%E5%86%99%E7%9A%84%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%B7%A5%E5%85%B7/" />
     <author>
       <name>may1as</name>
     </author>
@@ -75,13 +75,13 @@ BurpLoaderKeygen就是新版注册机，h3110w0r1d出品，burpsuite_pro_v2022.8
   
   <entry>
     <title>BuckeyeCTF-2022-writeup</title>
-    <link href="http://localhost:4000/posts/BuckeyeCTF-2022-writeup/" rel="alternate" type="text/html" title="BuckeyeCTF-2022-writeup" />
+    <link href="/posts/BuckeyeCTF-2022-writeup/" rel="alternate" type="text/html" title="BuckeyeCTF-2022-writeup" />
     <published>2022-11-12T00:00:00+08:00</published>
   
     <updated>2022-11-12T00:00:00+08:00</updated>
   
-    <id>http://localhost:4000/posts/BuckeyeCTF-2022-writeup/</id>
-    <content src="http://localhost:4000/posts/BuckeyeCTF-2022-writeup/" />
+    <id>/posts/BuckeyeCTF-2022-writeup/</id>
+    <content src="/posts/BuckeyeCTF-2022-writeup/" />
     <author>
       <name>may1as</name>
     </author>
@@ -121,13 +121,13 @@ https://buckeyenotes.chall.pwnoh.io
   
   <entry>
     <title>如何基于volatility2构建“新”版本内核的profile</title>
-    <link href="http://localhost:4000/posts/%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8Evolatility2%E6%9E%84%E5%BB%BA-%E6%96%B0-%E7%89%88%E6%9C%AC%E5%86%85%E6%A0%B8%E7%9A%84profile/" rel="alternate" type="text/html" title="如何基于volatility2构建“新”版本内核的profile" />
+    <link href="/posts/%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8Evolatility2%E6%9E%84%E5%BB%BA-%E6%96%B0-%E7%89%88%E6%9C%AC%E5%86%85%E6%A0%B8%E7%9A%84profile/" rel="alternate" type="text/html" title="如何基于volatility2构建“新”版本内核的profile" />
     <published>2022-11-04T00:00:00+08:00</published>
   
     <updated>2022-11-04T00:00:00+08:00</updated>
   
-    <id>http://localhost:4000/posts/%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8Evolatility2%E6%9E%84%E5%BB%BA-%E6%96%B0-%E7%89%88%E6%9C%AC%E5%86%85%E6%A0%B8%E7%9A%84profile/</id>
-    <content src="http://localhost:4000/posts/%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8Evolatility2%E6%9E%84%E5%BB%BA-%E6%96%B0-%E7%89%88%E6%9C%AC%E5%86%85%E6%A0%B8%E7%9A%84profile/" />
+    <id>/posts/%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8Evolatility2%E6%9E%84%E5%BB%BA-%E6%96%B0-%E7%89%88%E6%9C%AC%E5%86%85%E6%A0%B8%E7%9A%84profile/</id>
+    <content src="/posts/%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8Evolatility2%E6%9E%84%E5%BB%BA-%E6%96%B0-%E7%89%88%E6%9C%AC%E5%86%85%E6%A0%B8%E7%9A%84profile/" />
     <author>
       <name>may1as</name>
     </author>
@@ -160,13 +160,13 @@ https://buckeyenotes.chall.pwnoh.io
   
   <entry>
     <title>2022蓝帽杯遇见的SUID提权</title>
-    <link href="http://localhost:4000/posts/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84-SUID-%E6%8F%90%E6%9D%83-%E5%89%AF%E6%9C%AC/" rel="alternate" type="text/html" title="2022蓝帽杯遇见的SUID提权" />
+    <link href="/posts/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84-SUID-%E6%8F%90%E6%9D%83-%E5%89%AF%E6%9C%AC/" rel="alternate" type="text/html" title="2022蓝帽杯遇见的SUID提权" />
     <published>2022-10-31T00:00:00+08:00</published>
   
     <updated>2022-10-31T00:00:00+08:00</updated>
   
-    <id>http://localhost:4000/posts/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84-SUID-%E6%8F%90%E6%9D%83-%E5%89%AF%E6%9C%AC/</id>
-    <content src="http://localhost:4000/posts/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84-SUID-%E6%8F%90%E6%9D%83-%E5%89%AF%E6%9C%AC/" />
+    <id>/posts/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84-SUID-%E6%8F%90%E6%9D%83-%E5%89%AF%E6%9C%AC/</id>
+    <content src="/posts/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84-SUID-%E6%8F%90%E6%9D%83-%E5%89%AF%E6%9C%AC/" />
     <author>
       <name>may1as</name>
     </author>
@@ -197,13 +197,13 @@ https://buckeyenotes.chall.pwnoh.io
   
   <entry>
     <title>CTF中我的USB键盘鼠标流量解密指南和脚本</title>
-    <link href="http://localhost:4000/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/" rel="alternate" type="text/html" title="CTF中我的USB键盘鼠标流量解密指南和脚本" />
+    <link href="/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/" rel="alternate" type="text/html" title="CTF中我的USB键盘鼠标流量解密指南和脚本" />
     <published>2022-10-12T00:00:00+08:00</published>
   
     <updated>2022-10-12T00:00:00+08:00</updated>
   
-    <id>http://localhost:4000/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/</id>
-    <content src="http://localhost:4000/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/" />
+    <id>/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/</id>
+    <content src="/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/" />
     <author>
       <name>may1as</name>
     </author>

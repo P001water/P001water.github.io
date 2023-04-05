@@ -44,8 +44,8 @@
 <meta property="og:locale" content="en" />
 <meta name="description" content="在freebuf上发过，这里的是精简入门版" />
 <meta property="og:description" content="在freebuf上发过，这里的是精简入门版" />
-<link rel="canonical" href="http://localhost:4000/posts/pythonweb-SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6-%E5%9F%BA%E7%A1%80%E7%AF%87/" />
-<meta property="og:url" content="http://localhost:4000/posts/pythonweb-SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6-%E5%9F%BA%E7%A1%80%E7%AF%87/" />
+<link rel="canonical" href="/posts/pythonweb-SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6-%E5%9F%BA%E7%A1%80%E7%AF%87/" />
+<meta property="og:url" content="/posts/pythonweb-SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6-%E5%9F%BA%E7%A1%80%E7%AF%87/" />
 <meta property="og:site_name" content="may1as’ blog" />
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-07-24T00:00:00+08:00" />
@@ -54,7 +54,7 @@
 <meta name="twitter:site" content="@\#" />
 <meta name="twitter:creator" content="@may1as" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-07-24T00:00:00+08:00","datePublished":"2022-07-24T00:00:00+08:00","description":"在freebuf上发过，这里的是精简入门版","headline":"pythonweb SSTI的payload构造思路研究(基础篇)","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/posts/pythonweb-SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6-%E5%9F%BA%E7%A1%80%E7%AF%87/"},"url":"http://localhost:4000/posts/pythonweb-SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6-%E5%9F%BA%E7%A1%80%E7%AF%87/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-07-24T00:00:00+08:00","datePublished":"2022-07-24T00:00:00+08:00","description":"在freebuf上发过，这里的是精简入门版","headline":"pythonweb SSTI的payload构造思路研究(基础篇)","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/pythonweb-SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6-%E5%9F%BA%E7%A1%80%E7%AF%87/"},"url":"/posts/pythonweb-SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6-%E5%9F%BA%E7%A1%80%E7%AF%87/"}</script>
 <!-- End Jekyll SEO tag -->
 
   
@@ -1478,19 +1478,19 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
 
     
       
-        <a href="https://twitter.com/intent/tweet?text=pythonweb%20SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6(%E5%9F%BA%E7%A1%80%E7%AF%87)%20-%20may1as'%20blog&url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2Fpythonweb-SSTI%25E7%259A%2584payload%25E6%259E%2584%25E9%2580%25A0%25E6%2580%259D%25E8%25B7%25AF%25E7%25A0%2594%25E7%25A9%25B6-%25E5%259F%25BA%25E7%25A1%2580%25E7%25AF%2587%2F" data-toggle="tooltip" data-placement="top"
+        <a href="https://twitter.com/intent/tweet?text=pythonweb%20SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6(%E5%9F%BA%E7%A1%80%E7%AF%87)%20-%20may1as'%20blog&url=%2Fposts%2Fpythonweb-SSTI%25E7%259A%2584payload%25E6%259E%2584%25E9%2580%25A0%25E6%2580%259D%25E8%25B7%25AF%25E7%25A0%2594%25E7%25A9%25B6-%25E5%259F%25BA%25E7%25A1%2580%25E7%25AF%2587%2F" data-toggle="tooltip" data-placement="top"
           title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
           <i class="fa-fw fab fa-twitter"></i>
         </a>
     
       
-        <a href="https://www.facebook.com/sharer/sharer.php?title=pythonweb%20SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6(%E5%9F%BA%E7%A1%80%E7%AF%87)%20-%20may1as'%20blog&u=http%3A%2F%2Flocalhost%3A4000%2Fposts%2Fpythonweb-SSTI%25E7%259A%2584payload%25E6%259E%2584%25E9%2580%25A0%25E6%2580%259D%25E8%25B7%25AF%25E7%25A0%2594%25E7%25A9%25B6-%25E5%259F%25BA%25E7%25A1%2580%25E7%25AF%2587%2F" data-toggle="tooltip" data-placement="top"
+        <a href="https://www.facebook.com/sharer/sharer.php?title=pythonweb%20SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6(%E5%9F%BA%E7%A1%80%E7%AF%87)%20-%20may1as'%20blog&u=%2Fposts%2Fpythonweb-SSTI%25E7%259A%2584payload%25E6%259E%2584%25E9%2580%25A0%25E6%2580%259D%25E8%25B7%25AF%25E7%25A0%2594%25E7%25A9%25B6-%25E5%259F%25BA%25E7%25A1%2580%25E7%25AF%2587%2F" data-toggle="tooltip" data-placement="top"
           title="Facebook" target="_blank" rel="noopener" aria-label="Facebook">
           <i class="fa-fw fab fa-facebook-square"></i>
         </a>
     
       
-        <a href="https://t.me/share/url?url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2Fpythonweb-SSTI%25E7%259A%2584payload%25E6%259E%2584%25E9%2580%25A0%25E6%2580%259D%25E8%25B7%25AF%25E7%25A0%2594%25E7%25A9%25B6-%25E5%259F%25BA%25E7%25A1%2580%25E7%25AF%2587%2F&text=pythonweb%20SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6(%E5%9F%BA%E7%A1%80%E7%AF%87)%20-%20may1as'%20blog" data-toggle="tooltip" data-placement="top"
+        <a href="https://t.me/share/url?url=%2Fposts%2Fpythonweb-SSTI%25E7%259A%2584payload%25E6%259E%2584%25E9%2580%25A0%25E6%2580%259D%25E8%25B7%25AF%25E7%25A0%2594%25E7%25A9%25B6-%25E5%259F%25BA%25E7%25A1%2580%25E7%25AF%2587%2F&text=pythonweb%20SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6(%E5%9F%BA%E7%A1%80%E7%AF%87)%20-%20may1as'%20blog" data-toggle="tooltip" data-placement="top"
           title="Telegram" target="_blank" rel="noopener" aria-label="Telegram">
           <i class="fa-fw fab fa-telegram"></i>
         </a>
