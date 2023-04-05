@@ -19,6 +19,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e">
+  <meta name="referrer" content="never">
+
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta
@@ -42,8 +44,8 @@
 <meta property="og:title" content="BuckeyeCTF-2022-writeup" />
 <meta name="author" content="may1as" />
 <meta property="og:locale" content="en" />
-<meta name="description" content="文前漫谈 比赛地址：https://pwnoh.io/challs" />
-<meta property="og:description" content="文前漫谈 比赛地址：https://pwnoh.io/challs" />
+<meta name="description" content="文前漫谈" />
+<meta property="og:description" content="文前漫谈" />
 <link rel="canonical" href="/posts/BuckeyeCTF-2022-writeup/" />
 <meta property="og:url" content="/posts/BuckeyeCTF-2022-writeup/" />
 <meta property="og:site_name" content="may1as’ blog" />
@@ -54,7 +56,7 @@
 <meta name="twitter:site" content="@\#" />
 <meta name="twitter:creator" content="@may1as" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-11-12T00:00:00+08:00","datePublished":"2022-11-12T00:00:00+08:00","description":"文前漫谈 比赛地址：https://pwnoh.io/challs","headline":"BuckeyeCTF-2022-writeup","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/BuckeyeCTF-2022-writeup/"},"url":"/posts/BuckeyeCTF-2022-writeup/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-11-12T00:00:00+08:00","datePublished":"2022-11-12T00:00:00+08:00","description":"文前漫谈","headline":"BuckeyeCTF-2022-writeup","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/BuckeyeCTF-2022-writeup/"},"url":"/posts/BuckeyeCTF-2022-writeup/"}</script>
 <!-- End Jekyll SEO tag -->
 
   
@@ -2045,12 +2047,15 @@
 
 <div class="post-content">
   <h1 id="文前漫谈">文前漫谈</h1>
+
 <blockquote>
   <p>比赛地址：<a href="https://pwnoh.io/challs">https://pwnoh.io/challs</a></p>
 </blockquote>
 
 <h1 id="web">Web</h1>
+
 <h2 id="buckeyenotesbeginner"><span class="mr-2">buckeyenotes/beginner</span><a href="#buckeyenotesbeginner" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
 <blockquote>
   <p>des：Note taking apps are all the rage lately but turns our they’re harder to make than I thought :/. Even in development buckeyenotes has gotten some traction, Brutus signed up! I think his user name is brutusB3stNut9999. I wonder what kind of notes he writes 🤔 but I don’t have his login….
 <a href="https://buckeyenotes.chall.pwnoh.io">https://buckeyenotes.chall.pwnoh.io</a></p>
@@ -2063,6 +2068,7 @@
 然后一番折腾发现了这个，意思应该是过滤了等号。那就直接<code class="language-plaintext highlighter-rouge">1' or 1 -- -</code>
 <a href="544" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668187138169-441068c0-df5d-4ff0-a4b1-8d0f1d08e046.png#averageHue=%23dcb373&amp;clientId=u17c9685a-5f1c-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=170&amp;id=u360c9431&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=364&amp;originWidth=1162&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=44132&amp;status=done&amp;style=none&amp;taskId=ucbe79d5e-d9a8-44b2-b22e-90fae6843f7&amp;title=&amp;width=544" alt="image.png" class="lazyload" data-proofer-ignore></a><a href="723.3333333333334" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668217217370-280a5e5e-ce84-490b-a8b7-fae917fbd9e7.png#averageHue=%23fdfdfd&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=248&amp;id=u1ff164a4&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=372&amp;originWidth=1085&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=13157&amp;status=done&amp;style=none&amp;taskId=u192e0464-cbff-4b23-b585-551368dd14c&amp;title=&amp;width=723.3333333333334" alt="image.png" class="lazyload" data-proofer-ignore></a>
 应该是已经成功查询了，然后想着限制一下查询数量看看，也是试了不少次</p>
+
 <div class="language-sql highlighter-rouge"><div class="code-header">
         <span data-label-text="Sql"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -2070,27 +2076,34 @@
 </pre></td><td class="rouge-code"><pre><span class="s1">' or 1 limit 1, 2-- -
 过滤了等号
 </span></pre></td></tr></tbody></table></code></div></div>
+
 <p>直接就出了<a href="652.6666666666666" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668187714872-57a5229b-b60d-469f-b95f-a2b5eded9cfd.png#averageHue=%23fdfdfc&amp;clientId=u17c9685a-5f1c-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=229&amp;id=ufb60dc2a&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=344&amp;originWidth=979&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=16623&amp;status=done&amp;style=none&amp;taskId=u579616bb-c797-47a8-a301-d4361daa81c&amp;title=&amp;width=652.6666666666666" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
+
 <h3 id="view-source"><span class="mr-2">View source</span><a href="#view-source" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
 <p><a href="1104" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668219706177-39d02000-ec08-4ca4-b2b7-e9de0b8a2adc.png#averageHue=%232a2e40&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=295&amp;id=ua800c5b3&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=443&amp;originWidth=1656&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=70761&amp;status=done&amp;style=none&amp;taskId=ud673b059-4f48-496d-beeb-becbdca199f&amp;title=&amp;width=1104" alt="image.png" class="lazyload" data-proofer-ignore></a>
 <a href="1052" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668219721836-0f42e7dc-94ab-4158-96cb-c29b43fb8901.png#averageHue=%232a2e40&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=211&amp;id=u414b36bf&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=317&amp;originWidth=1578&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=49409&amp;status=done&amp;style=none&amp;taskId=u0145ddb0-a8a2-403c-994d-06aa3917dfe&amp;title=&amp;width=1052" alt="image.png" class="lazyload" data-proofer-ignore></a>
 用的是sqlite数据库<a href="766" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668219859301-9c5a8940-2e95-4279-ba69-9abec10ecb71.png#averageHue=%23f9f8f8&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=232&amp;id=uc0605c18&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=348&amp;originWidth=1149&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=23405&amp;status=done&amp;style=none&amp;taskId=u1603b8cc-5460-4d9e-ad2c-b9ae89d7355&amp;title=&amp;width=766" alt="image.png" class="lazyload" data-proofer-ignore></a>
 代码逻辑要求sql语句中查询的结果是<code class="language-plaintext highlighter-rouge">brutusB3stNut9999</code>，如果是则<code class="language-plaintext highlighter-rouge">$authenticated = true;</code>得到flag，呜呜呜，要是有密码，直接输密码就行。索性这里只过滤了个=，我们只要limit限制查询结果就OK，也就是</p>
+
 <div class="language-sql highlighter-rouge"><div class="code-header">
         <span data-label-text="Sql"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre><span class="s1">' or 1 limit 1, 2-- -
 </span></pre></td></tr></tbody></table></code></div></div>
+
 <p>但是不知道为什么<code class="language-plaintext highlighter-rouge">' or 1 limit 1, 1-- -</code>不行，这点暂时没想明白
 <a href="825" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668220642017-b86f7179-0338-4956-a2e7-d0a6731d6a96.png#averageHue=%23fdfdfd&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=0.8379&amp;from=paste&amp;height=300&amp;id=ud2835ba5&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=450&amp;originWidth=1237&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=13192&amp;status=done&amp;style=none&amp;taskId=u4d365121-db1a-4502-a3df-6108b93da3e&amp;title=&amp;width=825" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <h2 id="pongbeginner"><span class="mr-2">pong/beginner</span><a href="#pongbeginner" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
 <blockquote>
   <p>des：I dug up my first ever JavaScript game, but this time, my AI is unbeatable!! Hah!
 <a href="https://pong.chall.pwnoh.io/">https://pong.chall.pwnoh.io</a></p>
 </blockquote>
 
 <p>A  JavaScript game，我对JavaScript的印象就是直接在响应包中找base64加密过的flag，或者是console弹一段代码得到flag，这个题目还真是涨见识了</p>
+
 <div class="language-javascript highlighter-rouge"><div class="code-header">
         <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -2378,6 +2391,7 @@
 <span class="p">});</span>
 <span class="o">&lt;</span><span class="sr">/script</span><span class="err">&gt;
 </span></pre></td></tr></tbody></table></code></div></div>
+
 <blockquote>
   <p>Since JavaScript is a client-side language, we can use our console in the developer tool to control some variables.</p>
 </blockquote>
@@ -2389,7 +2403,9 @@
 <a href="648" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668224705181-57d0a30f-11b1-4939-977c-c04bac2e13d1.png#averageHue=%23999998&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=173&amp;id=u7e685b2b&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=260&amp;originWidth=972&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=19431&amp;status=done&amp;style=none&amp;taskId=u1134502d-58cf-4084-875f-7e7c0a2c155&amp;title=&amp;width=648" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <h1 id="misc">Misc</h1>
+
 <h2 id="what-you-see-is-what-you-gitbeginner"><span class="mr-2">what-you-see-is-what-you-git/beginner</span><a href="#what-you-see-is-what-you-gitbeginner" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
 <blockquote>
   <p>des：I definitely made a Git repo, but I somehow broke it. Something about not getting a HEAD of myself.</p>
 </blockquote>
@@ -2397,12 +2413,14 @@
 <p>git相关的题目，关键还是logs日志文件，HEAD中有些线索
 <a href="1262.6666666666667" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668250367571-0ab3f7e3-071f-4737-a7fa-c70008d7ef67.png#averageHue=%2338352f&amp;clientId=u381ece55-2730-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=375&amp;id=ua3d81ad3&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=562&amp;originWidth=1894&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=373020&amp;status=done&amp;style=none&amp;taskId=u453a60c5-7dbf-4b88-b1bb-2444bdcc563&amp;title=&amp;width=1262.6666666666667" alt="image.png" class="lazyload" data-proofer-ignore></a>
 然后恢复Hid the flag提交的暂存区</p>
+
 <blockquote>
   <p>git reset –hard 7ae8453a76a41d40bdfcc7992175390f70ba9fdf
 注解	# 重置暂存区与工作区，与上一次commit保持一致</p>
 </blockquote>
 
 <p>再</p>
+
 <blockquote>
   <p>git log -p [file]
 注解# 显示指定文件相关的每一次diff</p>
@@ -2412,12 +2430,14 @@
 <a href="838.6666666666666" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668252918384-917496f3-9664-4a97-8bd0-56d35a447bee.png#averageHue=%232d2a27&amp;clientId=u381ece55-2730-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=564&amp;id=ua92949ea&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=846&amp;originWidth=1258&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=490677&amp;status=done&amp;style=none&amp;taskId=ub1aea956-09c9-407b-a4eb-7b9a6122a08&amp;title=&amp;width=838.6666666666666" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <h2 id="suseasy"><span class="mr-2">sus/easy</span><a href="#suseasy" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
 <blockquote>
   <p>des：Something about this audio is pretty <em>sus</em>…
 Hint: The crackling in the audio should tell you that something’s wrong.</p>
 </blockquote>
 
 <p>wav的LSB隐写，参加 <a href="https://sumit-arora.medium.com/audio-steganography-the-art-of-hiding-secrets-within-earshot-part-2-of-2-c76b1be719b3">Medium blog</a>!</p>
+
 <div class="language-javascript highlighter-rouge"><div class="code-header">
         <span data-label-text="JavaScript"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -2451,9 +2471,11 @@ Hint: The crackling in the audio should tell you that something’s wrong.</p>
 <span class="nf">print</span><span class="p">(</span><span class="dl">"</span><span class="s2">Sucessfully decoded: </span><span class="dl">"</span><span class="o">+</span><span class="nx">decoded</span><span class="p">)</span>
 <span class="nx">song</span><span class="p">.</span><span class="nf">close</span><span class="p">()</span>
 </pre></td></tr></tbody></table></code></div></div>
+
 <p><a href="732.6666666666666" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668257881655-ef7555c3-23ca-4987-be82-07ebd661026c.png#averageHue=%23423e3a&amp;clientId=u381ece55-2730-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=264&amp;id=u02e3b1c6&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=396&amp;originWidth=1099&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=347522&amp;status=done&amp;style=none&amp;taskId=u6b8db589-3f22-4504-92c5-44d534e6ac0&amp;title=&amp;width=732.6666666666666" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <h2 id="keyboardwarriormedium"><span class="mr-2">keyboardwarrior/medium</span><a href="#keyboardwarriormedium" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
 <blockquote>
   <p>des：I found a PCAP of some Bluetooth packets being sent on this guy’s computer. He’s sending some pretty weird stuff, you should take a look.
 Flag format: buckeyectf{}</p>
@@ -2470,12 +2492,15 @@ _但是这里还有个坑，得把</em><code class="language-plaintext highlight
 <a href="1184.6666666666667" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1668239199020-ad70732e-dc4a-4c4c-8fc0-3ea2258f0413.png#averageHue=%23312d2a&amp;clientId=u095a0c98-f5b5-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=504&amp;id=u97a08891&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=756&amp;originWidth=1777&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=628350&amp;status=done&amp;style=none&amp;taskId=u50a7d481-6318-4bab-8ed3-6539a106fef&amp;title=&amp;width=1184.6666666666667" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <h1 id="一些小工具">一些小工具</h1>
+
 <p>file command for windows</p>
+
 <blockquote>
   <p><a href="https://gnuwin32.sourceforge.net/packages/file.htm">https://gnuwin32.sourceforge.net/packages/file.htm</a></p>
 </blockquote>
 
 <h1 id="resource">resource</h1>
+
 <p><a href="https://siunam321.github.io/ctf/BuckeyeCTF-2022/">https://siunam321.github.io/ctf/BuckeyeCTF-2022/</a></p>
 
 </div>

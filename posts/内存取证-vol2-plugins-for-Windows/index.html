@@ -19,6 +19,8 @@
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f7f7f7">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b1b1e">
+  <meta name="referrer" content="never">
+
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta
@@ -42,8 +44,8 @@
 <meta property="og:title" content="内存取证 vol2-plugins-for-Window" />
 <meta name="author" content="may1as" />
 <meta property="og:locale" content="en" />
-<meta name="description" content="文前漫谈 vol2的关于windows的常用命令" />
-<meta property="og:description" content="文前漫谈 vol2的关于windows的常用命令" />
+<meta name="description" content="文前漫谈" />
+<meta property="og:description" content="文前漫谈" />
 <link rel="canonical" href="/posts/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-vol2-plugins-for-Windows/" />
 <meta property="og:url" content="/posts/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-vol2-plugins-for-Windows/" />
 <meta property="og:site_name" content="may1as’ blog" />
@@ -54,7 +56,7 @@
 <meta name="twitter:site" content="@\#" />
 <meta name="twitter:creator" content="@may1as" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-07-12T00:00:00+08:00","datePublished":"2022-07-12T00:00:00+08:00","description":"文前漫谈 vol2的关于windows的常用命令","headline":"内存取证 vol2-plugins-for-Window","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-vol2-plugins-for-Windows/"},"url":"/posts/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-vol2-plugins-for-Windows/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-07-12T00:00:00+08:00","datePublished":"2022-07-12T00:00:00+08:00","description":"文前漫谈","headline":"内存取证 vol2-plugins-for-Window","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-vol2-plugins-for-Windows/"},"url":"/posts/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-vol2-plugins-for-Windows/"}</script>
 <!-- End Jekyll SEO tag -->
 
   
@@ -1622,7 +1624,7 @@
 
 <!-- return element -->
 <span class="readtime" data-toggle="tooltip" data-placement="bottom"
-  title="1101 words">
+  title="1085 words">
   <em>6 min</em> read</span>
 
     </div>
@@ -1633,13 +1635,17 @@
 
 <div class="post-content">
   <h2 id="文前漫谈"><span class="mr-2">文前漫谈</span><a href="#文前漫谈" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
 <p>vol2的关于windows的常用命令</p>
 
 <p>GitHub项目地址：<a href="https://github.com/volatilityfoundation/volatility">https://github.com/volatilityfoundation/volatility</a></p>
 
 <p>官方网站：<a href="https://www.volatilityfoundation.org/">https://www.volatilityfoundation.org/</a></p>
+
 <h2 id="命令格式"><span class="mr-2">命令格式</span><a href="#命令格式" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
 <p>命令格式非常简单，多用两次就记住了</p>
+
 <div class="language-shell highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -1657,12 +1663,15 @@ plugin：要使用的插件
 </pre></td></tr></tbody></table></code></div></div>
 
 <h2 id="查看vol配置插件"><span class="mr-2">查看vol配置插件</span><a href="#查看vol配置插件" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
 <p>这里的vol.exe是windows下的，在官网下载，主要是命令行参数
 <code class="language-plaintext highlighter-rouge">--info</code>，查看vol的一些配置信息，和已经安装的插件
 <a href="532" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657788660050-b685e891-2698-466d-929e-59f87e14d292.png#clientId=u229eeb32-2f92-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=272&amp;id=u93030605&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=775&amp;originWidth=1516&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=1024128&amp;status=error&amp;style=none&amp;taskId=ue6ef2418-ad4f-470b-8c1e-0fdab956c09&amp;title=&amp;width=532" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <h2 id="一切从获取镜像信息开始"><span class="mr-2">一切从获取镜像信息开始</span><a href="#一切从获取镜像信息开始" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
 <p>这个命令格式还是很简单的，<code class="language-plaintext highlighter-rouge">imageinfo</code>，这也是个插件，判断该镜像的架构，下面所以操作都基于这一步。</p>
+
 <div class="language-shell highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -1670,30 +1679,39 @@ plugin：要使用的插件
 </pre></td><td class="rouge-code"><pre>vol.py <span class="nt">-f</span> .<span class="se">\O</span>tterCTF.vmem imageinfo
 <span class="nt">-f</span> 指定文件
 </pre></td></tr></tbody></table></code></div></div>
+
 <p>下面的<code class="language-plaintext highlighter-rouge">Suggested Profile(s)</code>，探测出多个可能的系统信息，可靠性从前往后排序，一般取第一个，知道系统后，在<code class="language-plaintext highlighter-rouge">--profile=</code>中带上对应的系统架构，继续后面的分析。
 另外，获取系统还有<code class="language-plaintext highlighter-rouge">kdbgscan</code>这个插件，和<code class="language-plaintext highlighter-rouge">imageinfo</code>的效果一样
 <a href="606" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657793899739-274f0aad-9a95-46ea-b138-95690c4262bf.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=160&amp;id=u0e350be2&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=502&amp;originWidth=1903&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=433274&amp;status=error&amp;style=none&amp;taskId=u0e40a6c2-53ee-4486-abe2-b7289ba6370&amp;title=&amp;width=606" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <h2 id="插件使用"><span class="mr-2">插件使用</span><a href="#插件使用" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
 <p>基础使用还是很简单的，入门已经完成，接下来进入简单进阶了。主要关注插件的使用就行了。</p>
+
 <h3 id="查看计算机名称"><span class="mr-2">查看计算机名称</span><a href="#查看计算机名称" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
 <p>在注册表<code class="language-plaintext highlighter-rouge">SYSTEM</code>里面存在计算机名称
 具体位置：<code class="language-plaintext highlighter-rouge">ControlSet001\Control\ComputerName\ComputerName</code>
 我们可以使用命令：</p>
+
 <div class="language-shell highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre>vol.py <span class="nt">-f</span> <span class="o">[</span>image] <span class="nt">--profile</span><span class="o">=[</span>profile] printkey <span class="nt">-K</span> <span class="s2">"ControlSet001</span><span class="se">\C</span><span class="s2">ontrol</span><span class="se">\C</span><span class="s2">omputerName</span><span class="se">\C</span><span class="s2">omputerName"</span>
 </pre></td></tr></tbody></table></code></div></div>
+
 <p><a href="604" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657798290459-e50b170d-4a91-4f0e-81ae-75d1f014a3f2.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=190&amp;id=Z1Vtx&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=460&amp;originWidth=1459&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=520166&amp;status=error&amp;style=none&amp;taskId=uc2d119b0-6238-47b0-9b0b-ce748969206&amp;title=&amp;width=604" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
 
 <h3 id="查看系统用户名"><span class="mr-2">查看系统用户名</span><a href="#查看系统用户名" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
 <div class="language-shell highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre>vol.py <span class="nt">-f</span> <span class="o">[</span>image] <span class="nt">--profile</span><span class="o">=[</span>profile] printkey <span class="nt">-K</span> <span class="s2">"SAM</span><span class="se">\D</span><span class="s2">omains</span><span class="se">\A</span><span class="s2">ccount</span><span class="se">\U</span><span class="s2">sers</span><span class="se">\N</span><span class="s2">ames"</span>
 </pre></td></tr></tbody></table></code></div></div>
+
 <h3 id="查看注册表信息"><span class="mr-2">查看注册表信息</span><a href="#查看注册表信息" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
 <div class="language-shell highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -1703,17 +1721,23 @@ plugin：要使用的插件
 
 <span class="nt">-K</span>：<span class="s2">"键值"</span>
 </pre></td></tr></tbody></table></code></div></div>
+
 <p>###</p>
+
 <h3 id="查找户名密码信息"><span class="mr-2">查找⽤户名密码信息</span><a href="#查找户名密码信息" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
 <p>hashdump，从 SYSTEM 和 SAM 注册表配置单元中转储 NTLM 哈希
 这个在很多比赛很常用，密码都是经过hash的，拿去md5解密就行，比如，画红框的那行就是用户<code class="language-plaintext highlighter-rouge">Rick</code>经过hash的密码。</p>
+
 <div class="language-shell highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre>vol.py <span class="nt">-f</span> <span class="o">[</span>image] <span class="nt">--profile</span><span class="o">=[</span>profile] hashdump
 </pre></td></tr></tbody></table></code></div></div>
+
 <p><a href="904" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657799146922-7174b088-60c3-459f-91f6-25c3e258ed3a.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=112&amp;id=u39edf9f5&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=168&amp;originWidth=1356&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=140172&amp;status=error&amp;style=none&amp;taskId=ude6032d8-ab57-437a-a747-877870c8e29&amp;title=&amp;width=904" alt="image.png" class="lazyload" data-proofer-ignore></a>
 有的出题人可能比较善良，专门找个“解”不了的hash给你，这时候我们可以尝试使用<code class="language-plaintext highlighter-rouge"> John the Ripper </code>或 <code class="language-plaintext highlighter-rouge">Hashcat</code>（或 Google）等工具来破解它，或者我们可以尝试使用<code class="language-plaintext highlighter-rouge">_lsadump_</code>插件从<code class="language-plaintext highlighter-rouge">LSA secrets</code>中提取明文密码</p>
+
 <div class="language-shell highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -1723,34 +1747,65 @@ plugin：要使用的插件
 
 并不适合所有的例子，有一定失败率，下面是个成功的例子，MortyIsReallyAnOtter
 </pre></td></tr></tbody></table></code></div></div>
+
 <p><a href="674" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657799963790-f663781f-e4b5-41f2-81d4-eb9b09e5ef22.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=210&amp;id=u92350c2d&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=417&amp;originWidth=1339&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=587400&amp;status=error&amp;style=none&amp;taskId=u5d4f8533-d1aa-44d0-a1fb-8518523518d&amp;title=&amp;width=674" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
+
 <h3 id="查看系统进程信息"><span class="mr-2">查看系统进程信息</span><a href="#查看系统进程信息" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
-<p>| 查看进程列表 | Vol.exe -f Win7_SP1_x86.vmem –profile=Win7SP1x86 pslist |
-| — | — |
-| 查看进程列表（树形） | Vol.exe -f Win7_SP1_x86.vmem –profile=Win7SP1x86 pstree |
-| 查看进程列表(psx视图) | Vol.exe -f Win7_SP1_x86.vmem –profile=Win7SP1x86 psxview |
-| 查看进程列表
-psscan 可以找到先前已终止（不活动）的进程以及被rootkit隐藏或解链的进程,pslist和pstree无法检测隐藏或解链的进程 | Vol.exe -f Win7_SP1_x86.vmem –profile=Win7SP1x86 psscan |</p>
+
+<div class="table-wrapper"><table>
+  <thead>
+    <tr>
+      <th>查看进程列表</th>
+      <th>Vol.exe -f Win7_SP1_x86.vmem –profile=Win7SP1x86 pslist</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>查看进程列表（树形）</td>
+      <td>Vol.exe -f Win7_SP1_x86.vmem –profile=Win7SP1x86 pstree</td>
+    </tr>
+    <tr>
+      <td>查看进程列表(psx视图)</td>
+      <td>Vol.exe -f Win7_SP1_x86.vmem –profile=Win7SP1x86 psxview</td>
+    </tr>
+    <tr>
+      <td>查看进程列表</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>psscan 可以找到先前已终止（不活动）的进程以及被rootkit隐藏或解链的进程,pslist和pstree无法检测隐藏或解链的进程</td>
+      <td>Vol.exe -f Win7_SP1_x86.vmem –profile=Win7SP1x86 psscan</td>
+    </tr>
+  </tbody>
+</table></div>
 
 <p><a href="624" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657798855140-59eb1a00-426b-4a75-b1c5-46c87316e230.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=284&amp;id=u68bb4834&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=724&amp;originWidth=1591&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=1007611&amp;status=error&amp;style=none&amp;taskId=u1d77c519-f0c0-4391-93fd-786fa4e900d&amp;title=&amp;width=624" alt="image.png" class="lazyload" data-proofer-ignore></a>
 <a href="624" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1663297468436-527a43f3-feb5-4312-886e-e9a2626c067e.png#clientId=u459b111c-2751-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=250&amp;id=uc75a40dd&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=672&amp;originWidth=1677&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=748272&amp;status=done&amp;style=none&amp;taskId=u5817bbee-041a-49b9-98fb-449d32b2693&amp;title=&amp;width=624" alt="image.png" class="lazyload" data-proofer-ignore></a>
 <a href="625" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1663297506196-dd3247b1-9985-48b5-8a92-c9fa3cd1be46.png#clientId=u459b111c-2751-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=264&amp;id=udbdfcfde&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=711&amp;originWidth=1685&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=828643&amp;status=done&amp;style=none&amp;taskId=ud6af93fc-52d8-4652-9d6c-3b140f8aec8&amp;title=&amp;width=625" alt="image.png" class="lazyload" data-proofer-ignore></a>
 <a href="622" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1663297534545-11dd0934-4bc6-4679-ac33-a16ae45a9b9d.png#clientId=u459b111c-2751-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=329&amp;id=ue075d27e&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=901&amp;originWidth=1702&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=856460&amp;status=done&amp;style=none&amp;taskId=u60931932-d578-4e5d-bc01-ae801277b34&amp;title=&amp;width=622" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
+
 <h3 id="查看网络进程"><span class="mr-2">查看网络进程</span><a href="#查看网络进程" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
 <div class="language-shell highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre>vol.py <span class="nt">-f</span> <span class="o">[</span>image] <span class="nt">--profile</span><span class="o">=[</span>profile] netscan
 </pre></td></tr></tbody></table></code></div></div>
+
 <p><a href="1226" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657801631690-13a52b1c-15d5-47cd-9cb9-a3f7b3e2e652.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=510&amp;id=u4361b8cf&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=765&amp;originWidth=1839&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=1013127&amp;status=error&amp;style=none&amp;taskId=ufea5bfde-552c-4dd6-b556-0c989427ecb&amp;title=&amp;width=1226" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
+
 <h3 id="查看内存中剪贴板的内容"><span class="mr-2">查看内存中剪贴板的内容</span><a href="#查看内存中剪贴板的内容" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
 <p>vol3中好像还没这个功能</p>
+
 <div class="language-shell highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
 </pre></td><td class="rouge-code"><pre>vol.py <span class="nt">-f</span> <span class="o">[</span>image] <span class="nt">--profile</span><span class="o">=[</span>profile] clipboard
 </pre></td></tr></tbody></table></code></div></div>
+
 <h3 id="查看内存中的截图"><span class="mr-2">查看内存中的截图</span><a href="#查看内存中的截图" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
 <div class="language-shell highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -1762,6 +1817,7 @@ psscan 可以找到先前已终止（不活动）的进程以及被rootkit隐藏
 </pre></td></tr></tbody></table></code></div></div>
 
 <h3 id="查看cmd命令行历史"><span class="mr-2">查看cmd命令行历史</span><a href="#查看cmd命令行历史" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
 <div class="language-shell highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -1771,7 +1827,9 @@ psscan 可以找到先前已终止（不活动）的进程以及被rootkit隐藏
 
 <span class="nt">-p</span> 选项可选
 </pre></td></tr></tbody></table></code></div></div>
+
 <h3 id="查看内存中的文件"><span class="mr-2">查看内存中的文件</span><a href="#查看内存中的文件" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
 <div class="language-shell highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -1781,8 +1839,11 @@ psscan 可以找到先前已终止（不活动）的进程以及被rootkit隐藏
 
 这个命令在linux下通常结合grep命令使用，过滤得到有用信息，例如grep <span class="s2">"doc</span><span class="se">\|</span><span class="s2">docx</span><span class="se">\|</span><span class="s2">rtf"</span>
 </pre></td></tr></tbody></table></code></div></div>
+
 <h3 id="导出内存中的文件"><span class="mr-2">导出内存中的文件</span><a href="#导出内存中的文件" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h3>
+
 <p>这个可能比较麻烦</p>
+
 <div class="language-shell highlighter-rouge"><div class="code-header">
         <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
@@ -1794,7 +1855,9 @@ psscan 可以找到先前已终止（不活动）的进程以及被rootkit隐藏
 <span class="nt">-Q</span>：根据filescan得到的参数，就是下图箭头指向
 <span class="nt">-D</span>：导出文件夹 ， ./是当前文件夹
 </pre></td></tr></tbody></table></code></div></div>
+
 <p><a href="1197.3333333333333" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/png/22999319/1657812571620-47d5eb2a-6382-430b-804a-2a18388842b1.png#clientId=u7212710d-c1c9-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;errorMessage=unknown%20error&amp;from=paste&amp;height=371&amp;id=u13e2f8a6&amp;margin=%5Bobject%20Object%5D&amp;name=image.png&amp;originHeight=556&amp;originWidth=1796&amp;originalType=binary&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;size=726783&amp;status=error&amp;style=none&amp;taskId=u093076da-a013-4667-b86c-6f9f246edf3&amp;title=&amp;width=1197.3333333333333" alt="image.png" class="lazyload" data-proofer-ignore></a></p>
+
 <h2 id="其他常用插件"><span class="mr-2">其他常用插件</span><a href="#其他常用插件" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
 <div class="table-wrapper"><table>
@@ -2593,13 +2656,16 @@ Bu...
 
                 文前漫谈
 
+
   比赛地址：https://pwnoh.io/challs
 
 
 Web
+
 buckeyenotes/beginner
 
-  des：Note taking apps are all the rage lately but turns our they’re harder to make than I thought :/. Even in development buckeyen...
+
+  des：Note taking apps are all the rage lately but turns our they’re harder to make than I thought :/. Even in development bucke...
               </p>
             </div>
           </div>
