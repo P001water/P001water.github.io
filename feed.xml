@@ -4,7 +4,7 @@
   <id>/</id>
   <title>may1as' blog</title>
   <subtitle>SEC, may1as, nyist .</subtitle>
-  <updated>2023-04-05T20:33:29+08:00</updated>
+  <updated>2023-04-06T22:07:03+08:00</updated>
   <author>
     <name>may1as</name>
     <uri>/</uri>
@@ -194,23 +194,23 @@ USB的几种用途
 
   
   <entry>
-    <title>My CheatSheet</title>
-    <link href="/posts/CheatSheet/" rel="alternate" type="text/html" title="My CheatSheet" />
+    <title>My Life [KeepGoing]</title>
+    <link href="/posts/Mylife/" rel="alternate" type="text/html" title="My Life [KeepGoing]" />
     <published>2022-08-10T00:00:00+08:00</published>
   
     <updated>2022-08-10T00:00:00+08:00</updated>
   
-    <id>/posts/CheatSheet/</id>
-    <content src="/posts/CheatSheet/" />
+    <id>/posts/Mylife/</id>
+    <content src="/posts/Mylife/" />
     <author>
       <name>may1as</name>
     </author>
 
   
     
-    <category term="瞎折腾" />
+    <category term="Life" />
     
-    <category term="CheatSheet" />
+    <category term="Keepgoing" />
     
   
 
@@ -222,31 +222,71 @@ USB的几种用途
 
 
 
-      正则表达式速查卡
+      一些生活里的碎片
 
 
 
-Website collect
-
-User Agent String.Com —— 收集各种UA头
-
-Docker Error
-
-ph@ubuntu:~/Desktop$ docker-compose up -d
-ERROR:Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
-If it's at a non-standard location,specify the URL with the DOCKER_HOST environment variable.
 
 
-solution
-
-sudo usermod -aG docker $USER
 
 
-Can not kill redis Process
 
-solution
+For me , may For you
 
-/etc/init.d/...
+
+
+
+
+
+
+
+
+
+没有人永远emo，但永远有人正emo着
+—— 致暗恋的青春
+
+
+
+
+
+
+
+  于 2023.1.7 (用了YouTube misic后少有的打开网易云)
+
+
+
+
+
+
+
+
+
+
+
+
+找了个实习，想想脑子里还是空空，还是等暑假或者大三吧                                                                               
+烫了个tou，括弧锡纸烫，但是还没想当渣男哈哈
+
+
+
+
+
+
+  于 2023.1.9 (记录一下，这眼睛还是一单一双，显得一大一小的，哈哈)
+
+
+
+
+
+
+
+
+
+
+
+
+
+很少去影院看电影，可能实在没有这个习惯，也总赶不上趟，趁不到一个恰好的时间去看一部感兴趣的电影。所以我总是一个人窝着，恰好有兴趣的时候，看一...
     </summary>
   
 
