@@ -1264,7 +1264,7 @@
 
 <!-- return element -->
 <span class="readtime" data-toggle="tooltip" data-placement="bottom"
-  title="1755 words">
+  title="1781 words">
   <em>9 min</em> read</span>
 
     </div>
@@ -1387,14 +1387,15 @@ VMware, Inc. Virtual Mouse：生产商名字和设备名</p>
 </blockquote>
 
 <h2 id="我的键盘流量解密脚本"><span class="mr-2">我的键盘流量解密脚本</span><a href="#我的键盘流量解密脚本" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
-<p><a href="https://github.com/may1as/UsbKeyboardDataexp">https://github.com/may1as/UsbKeyboardDataexp</a></p>
+<p><a href="https://github.com/may1as/UsbKbCracker">may1as/UsbKbCracker: CTF中常见键盘流量解密脚本 (github.com)</a></p>
 
 <p>根据wangyihang大佬的脚本改的，主要增加了个协议字段的选项
 放在GitHub上了，用2021国赛初赛的举个例子吧</p>
+
 <div class="language-python highlighter-rouge"><div class="code-header">
         <span data-label-text="Python"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre><span class="n">python</span> <span class="p">.</span>\<span class="n">UsbKeyboardDataexp</span><span class="p">.</span><span class="n">py</span> <span class="o">-</span><span class="n">f</span> <span class="p">.</span>\<span class="n">example</span>\<span class="n">ez_usb</span><span class="p">.</span><span class="n">pcapng</span> <span class="o">-</span><span class="n">e</span> <span class="n">usbhid</span><span class="p">.</span><span class="n">data</span> <span class="o">-</span><span class="n">Y</span> <span class="s">"usb.src==2.8.1"</span>
+</pre></td><td class="rouge-code"><pre><span class="n">python</span> <span class="p">.</span>\<span class="n">UsbKbCracker</span><span class="p">.</span><span class="n">py</span> <span class="o">-</span><span class="n">f</span> <span class="p">.</span>\<span class="n">example</span>\<span class="n">ez_usb</span><span class="p">.</span><span class="n">pcapng</span> <span class="o">-</span><span class="n">e</span> <span class="n">usbhid</span><span class="p">.</span><span class="n">data</span> <span class="o">-</span><span class="n">Y</span> <span class="s">"usb.src==2.8.1"</span>
 </pre></td></tr></tbody></table></code></div></div>
 <p><a href="u0d8ea361-5c0c-47a9-9ada-8c37623f224&amp;title" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/jpeg/22999319/1667723923061-c079798e-57bc-4d06-a9d1-8be18d73e4a4.jpeg#averageHue=%23302d29&amp;clientId=ud764483f-221b-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;id=uf54f3a22&amp;margin=%5Bobject%20Object%5D&amp;originHeight=420&amp;originWidth=690&amp;originalType=url&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;taskId=u0d8ea361-5c0c-47a9-9ada-8c37623f224&amp;title=" alt="" class="lazyload" data-proofer-ignore></a></p>
 <h1 id="鼠标流量">鼠标流量</h1>
@@ -1425,13 +1426,13 @@ VMware, Inc. Virtual Mouse：生产商名字和设备名</p>
 
 <p>就这么多知识，剩下的就是写脚本了</p>
 <h2 id="我的鼠标流量解密脚本"><span class="mr-2">我的鼠标流量解密脚本</span><a href="#我的鼠标流量解密脚本" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
-<p><a href="https://github.com/may1as/UsbMiceDataexp">https://github.com/may1as/UsbMiceDataexp</a></p>
+<p><a href="https://github.com/may1as/UsbMiceDataexp">[may1as/UsbmiceCracker: CTF中常见鼠标流量解密脚本 (github.com)](https://github.com/may1as/UsbmiceCracker)</a></p>
 
 <p>很多朋友使用wangyihang大佬的鼠标流量解密脚本，出现无法成功显示图片的问题。原因是tshark早前的版本导出数据带冒号，形如这样：<code class="language-plaintext highlighter-rouge">00:00:04:00:00:00:00:00</code>，而现在是<code class="language-plaintext highlighter-rouge">00000000ffff0000</code>，并不带冒号，导致处理数据时出现问题。 这里就处理了一下导出数据格式，增加了命令行里协议字段的选项</p>
 <div class="language-python highlighter-rouge"><div class="code-header">
         <span data-label-text="Python"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre> <span class="n">python</span> <span class="p">.</span>\<span class="n">UsbMiceDataExp</span><span class="p">.</span><span class="n">py</span> <span class="o">-</span><span class="n">f</span> <span class="p">.</span>\<span class="n">example</span>\<span class="n">usb</span><span class="p">.</span><span class="n">capdata</span><span class="p">.</span><span class="n">pcapng</span> <span class="o">-</span><span class="n">e</span> <span class="n">usb</span><span class="p">.</span><span class="n">capdata</span> <span class="o">-</span><span class="n">a</span> <span class="n">LEFT</span>
+</pre></td><td class="rouge-code"><pre> <span class="n">python</span> <span class="p">.</span>\<span class="n">UsbmiceCracker</span><span class="p">.</span><span class="n">py</span> <span class="o">-</span><span class="n">f</span> <span class="p">.</span>\<span class="n">example</span>\<span class="n">usb</span><span class="p">.</span><span class="n">capdata</span><span class="p">.</span><span class="n">pcapng</span> <span class="o">-</span><span class="n">e</span> <span class="n">usb</span><span class="p">.</span><span class="n">capdata</span> <span class="o">-</span><span class="n">a</span> <span class="n">LEFT</span>
 </pre></td></tr></tbody></table></code></div></div>
 <p><a href="490" class="popup img-link "><img data-src="https://cdn.nlark.com/yuque/0/2022/jpeg/22999319/1667723998234-40e1cec4-2a97-4239-b293-792752d5aa3d.jpeg#averageHue=%23c0bdbc&amp;clientId=ud764483f-221b-4&amp;crop=0&amp;crop=0&amp;crop=1&amp;crop=1&amp;from=paste&amp;height=355&amp;id=u219efff4&amp;margin=%5Bobject%20Object%5D&amp;originHeight=500&amp;originWidth=690&amp;originalType=url&amp;ratio=1&amp;rotation=0&amp;showTitle=false&amp;status=done&amp;style=none&amp;taskId=u4c925ca9-c2d0-4fea-a576-1bf6eafe8cf&amp;title=&amp;width=490" alt="" class="lazyload" data-proofer-ignore></a></p>
 
@@ -1600,16 +1601,6 @@ VMware, Inc. Virtual Mouse：生产商名字和设备名</p>
     
     
     
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
       
         
         
@@ -1633,6 +1624,18 @@ VMware, Inc. Virtual Mouse：生产商名字和设备名</p>
     
     
     
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
     
   
     
@@ -1820,16 +1823,16 @@ VMware, Inc. Virtual Mouse：生产商名字和设备名</p>
 
     
       
-      <a class="post-tag" href="/tags/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
-    
-      
       <a class="post-tag" href="/tags/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/">内存取证</a>
     
       
-      <a class="post-tag" href="/tags/burp/">Burp</a>
+      <a class="post-tag" href="/tags/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
     
       
       <a class="post-tag" href="/tags/ctf/">CTF</a>
+    
+      
+      <a class="post-tag" href="/tags/life/">Life</a>
     
       
       <a class="post-tag" href="/tags/pythonssti/">PythonSSTI</a>
@@ -1894,19 +1897,6 @@ VMware, Inc. Virtual Mouse：生产商名字和设备名</p>
 
 
 
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
 
 
   
@@ -2067,51 +2057,6 @@ VMware, Inc. Virtual Mouse：生产商名字和设备名</p>
       
       
       <div class="card">
-        <a href="/posts/BurpSuite-Pro-2022.8%E5%92%8C%E7%BB%83%E6%89%8B%E5%86%99%E7%9A%84%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%B7%A5%E5%85%B7/">
-          <div class="card-body">
-            <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-
-<em class="small"
-    data-ts="1669824000"
-    data-df="ll"
-    >
-  Dec  1, 2022
-</em>
-
-            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>BurpSuite Pro 2022.8和练手写的一个小工具</h3>
-            <div class="text-muted small">
-              <p>
-                
-
-
-
-
-
-                文前漫谈
-
-没啥别的想法，纯粹想更新一下了。
-
-我有个毛病，软件和工具总是喜欢最新的，所以刚接触java的时候我的java环境配的就是当时刚出的JDK-17。于是现在我需要为我的这个毛病付出一点代价：）
-
-BP的也由于更新的缘故，记不清从哪个版本开始，注册机也更新了，虽然从我们的角度还是那个熟悉的页面，还是那个熟悉的By h3110w0r1d，但是用旧注册机好像已经不能注册新版本了。
-
-Bu...
-              </p>
-            </div>
-          </div>
-        </a>
-      </div>
-    
-      
-      
-      <div class="card">
         <a href="/posts/BuckeyeCTF-2022-writeup/">
           <div class="card-body">
             <!--
@@ -2189,6 +2134,46 @@ buckeyenotes/beginner
 
                 
   文章水在跳跳糖上了
+
+
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+      
+      
+      <div class="card">
+        <a href="/posts/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84-SUID-%E6%8F%90%E6%9D%83-%E5%89%AF%E6%9C%AC/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+
+<em class="small"
+    data-ts="1667145600"
+    data-df="ll"
+    >
+  Oct 31, 2022
+</em>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>2022蓝帽杯遇见的SUID提权</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                
+  文章发在跳跳糖上了
 
 
               </p>
@@ -2288,16 +2273,6 @@ buckeyenotes/beginner
     
     
     
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
       
         
         
@@ -2321,6 +2296,18 @@ buckeyenotes/beginner
     
     
     
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
     
   
     
@@ -2508,16 +2495,16 @@ buckeyenotes/beginner
 
     
       
-      <a class="post-tag" href="/tags/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
-    
-      
       <a class="post-tag" href="/tags/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/">内存取证</a>
     
       
-      <a class="post-tag" href="/tags/burp/">Burp</a>
+      <a class="post-tag" href="/tags/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
     
       
       <a class="post-tag" href="/tags/ctf/">CTF</a>
+    
+      
+      <a class="post-tag" href="/tags/life/">Life</a>
     
       
       <a class="post-tag" href="/tags/pythonssti/">PythonSSTI</a>

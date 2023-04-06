@@ -1338,6 +1338,7 @@
 <h2 id="文前漫谈"><span class="mr-2">文前漫谈</span><a href="#文前漫谈" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 <p>是一篇基础篇嘛，给新同学入门用，从payload的角度看看SSTI
 <a name="kIZVB"></a></p>
+
 <h2 id="从原点出发"><span class="mr-2">从原点出发</span><a href="#从原点出发" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 <p>你会发现，大多数payload总是从下面这段代码出发，延伸出各种各样的花样。而这一步的目的是得到当前模块中所有可以利用的类。得到的结果跟当前模块（py文件）import的库也是有关系的。</p>
 <div class="language-python highlighter-rouge"><div class="code-header">
@@ -1585,16 +1586,6 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
     
     
     
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
       
         
         
@@ -1618,6 +1609,18 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
     
     
     
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
     
   
     
@@ -1805,16 +1808,16 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
 
     
       
-      <a class="post-tag" href="/tags/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
-    
-      
       <a class="post-tag" href="/tags/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/">内存取证</a>
     
       
-      <a class="post-tag" href="/tags/burp/">Burp</a>
+      <a class="post-tag" href="/tags/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
     
       
       <a class="post-tag" href="/tags/ctf/">CTF</a>
+    
+      
+      <a class="post-tag" href="/tags/life/">Life</a>
     
       
       <a class="post-tag" href="/tags/pythonssti/">PythonSSTI</a>
@@ -1975,19 +1978,6 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
   
 
   
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
     
   
 
@@ -2048,51 +2038,6 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
     <h3 class="pt-2 mb-4 ml-1"
       data-toc-skip>Further Reading</h3>
     <div class="card-deck mb-4">
-    
-      
-      
-      <div class="card">
-        <a href="/posts/BurpSuite-Pro-2022.8%E5%92%8C%E7%BB%83%E6%89%8B%E5%86%99%E7%9A%84%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%B7%A5%E5%85%B7/">
-          <div class="card-body">
-            <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-
-<em class="small"
-    data-ts="1669824000"
-    data-df="ll"
-    >
-  Dec  1, 2022
-</em>
-
-            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>BurpSuite Pro 2022.8和练手写的一个小工具</h3>
-            <div class="text-muted small">
-              <p>
-                
-
-
-
-
-
-                文前漫谈
-
-没啥别的想法，纯粹想更新一下了。
-
-我有个毛病，软件和工具总是喜欢最新的，所以刚接触java的时候我的java环境配的就是当时刚出的JDK-17。于是现在我需要为我的这个毛病付出一点代价：）
-
-BP的也由于更新的缘故，记不清从哪个版本开始，注册机也更新了，虽然从我们的角度还是那个熟悉的页面，还是那个熟悉的By h3110w0r1d，但是用旧注册机好像已经不能注册新版本了。
-
-Bu...
-              </p>
-            </div>
-          </div>
-        </a>
-      </div>
     
       
       
@@ -2174,6 +2119,46 @@ buckeyenotes/beginner
 
                 
   文章水在跳跳糖上了
+
+
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+      
+      
+      <div class="card">
+        <a href="/posts/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84-SUID-%E6%8F%90%E6%9D%83-%E5%89%AF%E6%9C%AC/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+
+<em class="small"
+    data-ts="1667145600"
+    data-df="ll"
+    >
+  Oct 31, 2022
+</em>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>2022蓝帽杯遇见的SUID提权</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                
+  文章发在跳跳糖上了
 
 
               </p>
@@ -2273,16 +2258,6 @@ buckeyenotes/beginner
     
     
     
-  
-    
-    
-    
-    
-  
-    
-    
-    
-    
       
         
         
@@ -2306,6 +2281,18 @@ buckeyenotes/beginner
     
     
     
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
     
   
     
@@ -2493,16 +2480,16 @@ buckeyenotes/beginner
 
     
       
-      <a class="post-tag" href="/tags/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
-    
-      
       <a class="post-tag" href="/tags/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/">内存取证</a>
     
       
-      <a class="post-tag" href="/tags/burp/">Burp</a>
+      <a class="post-tag" href="/tags/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
     
       
       <a class="post-tag" href="/tags/ctf/">CTF</a>
+    
+      
+      <a class="post-tag" href="/tags/life/">Life</a>
     
       
       <a class="post-tag" href="/tags/pythonssti/">PythonSSTI</a>

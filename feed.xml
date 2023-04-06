@@ -4,7 +4,7 @@
   <id>/</id>
   <title>may1as' blog</title>
   <subtitle>SEC, may1as, nyist .</subtitle>
-  <updated>2023-04-05T18:15:40+08:00</updated>
+  <updated>2023-04-05T20:33:29+08:00</updated>
   <author>
     <name>may1as</name>
     <uri>/</uri>
@@ -17,60 +17,6 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
-
-  
-  <entry>
-    <title>BurpSuite Pro 2022.8和练手写的一个小工具</title>
-    <link href="/posts/BurpSuite-Pro-2022.8%E5%92%8C%E7%BB%83%E6%89%8B%E5%86%99%E7%9A%84%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%B7%A5%E5%85%B7/" rel="alternate" type="text/html" title="BurpSuite Pro 2022.8和练手写的一个小工具" />
-    <published>2022-12-01T00:00:00+08:00</published>
-  
-    <updated>2022-12-01T00:00:00+08:00</updated>
-  
-    <id>/posts/BurpSuite-Pro-2022.8%E5%92%8C%E7%BB%83%E6%89%8B%E5%86%99%E7%9A%84%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%B7%A5%E5%85%B7/</id>
-    <content src="/posts/BurpSuite-Pro-2022.8%E5%92%8C%E7%BB%83%E6%89%8B%E5%86%99%E7%9A%84%E4%B8%80%E4%B8%AA%E5%B0%8F%E5%B7%A5%E5%85%B7/" />
-    <author>
-      <name>may1as</name>
-    </author>
-
-  
-    
-    <category term="瞎折腾" />
-    
-    <category term="BurpSuite" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      文前漫谈
-
-没啥别的想法，纯粹想更新一下了。
-
-我有个毛病，软件和工具总是喜欢最新的，所以刚接触java的时候我的java环境配的就是当时刚出的JDK-17。于是现在我需要为我的这个毛病付出一点代价：）
-
-BP的也由于更新的缘故，记不清从哪个版本开始，注册机也更新了，虽然从我们的角度还是那个熟悉的页面，还是那个熟悉的By h3110w0r1d，但是用旧注册机好像已经不能注册新版本了。
-
-BurpSuite Pro 2022.8
-
-为了方便，直接内嵌了一个jdk17了，整个内容就像这样，bat脚本启动会有cmd窗口（黑窗口），用vbs脚本启动就OK，ico是图标文件，有那点外观要求的能用上，such as me。
-
-BurpLoaderKeygen就是新版注册机，h3110w0r1d出品，burpsuite_pro_v2022.8.4就是官网下的burp主要文件
-
-
-  
-
-
-下载地址...
-    </summary>
-  
-
-  </entry>
 
   
   <entry>
@@ -136,7 +82,7 @@ https://buckeyenotes.chall.pwnoh.io...
     
     <category term="内存取证" />
     
-    <category term="volatility" />
+    <category term="构建profile" />
     
   
 
@@ -241,6 +187,66 @@ USB的几种用途
   USB UART
     
       异...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>My CheatSheet</title>
+    <link href="/posts/CheatSheet/" rel="alternate" type="text/html" title="My CheatSheet" />
+    <published>2022-08-10T00:00:00+08:00</published>
+  
+    <updated>2022-08-10T00:00:00+08:00</updated>
+  
+    <id>/posts/CheatSheet/</id>
+    <content src="/posts/CheatSheet/" />
+    <author>
+      <name>may1as</name>
+    </author>
+
+  
+    
+    <category term="瞎折腾" />
+    
+    <category term="CheatSheet" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      正则表达式速查卡
+
+
+
+Website collect
+
+User Agent String.Com —— 收集各种UA头
+
+Docker Error
+
+ph@ubuntu:~/Desktop$ docker-compose up -d
+ERROR:Couldn't connect to Docker daemon at http+docker://localunixsocket - is it running?
+If it's at a non-standard location,specify the URL with the DOCKER_HOST environment variable.
+
+
+solution
+
+sudo usermod -aG docker $USER
+
+
+Can not kill redis Process
+
+solution
+
+/etc/init.d/...
     </summary>
   
 
