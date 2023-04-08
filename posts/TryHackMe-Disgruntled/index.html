@@ -49,13 +49,13 @@
 <meta property="og:url" content="/posts/TryHackMe-Disgruntled/" />
 <meta property="og:site_name" content="may1as’ blog" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-03-29T00:00:00+08:00" />
+<meta property="article:published_time" content="2023-03-29T00:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="TryHackMe-Disgruntled-一个关于Linux日志文件取证的房间" />
 <meta name="twitter:site" content="@\#" />
 <meta name="twitter:creator" content="@may1as" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-03-29T00:00:00+08:00","datePublished":"2022-03-29T00:00:00+08:00","description":"Room - Disgruntled which for Linux_forensics","headline":"TryHackMe-Disgruntled-一个关于Linux日志文件取证的房间","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/TryHackMe-Disgruntled/"},"url":"/posts/TryHackMe-Disgruntled/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2023-03-29T00:00:00+08:00","datePublished":"2023-03-29T00:00:00+08:00","description":"Room - Disgruntled which for Linux_forensics","headline":"TryHackMe-Disgruntled-一个关于Linux日志文件取证的房间","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/TryHackMe-Disgruntled/"},"url":"/posts/TryHackMe-Disgruntled/"}</script>
 <!-- End Jekyll SEO tag -->
 
   
@@ -1501,10 +1501,10 @@
 
 
 <em class=""
-    data-ts="1648483200"
+    data-ts="1680019200"
     data-df="ll"
     data-toggle="tooltip" data-placement="bottom">
-  Mar 29, 2022
+  Mar 29, 2023
 </em>
 
     </span>
@@ -1575,7 +1575,7 @@
 
 <h1 id="review">review</h1>
 
-<p><a href="img/image-20230327213815779.png" class="popup img-link "><img data-src="img/image-20230327213815779.png" alt="image-20230327213815779" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
+<p><a href="../../img/image-20230327213815779.png" class="popup img-link "><img data-src="../../img/image-20230327213815779.png" alt="image-20230327213815779" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
 
 <h1 id="begin">Begin</h1>
 
@@ -1605,7 +1605,7 @@
 
 <p>进到机器里发现直接给了root用户，查看下home目录下的用户</p>
 
-<p><a href="img/image-20230328220906702.png" class="popup img-link "><img data-src="img/image-20230328220906702.png" alt="image-20230328220906702" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
+<p><a href="../../img/image-20230328220906702.png" class="popup img-link "><img data-src="../../img/image-20230328220906702.png" alt="image-20230328220906702" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
 
 <p>首先想到肯定是挨个查看用户的bash history，先看了这个cybert用户的，它可能是这个公司的默认用户</p>
 
@@ -1617,11 +1617,11 @@
 
 <p>也确实看见了apt install 的痕迹，但是安装的是个wiki，还有授权给www-data用户的命令，所以一开始我是把这个排除了。</p>
 
-<p><a href="img/image-20230328222720384.png" class="popup img-link "><img data-src="img/image-20230328222720384.png" alt="image-20230328222720384" style="zoom: 50%;" class="lazyload" data-proofer-ignore></a></p>
+<p><a href="../../img/image-20230328222720384.png" class="popup img-link "><img data-src="../../img/image-20230328222720384.png" alt="image-20230328222720384" style="zoom: 50%;" class="lazyload" data-proofer-ignore></a></p>
 
 <p>但是这个task实际考的是 <strong>/var/log/auth.log</strong> 这个文件</p>
 
-<p><a href="img/image-20230328221833357.png" class="popup img-link "><img data-src="img/image-20230328221833357.png" alt="image-20230328221833357" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
+<p><a href="../../img/image-20230328221833357.png" class="popup img-link "><img data-src="../../img/image-20230328221833357.png" alt="image-20230328221833357" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
 
 <div class="language-plaintext highlighter-rouge"><div class="code-header">
         <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span>
@@ -1653,7 +1653,7 @@
 
 <p>这里直接过滤和cybert用户相关的内容，最后我翻了一圈，只有这一个apt install的行为，提示结果显示正确。它题目也说了，<strong>full COMMAND</strong>，所以你直接提交bash_history里的内容也不对</p>
 
-<p><a href="img/image-20230328222202535.png" class="popup img-link "><img data-src="img/image-20230328222202535.png" alt="image-20230328222202535" class="lazyload" data-proofer-ignore></a></p>
+<p><a href="../../img/image-20230328222202535.png" class="popup img-link "><img data-src="../../img/image-20230328222202535.png" alt="image-20230328222202535" class="lazyload" data-proofer-ignore></a></p>
 
 <ol>
   <li>What was the present working directory (PWD) when the previous command was run?</li>
@@ -1675,7 +1675,7 @@
 </pre></td><td class="rouge-code"><pre>cat /home/cybert/.bash_history
 </pre></td></tr></tbody></table></code></div></div>
 
-<p><a href="img/image-20230328223159353.png" class="popup img-link "><img data-src="img/image-20230328223159353.png" alt="image-20230328223159353" style="zoom:50%;" class="lazyload" data-proofer-ignore></a></p>
+<p><a href="../../img/image-20230328223159353.png" class="popup img-link "><img data-src="../../img/image-20230328223159353.png" alt="image-20230328223159353" style="zoom:50%;" class="lazyload" data-proofer-ignore></a></p>
 
 <ol>
   <li>A user was then later given sudo priveleges. When was the sudoers file updated? (Format: Month Day HH:MM:SS)</li>
@@ -1685,7 +1685,7 @@
 
 <p>还是查看记录sudo命令执行的/var/log/auth.log文件，找到visudo命令，是cybert用户执行的命令</p>
 
-<p><a href="img/image-20230328223637586.png" class="popup img-link "><img data-src="img/image-20230328223637586.png" alt="image-20230328223637586" class="lazyload" data-proofer-ignore></a></p>
+<p><a href="../../img/image-20230328223637586.png" class="popup img-link "><img data-src="../../img/image-20230328223637586.png" alt="image-20230328223637586" class="lazyload" data-proofer-ignore></a></p>
 
 <ol>
   <li>A script file was opened using the “vi” text editor. What is the name of this file?</li>
@@ -1693,7 +1693,7 @@
 
 <p>在创建的it-admin用户的bash_history记录里发现的</p>
 
-<p><a href="img/image-20230328230444925.png" class="popup img-link "><img data-src="img/image-20230328230444925.png" alt="image-20230328230444925" style="zoom:50%;" class="lazyload" data-proofer-ignore></a></p>
+<p><a href="../img/image-20230328230444925.png" class="popup img-link "><img data-src="../img/image-20230328230444925.png" alt="image-20230328230444925" style="zoom:50%;" class="lazyload" data-proofer-ignore></a></p>
 
 <h1 id="task-5-bomb-has-been-planted-but-when-and-where">Task 5 Bomb has been planted. But when and where?</h1>
 
@@ -1717,7 +1717,7 @@
 
 <p>还是查看it-admin用户vi的记录</p>
 
-<p><a href="img/image-20230328232207323.png" class="popup img-link "><img data-src="img/image-20230328232207323.png" alt="image-20230328232207323" style="zoom:50%;" class="lazyload" data-proofer-ignore></a></p>
+<p><a href="../img/image-20230328232207323.png" class="popup img-link "><img data-src="../img/image-20230328232207323.png" alt="image-20230328232207323" style="zoom:50%;" class="lazyload" data-proofer-ignore></a></p>
 
 <ol>
   <li>When was the file from the previous question last modified? (Format: Month Day HH:MM)</li>
@@ -1731,7 +1731,7 @@
 </pre></td><td class="rouge-code"><pre>ls -al
 </pre></td></tr></tbody></table></code></div></div>
 
-<p><a href="img/image-20230328232400235.png" class="popup img-link "><img data-src="img/image-20230328232400235.png" alt="image-20230328232400235" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
+<p><a href="../img/image-20230328232400235.png" class="popup img-link "><img data-src="../img/image-20230328232400235.png" alt="image-20230328232400235" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
 
 <ol>
   <li>What is the name of the file that will get created when the file from the first question executes?</li>
@@ -1739,7 +1739,7 @@
 
 <p>root用户的文件，直接cat</p>
 
-<p><a href="img/image-20230328232546279.png" class="popup img-link "><img data-src="img/image-20230328232546279.png" alt="image-20230328232546279" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
+<p><a href="../../img/image-20230328232546279.png" class="popup img-link "><img data-src="../../img/image-20230328232546279.png" alt="image-20230328232546279" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
 
 <h1 id="task-6-following-the-fuse">Task 6 Following the fuse</h1>
 
@@ -1753,7 +1753,7 @@
 
 <p>查看计划任务，用在线网站转换，<a href="https://crontab.guru/">Crontab.guru - The cron schedule expression editor</a></p>
 
-<p><a href="img/image-20230328232658728.png" class="popup img-link "><img data-src="img/image-20230328232658728.png" alt="image-20230328232658728" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
+<p><a href="../../img/image-20230328232658728.png" class="popup img-link "><img data-src="../../img/image-20230328232658728.png" alt="image-20230328232658728" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
 
 <h1 id="finish">Finish</h1>
 
@@ -1927,20 +1927,10 @@
     
     
     
-  
-    
-    
-    
-    
       
         
         
 
-  
-    
-    
-    
-    
   
     
     
@@ -2151,64 +2141,6 @@
         
         
 
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-      
-    
   
     
     
@@ -2285,9 +2217,6 @@
       <a class="post-tag" href="/tags/disgruntled/">Disgruntled</a>
     
       
-      <a class="post-tag" href="/tags/life/">Life</a>
-    
-      
       <a class="post-tag" href="/tags/pythonssti/">PythonSSTI</a>
     
       
@@ -2350,124 +2279,111 @@
   
 
   
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
 
 
 
@@ -2478,6 +2394,9 @@
 
 
 
+  
+    
+    
   
     
     
@@ -2606,7 +2525,7 @@ buckeyenotes/beginner
       
       
       <div class="card">
-        <a href="/posts/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84-SUID-%E6%8F%90%E6%9D%83-%E5%89%AF%E6%9C%AC/">
+        <a href="/posts/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84-SUID-%E6%8F%90%E6%9D%83/">
           <div class="card-body">
             <!--
   Date format snippet
@@ -2655,17 +2574,17 @@ buckeyenotes/beginner
 
 <div class="post-navigation d-flex justify-content-between">
   
-  <div class="btn btn-outline-primary disabled"
+  <a href="/posts/BuckeyeCTF-2022-writeup/" class="btn btn-outline-primary"
     prompt="Older">
-    <p>-</p>
-  </div>
+    <p>BuckeyeCTF-2022-writeup</p>
+  </a>
   
 
   
-  <a href="/posts/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-vol2-plugins-for-Windows/" class="btn btn-outline-primary"
+  <div class="btn btn-outline-primary disabled"
     prompt="Newer">
-    <p>内存取证 vol2-plugins-for-Window</p>
-  </a>
+    <p>-</p>
+  </div>
   
 
 </div>
@@ -2739,20 +2658,10 @@ buckeyenotes/beginner
     
     
     
-  
-    
-    
-    
-    
       
         
         
 
-  
-    
-    
-    
-    
   
     
     
@@ -2963,64 +2872,6 @@ buckeyenotes/beginner
         
         
 
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-      
-    
   
     
     
@@ -3095,9 +2946,6 @@ buckeyenotes/beginner
     
       
       <a class="post-tag" href="/tags/disgruntled/">Disgruntled</a>
-    
-      
-      <a class="post-tag" href="/tags/life/">Life</a>
     
       
       <a class="post-tag" href="/tags/pythonssti/">PythonSSTI</a>
