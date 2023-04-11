@@ -693,6 +693,83 @@
     
 
   
+    
+
+    
+    
+
+    
+
+    
+    
+
+    
+    
+    
+    
+
+    
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+      
+
+      
+
+    
+
+    <!-- take out classes -->
+    
+
+    
+
+    
+
+    
+
+    <!-- lazy-load images <https://github.com/aFarkas/lazysizes#readme> -->
+    
+    
+
+    <!-- add image placeholder -->
+    
+      
+    
+
+    <!-- Bypass the HTML-proofer test -->
+    
+
+    <!-- make sure the `<img>` is wrapped by `<a>` -->
+    
+
+    
+      <!-- create the image wrapper -->
+      
+    
+
+    <!-- combine -->
+    
+
+  
 
   
 
@@ -803,8 +880,8 @@
 
 <!-- return element -->
 <span class="readtime" data-toggle="tooltip" data-placement="bottom"
-  title="826 words">
-  <em>4 min</em> read</span>
+  title="997 words">
+  <em>5 min</em> read</span>
 
     </div>
 
@@ -820,6 +897,17 @@
 <h1 id="website-collect">Website collect</h1>
 
 <p><a href="https://useragentstring.com/">User Agent String.Com</a> —— 收集各种UA头</p>
+
+<div class="table-wrapper"><table>
+  <tbody>
+    <tr>
+      <td>[Civitai</td>
+      <td>Stable Diffusion models, embeddings, hypernetworks and more](https://civitai.com/) —— ai图片模型</td>
+    </tr>
+  </tbody>
+</table></div>
+
+<p><a href="img/image-20230410104735171.png" class="popup img-link "><img data-src="img/image-20230410104735171.png" alt="image-20230410104735171" style="zoom: 50%;" class="lazyload" data-proofer-ignore></a></p>
 
 <h1 id="docker-error">Docker Error</h1>
 
@@ -1024,6 +1112,26 @@ source ~/.bashrc
 <h1 id="xss-get-cookie">xss get cookie</h1>
 
 <p><a href="../../img/1668786596594-5d604f91-441b-46d8-b8ea-4f43f87f74ab.jpeg" class="popup img-link "><img data-src="../../img/1668786596594-5d604f91-441b-46d8-b8ea-4f43f87f74ab.jpeg" alt="1668786596594-5d604f91-441b-46d8-b8ea-4f43f87f74ab" style="zoom:50%;" class="lazyload" data-proofer-ignore></a></p>
+
+<h1 id="tcpdump-抓包和保存">Tcpdump 抓包和保存</h1>
+
+<div class="language-shell highlighter-rouge"><div class="code-header">
+        <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+</pre></td><td class="rouge-code"><pre>tcpdump <span class="nt">-i</span> any port 80 <span class="nt">-A</span> <span class="nt">-w</span> dump.pcap
+
+这是一个使用tcpdump命令的示例，用于在网络接口上捕获所有使用HTTP协议（端口号为80）的数据包，并将它们保存到名为“dump.pcap”的文件中。其中：
+
+<span class="nt">-i</span> any 表示监听所有可用的网络接口。
+port 80 指定只捕获目标端口为80的数据包。
+<span class="nt">-w</span> dump.pcap 表示将捕获的数据包保存到名为“dump.pcap”的文件中，以二进制形式存储，而不是将其转换为ASCII文本。
+</pre></td></tr></tbody></table></code></div></div>
 
 
 </div>
@@ -1609,6 +1717,19 @@ source ~/.bashrc
   
 
   
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
     
   
 
@@ -1794,7 +1915,7 @@ Background
       
       
       <div class="card">
-        <a href="/posts/BuckeyeCTF-2022-writeup/">
+        <a href="/posts/%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)-%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F/">
           <div class="card-body">
             <!--
   Date format snippet
@@ -1806,13 +1927,13 @@ Background
 
 
 <em class="small"
-    data-ts="1668182400"
+    data-ts="1673712000"
     data-df="ll"
     >
-  Nov 12, 2022
+  Jan 15, 2023
 </em>
 
-            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>BuckeyeCTF-2022-writeup</h3>
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>蚁剑流量分析(1) 简单解密蚁剑流量</h3>
             <div class="text-muted small">
               <p>
                 
@@ -1823,16 +1944,12 @@ Background
 
                 文前漫谈
 
+在学习Godzaill流量的时候，我发现了批量解密流量包中蚁剑流量的新思路——py的mitmproxy模块，中间人攻击（Man-in-the-middle attack）的意思
 
-  比赛地址：https://pwnoh.io/challs
-
-
-Web
-
-buckeyenotes/beginner
+mitmproxy模块就相当于py里的burp suite，更有用的是它支持我们自定义脚本处理http的请求和响应内容（在mitmproxy里叫addon脚本），这正好解决了我的大问题
 
 
-  des：Note taking apps are all the rage lately but turns our they’re harder to make than I thought :/. Even in development bucke...
+  mitm...
               </p>
             </div>
           </div>
