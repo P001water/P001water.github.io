@@ -40,27 +40,27 @@
   
     <!-- Begin Jekyll SEO tag v2.8.0 -->
 <meta name="generator" content="Jekyll v4.3.2" />
-<meta property="og:title" content="蚁剑流量分析(1)——简单解密蚁剑流量" />
+<meta property="og:title" content="伪协议php://input命令执行的原理" />
 <meta name="author" content="may1as" />
 <meta property="og:locale" content="en" />
 <meta name="description" content="文前漫谈" />
 <meta property="og:description" content="文前漫谈" />
-<link rel="canonical" href="/posts/%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)-%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F/" />
-<meta property="og:url" content="/posts/%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)-%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F/" />
+<link rel="canonical" href="/posts/%E4%BC%AA%E5%8D%8F%E8%AE%AEphp_input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86/" />
+<meta property="og:url" content="/posts/%E4%BC%AA%E5%8D%8F%E8%AE%AEphp_input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86/" />
 <meta property="og:site_name" content="may1as’ blog" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2022-01-15T00:00:00+08:00" />
+<meta property="article:published_time" content="2022-04-07T00:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="蚁剑流量分析(1)——简单解密蚁剑流量" />
+<meta property="twitter:title" content="伪协议php://input命令执行的原理" />
 <meta name="twitter:site" content="@\#" />
 <meta name="twitter:creator" content="@may1as" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-01-15T00:00:00+08:00","datePublished":"2022-01-15T00:00:00+08:00","description":"文前漫谈","headline":"蚁剑流量分析(1)——简单解密蚁剑流量","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)-%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F/"},"url":"/posts/%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)-%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-04-07T00:00:00+08:00","datePublished":"2022-04-07T00:00:00+08:00","description":"文前漫谈","headline":"伪协议php://input命令执行的原理","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/%E4%BC%AA%E5%8D%8F%E8%AE%AEphp_input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86/"},"url":"/posts/%E4%BC%AA%E5%8D%8F%E8%AE%AEphp_input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86/"}</script>
 <!-- End Jekyll SEO tag -->
 
   
 
-  <title>蚁剑流量分析(1)——简单解密蚁剑流量 | may1as' blog
+  <title>伪协议php://input命令执行的原理 | may1as' blog
   </title>
 
   <!--
@@ -449,7 +449,7 @@
         
 
           
-            <span>蚁剑流量分析(1)——简单解密蚁剑流量</span>
+            <span>伪协议php://input命令执行的原理</span>
           
 
         
@@ -958,15 +958,6 @@
       
 
     
-      
-
-      
-      
-      
-
-      
-
-    
 
     <!-- take out classes -->
     
@@ -1205,6 +1196,42 @@
       
 
     
+      
+
+      
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+
+    
 
     
 
@@ -1230,7 +1257,7 @@
 
 <!-- return -->
 
-<h1 data-toc-skip>蚁剑流量分析(1)——简单解密蚁剑流量</h1>
+<h1 data-toc-skip>伪协议php://input命令执行的原理</h1>
 
 <div class="post-meta text-muted">
     <!-- published date -->
@@ -1246,10 +1273,10 @@
 
 
 <em class=""
-    data-ts="1642176000"
+    data-ts="1649260800"
     data-df="ll"
     data-toggle="tooltip" data-placement="bottom">
-  Jan 15, 2022
+  Apr  7, 2022
 </em>
 
     </span>
@@ -1300,8 +1327,8 @@
 
 <!-- return element -->
 <span class="readtime" data-toggle="tooltip" data-placement="bottom"
-  title="533 words">
-  <em>2 min</em> read</span>
+  title="1300 words">
+  <em>7 min</em> read</span>
 
     </div>
 
@@ -1312,117 +1339,269 @@
 <div class="post-content">
   <h1 id="文前漫谈">文前漫谈</h1>
 
-<p>在学习Godzaill流量的时候，我发现了批量解密流量包流量的新思路——py的mitmproxy模块，中间人攻击（Man-in-the-middle attack）的意思</p>
+<ul>
+  <li>文章首发在Freebuf</li>
+</ul>
 
-<p>mitmproxy模块就相当于py里的burp suite，更有用的是它支持我们自定义脚本处理http的请求和响应内容（在mitmproxy里叫addon脚本），这正好解决了我的大问题</p>
+<p>研究几种webshell管理工具时遇见，发现几款常见的webshell管理工具都有对php://input的利用</p>
 
-<blockquote>
-  <p>mitmproxy安装后有 3 个命令行工具：mitmproxy, mitmdump, mitmweb</p>
+<p>本文记录我对php://input原理的学习和思考，如有疏漏失错，还请联系告知</p>
 
-  <p>mitmproxy：<code class="language-plaintext highlighter-rouge">交互式；查看流量数据 (请求与响应)；执行自定义脚本</code></p>
+<p>$HTTP_RAW_POST_DATA的作用和php://input的作用相同，但是PHP 5.6.0. 被废弃了，后面的版本中就是用php://input替代。所有本文省略</p>
 
-  <p>mitmdump：<code class="language-plaintext highlighter-rouge">执行自定义脚本，脚本在 Mitmproxy 中叫做 Addon</code></p>
+<h1 id="官方文档的解释">官方文档的解释</h1>
 
-  <p>mitmweb：<code class="language-plaintext highlighter-rouge">mitmweb是一个基于Web的用户界面，用于与mitmproxy交互和监视HTTP / HTTPS流量。它使开发人员能够更轻松地查看和分析代理拦截的网络流量。</code></p>
-</blockquote>
+<h2 id="_post数组"><span class="mr-2">$_POST数组</span><a href="#_post数组" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
-<p>用mitmproxy分析抓包很方便</p>
+<p>当 HTTP POST 请求的 Content-Type 是 <code class="language-plaintext highlighter-rouge">application/x-www-form-urlencoded</code>或 <code class="language-plaintext highlighter-rouge">multipart/form-data</code>时，会将变量以关联数组形式传入当前脚本。</p>
 
-<p>2023-4-10更</p>
+<h2 id="phpinput-伪协议"><span class="mr-2">php://input 伪协议</span><a href="#phpinput-伪协议" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
-<blockquote>
-  <p>不知道当时咋想的，直接用pyshark分包解不久行了吗，搞的挺麻烦</p>
-</blockquote>
+<p>php://input 是个可以访问请求的原始数据的只读流。当请求方式是post，并且Content-Type不等于<code class="language-plaintext highlighter-rouge">"multipart/form-data"</code>时，可以使用php://input来获取原始请求的数据。</p>
 
-<h1 id="蚁剑流量解密">蚁剑流量解密</h1>
+<h1 id="从post的几种content-type看php的_post-与-phpinput">从POST的几种Content-Type看PHP的$_POST []与 php://input</h1>
 
-<p>蚁剑自带的编码器，解码器都很简单，直接过一遍了</p>
+<p>通常的，在php中我们用<code class="language-plaintext highlighter-rouge">$POST[]</code>数组来处理封装好的POST请求正文中的内容，下面从http post上传时几种不同的表单编码格式分析$POST[]数组和php://input伪协议在处理post内容时的差别</p>
 
-<p>编码器就是对http请求的内容进行对应的编码，解码器就是对返回报文进行的编码</p>
+<p>POST表单上传时常见有这几种编码：</p>
 
-<div class="language-shell highlighter-rouge"><div class="code-header">
-        <span data-label-text="Shell"><i class="fas fa-code small"></i></span>
+<ul>
+  <li>multipart/form-data</li>
+  <li>application/x-www-data-urlencoded</li>
+  <li>application/json</li>
+  <li>text/plain</li>
+</ul>
+
+<h2 id="multipartform-data-文件上传时的编码"><span class="mr-2">multipart/form-data (文件上传时的编码)</span><a href="#multipartform-data-文件上传时的编码" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>服务端代码</p>
+
+<pre><code class="language-php+HTML">&lt;html&gt;
+&lt;form enctype="multipart/form-data" method="post"&gt;
+&lt;input type="text" name="name" /&gt;
+&lt;input type="file" name="upload_file" /&gt;
+&lt;button type="submit" name="submit" value="Submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
+&lt;?php
+echo "\$_POST[]: ";
+var_dump($_POST);
+echo "&lt;br&gt;";echo "&lt;br&gt;";
+echo "php://input: ";
+var_dump(file_get_contents("php://input"));
+?&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>上传 upload.txt , form表单如下，文件上传的post包就不多解释了</p>
+
+<p>boundary=—-WebKitFormBoundaryHwjtGxAgxib9xeFe就是multipart分块传输的分界线</p>
+
+<p>这个http包我精简过，注意Content-Type即可</p>
+
+<div class="language-http highlighter-rouge"><div class="code-header">
+        <span data-label-text="Http"><i class="fas fa-code small"></i></span>
       <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
-</pre></td><td class="rouge-code"><pre>mitmproxy <span class="nt">-p</span> 9000
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+</pre></td><td class="rouge-code"><pre><span class="nf">POST</span> <span class="nn">/test/demo.php</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">192.168.1.136</span>
+<span class="na">Content-Length</span><span class="p">:</span> <span class="s">398</span>
+<span class="na">Cache-Control</span><span class="p">:</span> <span class="s">max-age=0</span>
+<span class="na">Upgrade-Insecure-Requests</span><span class="p">:</span> <span class="s">1</span>
+<span class="na">Origin</span><span class="p">:</span> <span class="s">http://192.168.1.136</span>
+<span class="na">Content-Type</span><span class="p">:</span> <span class="s">multipart/form-data; boundary=----WebKitFormBoundaryHwjtGxAgxib9xeFe</span>
+<span class="na">User-Agent</span><span class="p">:</span> <span class="s">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span>
+<span class="na">Referer</span><span class="p">:</span> <span class="s">http://192.168.1.136/test/demo.php</span>
+<span class="na">Accept-Encoding</span><span class="p">:</span> <span class="s">gzip, deflate</span>
+<span class="na">Accept-Language</span><span class="p">:</span> <span class="s">en,zh-CN;q=0.9,zh;q=0.8</span>
+<span class="na">Connection</span><span class="p">:</span> <span class="s">close</span>
+
+------WebKitFormBoundaryHwjtGxAgxib9xeFe
+Content-Disposition: form-data; name="name"
+
+123456
+------WebKitFormBoundaryHwjtGxAgxib9xeFe
+Content-Disposition: form-data; name="upload_file"; filename="upload.txt"
+Content-Type: text/plain
+
+upload test
+------WebKitFormBoundaryHwjtGxAgxib9xeFe
+Content-Disposition: form-data; name="submit"
+
+Submit
+------WebKitFormBoundaryHwjtGxAgxib9xeFe--
+
 </pre></td></tr></tbody></table></code></div></div>
 
-<p>用mitmproxy模块启动一个http代理，方便后续我们观察http的请求和响应</p>
+<p>看见后端只有$POST[] 数组接收了form表单上传的内容，正如上面说的，当Content-Type: multipart/form-data;，php://input并不起作用</p>
 
-<p>依据蚁剑自带的编码和解码器，挨个试一下</p>
+<p><a href="img/image-20230403225438175-1680843364971-1.png" class="popup img-link "><img data-src="img/image-20230403225438175-1680843364971-1.png" alt="image-20230403225438175" style="zoom:50%;" class="lazyload" data-proofer-ignore></a></p>
 
-<p><a href="../../img/image-20230326194649343.png" class="popup img-link "><img data-src="../../img/image-20230326194649343.png" alt="image-20230326194649343" style="zoom: 67%;" class="lazyload" data-proofer-ignore></a></p>
+<h2 id="applicationx-www-data-urlencoded"><span class="mr-2">application/x-www-data-urlencoded</span><a href="#applicationx-www-data-urlencoded" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
 
-<h2 id="编码器"><span class="mr-2">编码器</span><a href="#编码器" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+<p>服务端代码</p>
+
+<pre><code class="language-php+HTML">&lt;html&gt;
+&lt;form enctype="application/x-www-data-urlencoded" method="post"&gt;
+&lt;input type="text" name="name" /&gt;
+&lt;button type="submit" name="submit" value="Submit"&gt;Submit&lt;/button&gt;
+&lt;/form&gt;
+&lt;?php
+echo "\$_POST[]: ";
+var_dump($_POST);
+echo "&lt;br&gt;";echo "&lt;br&gt;";
+echo "php://input: ";
+var_dump(file_get_contents("php://input"));
+?&gt;
+&lt;/html&gt;
+</code></pre>
+
+<p>form表单的内容</p>
+
+<div class="language-http highlighter-rouge"><div class="code-header">
+        <span data-label-text="Http"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+</pre></td><td class="rouge-code"><pre><span class="nf">POST</span> <span class="nn">/test/demo.php</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">192.168.1.136</span>
+<span class="na">Content-Length</span><span class="p">:</span> <span class="s">23</span>
+<span class="na">Cache-Control</span><span class="p">:</span> <span class="s">max-age=0</span>
+<span class="na">Upgrade-Insecure-Requests</span><span class="p">:</span> <span class="s">1</span>
+<span class="na">Origin</span><span class="p">:</span> <span class="s">http://192.168.1.136</span>
+<span class="na">Content-Type</span><span class="p">:</span> <span class="s">application/x-www-form-urlencoded</span>
+<span class="na">User-Agent</span><span class="p">:</span> <span class="s">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span>
+<span class="na">Referer</span><span class="p">:</span> <span class="s">http://192.168.1.136/test/demo.php</span>
+<span class="na">Accept-Encoding</span><span class="p">:</span> <span class="s">gzip, deflate</span>
+<span class="na">Accept-Language</span><span class="p">:</span> <span class="s">en,zh-CN;q=0.9,zh;q=0.8</span>
+<span class="na">Connection</span><span class="p">:</span> <span class="s">close</span>
+
+name=demo&amp;submit=Submit
+</pre></td></tr></tbody></table></code></div></div>
+
+<p>$_POST[] 和 php://input都能接收到form表单的内容，也正如上面所说，php://input访问的时原始数据的只读流，后端接收到的和http传输的是相同的，但是解析的结果依然不同</p>
+
+<p><a href="img/image-20230403230323508.png" class="popup img-link "><img data-src="img/image-20230403230323508.png" alt="image-20230403230323508" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
+
+<p>这里我突发奇想看看试试如果url编码的结果是什么</p>
+
+<p>把 ‘demo’ 进行再一次编码url全编码，相当于url二次编码了</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="code-header">
+        <span data-label-text="Plaintext"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre>demo
+-&gt;urlencode
+%31%32%37%2e%30%2e%30%2e%31
+</pre></td></tr></tbody></table></code></div></div>
+
+<p><a href="img/image-20230403231001651.png" class="popup img-link "><img data-src="img/image-20230403231001651.png" alt="image-20230403231001651" style="zoom:50%;" class="lazyload" data-proofer-ignore></a></p>
+
+<p>这里两者之间就有些差别了，具体原因就是浏览器发包时还会对post请求进行一次url编码，$_POST[]数组的内容是urldecode()之后的，而php://input访问的还是原始数据，也就没有解码</p>
+
+<p><a href="img/image-20230403233824446.png" class="popup img-link "><img data-src="img/image-20230403233824446.png" alt="image-20230403233824446" style="zoom:50%;" class="lazyload" data-proofer-ignore></a></p>
+
+<h2 id="applicationjson"><span class="mr-2">application/json</span><a href="#applicationjson" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
+
+<p>json格式通常在传输数据时使用，我直接在post包中发送json格式的数据了。其实理所应当的能想到$_POST[]数组是处理不了json格式的数据的，这种情况php只能用php://input读post的数据</p>
+
+<p><a href="img/image-20230403234723112.png" class="popup img-link "><img data-src="img/image-20230403234723112.png" alt="image-20230403234723112" style="zoom: 50%;" class="lazyload" data-proofer-ignore></a></p>
+
+<p>总的来说</p>
 
 <blockquote>
-  <ul>
-    <li>default编码</li>
-  </ul>
+  <p>php://input会接收除了Content_Type: multipart/form-data情况下的内容</p>
 
-  <p>直接明文传输</p>
+  <p>而$_POST[]数组只处理类型为<code class="language-plaintext highlighter-rouge">application/x-www-form-urlencoded</code> 或 <code class="language-plaintext highlighter-rouge">multipart/form-data</code>的情况，因为只有这两种能被直接写成关联数组的形式（就是字典的形式）</p>
 </blockquote>
 
-<p><a href="../../img/image-20230326203315920.png" class="popup img-link "><img data-src="../../img/image-20230326203315920.png" alt="image-20230326203315920" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
+<h1 id="phpinput-命令执行的原理">php://input 命令执行的原理</h1>
 
-<blockquote>
-  <ul>
-    <li>base64编码器</li>
-  </ul>
+<p>请求头中的Content-Type字段告诉服务器后端用户交互上传的是什么类型的数据，$_POST能处理form表单上传的键值对格式（类似字典）的内容，但是处理如上的json格式或者其他格式内容并不会生效。何况php的Content-Type类型且不止这三种</p>
 
-  <p>直接按照shell里的解密顺序就行</p>
-</blockquote>
+<p>上面的三个例子也更好的说明了php://input是怎样和为什么要从原始数据的只读流处理post请求包的内容，但这不是php://input能进行命令执行的关键</p>
 
-<p><a href="../../img/image-20230326203709380.png" class="popup img-link "><img data-src="../../img/image-20230326203709380.png" alt="image-20230326203709380" style="zoom: 67%;" class="lazyload" data-proofer-ignore></a></p>
+<p>它能进行命令执行的关键还是看它和什么函数联动，它本身并不能进行RCE，是处理php://input内容的函数出了问题</p>
 
-<blockquote>
-  <ul>
-    <li>chr 型</li>
-  </ul>
+<p>比如经典的远程文件包含</p>
 
-  <p>代码复制下来，调试或者直接赋值输出</p>
-</blockquote>
+<div class="language-php highlighter-rouge"><div class="code-header">
+        <span data-label-text="PHP"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="cp">&lt;?php</span>
+<span class="k">include</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'file'</span><span class="p">]);</span>
+<span class="cp">?&gt;</span>
+</pre></td></tr></tbody></table></code></div></div>
 
-<p><a href="../../img/image-20230326203824990.png" class="popup img-link "><img data-src="../../img/image-20230326203824990.png" alt="image-20230326203824990" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
+<p>file接收php://input的内容，post body里就是完整的php文件内容，这里的关键就是include()函数，它会解析&lt;?php标签，并把后面的代码当作php代码执行，直到读到?&gt;</p>
 
-<blockquote>
-  <p>chr(16) 型</p>
+<p><a href="img/image-20230404001117124.png" class="popup img-link "><img data-src="img/image-20230404001117124.png" alt="image-20230404001117124" class="lazyload" data-proofer-ignore></a></p>
 
-  <p>同chr 型，只不过换成了hex的形式</p>
-</blockquote>
+<p>或者说直接是</p>
 
-<p><a href="../../img/image-20230326203937057.png" class="popup img-link "><img data-src="../../img/image-20230326203937057.png" alt="image-20230326203937057" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
+<div class="language-php highlighter-rouge"><div class="code-header">
+        <span data-label-text="PHP"><i class="fas fa-code small"></i></span>
+      <button aria-label="copy" data-title-succeed="Copied!"><i class="far fa-clipboard"></i></button></div><div class="highlight"><code><table class="rouge-table"><tbody><tr><td class="rouge-gutter gl"><pre class="lineno">1
+2
+3
+</pre></td><td class="rouge-code"><pre><span class="cp">&lt;?php</span>
+<span class="k">eval</span><span class="p">(</span><span class="nb">file_get_contents</span><span class="p">(</span><span class="s2">"php://input"</span><span class="p">));</span>
+<span class="cp">?&gt;</span>
+</pre></td></tr></tbody></table></code></div></div>
 
-<blockquote>
-  <p>rot13型</p>
+<p>这种情况根据上面所说，直接在post body里输入php代码就行，连标签都不用加。（注意php://input和全局变量$_POST不同，它通常配合file_get_contents()函数使用）</p>
 
-  <p>rot13再转一次就行</p>
-</blockquote>
+<p><a href="img/image-20230404001948080.png" class="popup img-link "><img data-src="img/image-20230404001948080.png" alt="image-20230404001948080" style="zoom:50%;" class="lazyload" data-proofer-ignore></a></p>
 
-<p><a href="../../img/image-20230326204026036.png" class="popup img-link "><img data-src="../../img/image-20230326204026036.png" alt="image-20230326204026036" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
+<p>比如冰蝎4的默认shell</p>
 
-<h2 id="解码器"><span class="mr-2">解码器</span><a href="#解码器" class="anchor text-muted"><i class="fas fa-hashtag"></i></a></h2>
-
-<blockquote>
-  <p>base64 型</p>
-
-  <p>base64解密</p>
-</blockquote>
-
-<p><a href="../../img/image-20230326204523977.png" class="popup img-link "><img data-src="../../img/image-20230326204523977.png" alt="image-20230326204523977" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
-
-<blockquote>
-  <p>rot13型</p>
-
-  <p>rot13解密</p>
-</blockquote>
-
-<p><a href="../../img/image-20230326204618764.png" class="popup img-link "><img data-src="../../img/image-20230326204618764.png" alt="image-20230326204618764" style="zoom:67%;" class="lazyload" data-proofer-ignore></a></p>
+<p><a href="img/image-20230404145214389.png" class="popup img-link "><img data-src="img/image-20230404145214389.png" alt="image-20230404145214389" style="zoom: 50%;" class="lazyload" data-proofer-ignore></a></p>
 
 <h1 id="完">完</h1>
-
-<p>这个只是流量解密系列的开端，就先写蚁剑的简单解密了，继续会更上蚁剑的bypasswaf和自定义编码器、解码器</p>
-
-<p>其实冰蝎、哥斯拉流量默认解密我都搞得差不多了，后面整整也更上来</p>
 
 
 </div>
@@ -1434,7 +1613,7 @@
   <div class="post-meta mb-3">
     <i class="far fa-folder-open fa-fw mr-1"></i>
     
-      <a href='/categories/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/'>流量分析</a>
+      <a href='/categories/php/'>PHP</a>
   </div>
   
 
@@ -1443,11 +1622,11 @@
   <div class="post-tags">
     <i class="fa fa-tags fa-fw mr-1"></i>
       
-      <a href="/tags/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/"
-          class="post-tag no-text-decoration" >流量分析</a>
+      <a href="/tags/php/"
+          class="post-tag no-text-decoration" >PHP</a>
       
-      <a href="/tags/%E4%B8%AD%E5%9B%BD%E8%9A%81%E5%89%91/"
-          class="post-tag no-text-decoration" >中国蚁剑</a>
+      <a href="/tags/php-input/"
+          class="post-tag no-text-decoration" >php://input</a>
       
   </div>
   
@@ -1482,19 +1661,19 @@
 
     
       
-        <a href="https://twitter.com/intent/tweet?text=%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%20-%20may1as'%20blog&url=%2Fposts%2F%25E8%259A%2581%25E5%2589%2591%25E6%25B5%2581%25E9%2587%258F%25E5%2588%2586%25E6%259E%2590%281%29-%25E7%25AE%2580%25E5%258D%2595%25E8%25A7%25A3%25E5%25AF%2586%25E8%259A%2581%25E5%2589%2591%25E6%25B5%2581%25E9%2587%258F%2F" data-toggle="tooltip" data-placement="top"
+        <a href="https://twitter.com/intent/tweet?text=%E4%BC%AA%E5%8D%8F%E8%AE%AEphp://input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86%20-%20may1as'%20blog&url=%2Fposts%2F%25E4%25BC%25AA%25E5%258D%258F%25E8%25AE%25AEphp_input%25E5%2591%25BD%25E4%25BB%25A4%25E6%2589%25A7%25E8%25A1%258C%25E7%259A%2584%25E5%258E%259F%25E7%2590%2586%2F" data-toggle="tooltip" data-placement="top"
           title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
           <i class="fa-fw fab fa-twitter"></i>
         </a>
     
       
-        <a href="https://www.facebook.com/sharer/sharer.php?title=%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%20-%20may1as'%20blog&u=%2Fposts%2F%25E8%259A%2581%25E5%2589%2591%25E6%25B5%2581%25E9%2587%258F%25E5%2588%2586%25E6%259E%2590%281%29-%25E7%25AE%2580%25E5%258D%2595%25E8%25A7%25A3%25E5%25AF%2586%25E8%259A%2581%25E5%2589%2591%25E6%25B5%2581%25E9%2587%258F%2F" data-toggle="tooltip" data-placement="top"
+        <a href="https://www.facebook.com/sharer/sharer.php?title=%E4%BC%AA%E5%8D%8F%E8%AE%AEphp://input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86%20-%20may1as'%20blog&u=%2Fposts%2F%25E4%25BC%25AA%25E5%258D%258F%25E8%25AE%25AEphp_input%25E5%2591%25BD%25E4%25BB%25A4%25E6%2589%25A7%25E8%25A1%258C%25E7%259A%2584%25E5%258E%259F%25E7%2590%2586%2F" data-toggle="tooltip" data-placement="top"
           title="Facebook" target="_blank" rel="noopener" aria-label="Facebook">
           <i class="fa-fw fab fa-facebook-square"></i>
         </a>
     
       
-        <a href="https://t.me/share/url?url=%2Fposts%2F%25E8%259A%2581%25E5%2589%2591%25E6%25B5%2581%25E9%2587%258F%25E5%2588%2586%25E6%259E%2590%281%29-%25E7%25AE%2580%25E5%258D%2595%25E8%25A7%25A3%25E5%25AF%2586%25E8%259A%2581%25E5%2589%2591%25E6%25B5%2581%25E9%2587%258F%2F&text=%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)%E2%80%94%E2%80%94%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%20-%20may1as'%20blog" data-toggle="tooltip" data-placement="top"
+        <a href="https://t.me/share/url?url=%2Fposts%2F%25E4%25BC%25AA%25E5%258D%258F%25E8%25AE%25AEphp_input%25E5%2591%25BD%25E4%25BB%25A4%25E6%2589%25A7%25E8%25A1%258C%25E7%259A%2584%25E5%258E%259F%25E7%2590%2586%2F&text=%E4%BC%AA%E5%8D%8F%E8%AE%AEphp://input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86%20-%20may1as'%20blog" data-toggle="tooltip" data-placement="top"
           title="Telegram" target="_blank" rel="noopener" aria-label="Telegram">
           <i class="fa-fw fab fa-telegram"></i>
         </a>
@@ -2161,20 +2340,20 @@
   
 
   
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
 
 
 
@@ -2203,6 +2382,16 @@
         
         
         
+      
+    
+  
+    
+    
+      
+      
+        
+        
+        
           
 
 
@@ -2211,50 +2400,6 @@
     <h3 class="pt-2 mb-4 ml-1"
       data-toc-skip>Further Reading</h3>
     <div class="card-deck mb-4">
-    
-      
-      
-      <div class="card">
-        <a href="/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/">
-          <div class="card-body">
-            <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-
-<em class="small"
-    data-ts="1665504000"
-    data-df="ll"
-    >
-  Oct 12, 2022
-</em>
-
-            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>CTF中我的USB键盘鼠标流量解密指南和脚本</h3>
-            <div class="text-muted small">
-              <p>
-                
-
-
-
-
-
-                
-  文章首发于freebuf
-
-
-文前漫谈
-对ctf中的USB做一个了断吧，先摆上一些概念性的东西
-
-USB是 UniversalSerial Bus（通用串行总线）的缩写，是一个外部总线标准，用于规范电脑与外部设备的连接和通讯，例如键盘、鼠标、打印机、磁盘或网络适配器等等。通过对该接口流量的监听，我们可以得到取键盘敲击键、鼠标移动与点击、存储设备的铭文传输通信、USB无线网卡网络传输内容...
-              </p>
-            </div>
-          </div>
-        </a>
-      </div>
     
       
       
@@ -2358,6 +2503,46 @@ buckeyenotes/beginner
         </a>
       </div>
     
+      
+      
+      <div class="card">
+        <a href="/posts/%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8Evolatility2%E6%9E%84%E5%BB%BA-%E6%96%B0-%E7%89%88%E6%9C%AC%E5%86%85%E6%A0%B8%E7%9A%84profile/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+
+<em class="small"
+    data-ts="1667491200"
+    data-df="ll"
+    >
+  Nov  4, 2022
+</em>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>如何基于volatility2构建“新”版本内核的profile</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                
+  文章水在跳跳糖上了
+
+
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
     </div> <!-- .card-deck -->
   </div> <!-- #related-posts -->
 
@@ -2370,16 +2555,16 @@ buckeyenotes/beginner
 
 <div class="post-navigation d-flex justify-content-between">
   
-  <div class="btn btn-outline-primary disabled"
+  <a href="/posts/%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)-%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F/" class="btn btn-outline-primary"
     prompt="Older">
-    <p>-</p>
-  </div>
+    <p>蚁剑流量分析(1)——简单解密蚁剑流量</p>
+  </a>
   
 
   
-  <a href="/posts/%E4%BC%AA%E5%8D%8F%E8%AE%AEphp_input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86/" class="btn btn-outline-primary"
+  <a href="/posts/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-vol2-plugins-for-Windows/" class="btn btn-outline-primary"
     prompt="Newer">
-    <p>伪协议php://input命令执行的原理</p>
+    <p>内存取证 vol2-plugins-for-Window</p>
   </a>
   
 

@@ -48,6 +48,7 @@
 <meta property="og:url" content="/" />
 <meta property="og:site_name" content="may1as’ blog" />
 <meta property="og:type" content="website" />
+<link rel="next" href="/page2" />
 <meta name="twitter:card" content="summary" />
 <meta property="twitter:title" content="may1as’ blog" />
 <meta name="twitter:site" content="@\#" />
@@ -647,65 +648,6 @@ Background
     <!-- .post-review -->
   
     <div class="card post-preview">
-      <a href="/posts/%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)-%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F/">
-        <div class="card-body">
-          <h1 class="card-title">
-            蚁剑流量分析(1) 简单解密蚁剑流量
-          </h1>
-
-          <div class="card-text post-content">
-            <p>
-              
-
-
-
-
-
-              文前漫谈
-
-在学习Godzaill流量的时候，我发现了批量解密流量包中蚁剑流量的新思路——py的mitmproxy模块，中间人攻击（Man-in-the-middle attack）的意思
-
-mitmproxy模块就相当于py里的burp suite，更有用的是它支持我们自定义脚本处理http的请求和响应内容（在mitmproxy里叫addon脚本），这正好解决了我的大问题
-
-
-  mitm...
-            </p>
-          </div>
-
-          <div class="post-meta text-muted d-flex">
-            <div class="mr-auto">
-              <!-- posted date -->
-              <i class="far fa-calendar fa-fw"></i>
-              <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-
-<em class=""
-    data-ts="1673712000"
-    data-df="ll"
-    >
-  Jan 15, 2023
-</em>
-
-
-              <!-- categories -->
-              
-            </div>
-
-            
-          </div>
-          <!-- .post-meta -->
-        </div>
-      </a>
-    </div>
-    <!-- .post-review -->
-  
-    <div class="card post-preview">
       <a href="/posts/BuckeyeCTF-2022-writeup/">
         <div class="card-body">
           <h1 class="card-title">
@@ -1040,7 +982,7 @@ import hm...
       <a href="/posts/pythonweb-SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6-%E5%9F%BA%E7%A1%80%E7%AF%87/">
         <div class="card-body">
           <h1 class="card-title">
-            pythonweb SSTI的payload构造思路研究(基础篇)
+            Pythonweb SSTI的payload构造思路研究(基础篇)
           </h1>
 
           <div class="card-text post-content">
@@ -1177,6 +1119,74 @@ python2/3 vol.py -f [image] --profile=...
     </div>
     <!-- .post-review -->
   
+    <div class="card post-preview">
+      <a href="/posts/%E4%BC%AA%E5%8D%8F%E8%AE%AEphp_input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86/">
+        <div class="card-body">
+          <h1 class="card-title">
+            伪协议php://input命令执行的原理
+          </h1>
+
+          <div class="card-text post-content">
+            <p>
+              
+
+
+
+
+
+              文前漫谈
+
+
+  文章首发在Freebuf
+
+
+研究几种webshell管理工具时遇见，发现几款常见的webshell管理工具都有对php://input的利用
+
+本文记录我对php://input原理的学习和思考，如有疏漏失错，还请联系告知
+
+$HTTP_RAW_POST_DATA的作用和php://input的作用相同，但是PHP 5.6.0. 被废弃了，后面的版本中就是用php://i...
+            </p>
+          </div>
+
+          <div class="post-meta text-muted d-flex">
+            <div class="mr-auto">
+              <!-- posted date -->
+              <i class="far fa-calendar fa-fw"></i>
+              <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+
+<em class=""
+    data-ts="1649260800"
+    data-df="ll"
+    >
+  Apr  7, 2022
+</em>
+
+
+              <!-- categories -->
+              
+                <i class="far fa-folder-open fa-fw"></i>
+                <span>
+                  
+                    PHP
+                </span>
+              
+            </div>
+
+            
+          </div>
+          <!-- .post-meta -->
+        </div>
+      </a>
+    </div>
+    <!-- .post-review -->
+  
 </div>
 <!-- #post-list -->
 
@@ -1218,17 +1228,34 @@ python2/3 vol.py -f [image] --profile=...
 
   
 
+    
+    
+    
+    
+    
+
+    
+
+    
+      <!-- show number -->
+      <li class="page-item ">
+        <a class="page-link btn-box-shadow" href="/page2">2</a>
+      </li>
+    
+
+  
+
   <!-- mobile pagination -->
   <li class="page-index align-middle">
     <span>1</span>
-    <span class="text-muted">/ 1</span>
+    <span class="text-muted">/ 2</span>
   </li>
 
   <!-- right arrow -->
   
 
-  <li class="page-item disabled">
-    <a class="page-link btn-box-shadow" href="#" aria-label="next-page">
+  <li class="page-item ">
+    <a class="page-link btn-box-shadow" href="/page2" aria-label="next-page">
       <i class="fas fa-angle-right"></i>
     </a>
   </li>
@@ -1315,6 +1342,21 @@ python2/3 vol.py -f [image] --profile=...
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
@@ -1354,12 +1396,90 @@ python2/3 vol.py -f [image] --profile=...
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
     
   
     
     
     
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
     
   
     
@@ -1395,117 +1515,6 @@ python2/3 vol.py -f [image] --profile=...
         
         
 
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
   
     
     
@@ -1556,6 +1565,22 @@ python2/3 vol.py -f [image] --profile=...
     
     
       
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
     
   
     
@@ -1575,6 +1600,96 @@ python2/3 vol.py -f [image] --profile=...
     
     
     
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
     
   
     
@@ -1596,6 +1711,9 @@ python2/3 vol.py -f [image] --profile=...
       <a class="post-tag" href="/tags/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/">内存取证</a>
     
       
+      <a class="post-tag" href="/tags/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
+    
+      
       <a class="post-tag" href="/tags/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
     
       
@@ -1605,6 +1723,12 @@ python2/3 vol.py -f [image] --profile=...
       <a class="post-tag" href="/tags/disgruntled/">Disgruntled</a>
     
       
+      <a class="post-tag" href="/tags/php-input/">php://input</a>
+    
+      
+      <a class="post-tag" href="/tags/php/">PHP</a>
+    
+      
       <a class="post-tag" href="/tags/pythonssti/">PythonSSTI</a>
     
       
@@ -1612,12 +1736,6 @@ python2/3 vol.py -f [image] --profile=...
     
       
       <a class="post-tag" href="/tags/tryhackme/">Tryhackme</a>
-    
-      
-      <a class="post-tag" href="/tags/writeup/">Writeup</a>
-    
-      
-      <a class="post-tag" href="/tags/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
     
 
     </div>
@@ -1693,6 +1811,21 @@ python2/3 vol.py -f [image] --profile=...
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
@@ -1732,12 +1865,90 @@ python2/3 vol.py -f [image] --profile=...
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
     
   
     
     
     
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
     
   
     
@@ -1773,117 +1984,6 @@ python2/3 vol.py -f [image] --profile=...
         
         
 
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
   
     
     
@@ -1934,6 +2034,22 @@ python2/3 vol.py -f [image] --profile=...
     
     
       
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
     
   
     
@@ -1953,6 +2069,96 @@ python2/3 vol.py -f [image] --profile=...
     
     
     
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
     
   
     
@@ -1974,6 +2180,9 @@ python2/3 vol.py -f [image] --profile=...
       <a class="post-tag" href="/tags/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/">内存取证</a>
     
       
+      <a class="post-tag" href="/tags/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
+    
+      
       <a class="post-tag" href="/tags/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
     
       
@@ -1983,6 +2192,12 @@ python2/3 vol.py -f [image] --profile=...
       <a class="post-tag" href="/tags/disgruntled/">Disgruntled</a>
     
       
+      <a class="post-tag" href="/tags/php-input/">php://input</a>
+    
+      
+      <a class="post-tag" href="/tags/php/">PHP</a>
+    
+      
       <a class="post-tag" href="/tags/pythonssti/">PythonSSTI</a>
     
       
@@ -1990,12 +2205,6 @@ python2/3 vol.py -f [image] --profile=...
     
       
       <a class="post-tag" href="/tags/tryhackme/">Tryhackme</a>
-    
-      
-      <a class="post-tag" href="/tags/writeup/">Writeup</a>
-    
-      
-      <a class="post-tag" href="/tags/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
     
 
     </div>

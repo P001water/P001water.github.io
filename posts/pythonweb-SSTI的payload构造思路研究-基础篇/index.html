@@ -40,7 +40,7 @@
   
     <!-- Begin Jekyll SEO tag v2.8.0 -->
 <meta name="generator" content="Jekyll v4.3.2" />
-<meta property="og:title" content="pythonweb SSTI的payload构造思路研究(基础篇)" />
+<meta property="og:title" content="Pythonweb SSTI的payload构造思路研究(基础篇)" />
 <meta name="author" content="may1as" />
 <meta property="og:locale" content="en" />
 <meta name="description" content="在freebuf上发过，这里的是精简入门版" />
@@ -51,16 +51,16 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2022-07-24T00:00:00+08:00" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="pythonweb SSTI的payload构造思路研究(基础篇)" />
+<meta property="twitter:title" content="Pythonweb SSTI的payload构造思路研究(基础篇)" />
 <meta name="twitter:site" content="@\#" />
 <meta name="twitter:creator" content="@may1as" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-07-24T00:00:00+08:00","datePublished":"2022-07-24T00:00:00+08:00","description":"在freebuf上发过，这里的是精简入门版","headline":"pythonweb SSTI的payload构造思路研究(基础篇)","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/pythonweb-SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6-%E5%9F%BA%E7%A1%80%E7%AF%87/"},"url":"/posts/pythonweb-SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6-%E5%9F%BA%E7%A1%80%E7%AF%87/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"may1as"},"dateModified":"2022-07-24T00:00:00+08:00","datePublished":"2022-07-24T00:00:00+08:00","description":"在freebuf上发过，这里的是精简入门版","headline":"Pythonweb SSTI的payload构造思路研究(基础篇)","mainEntityOfPage":{"@type":"WebPage","@id":"/posts/pythonweb-SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6-%E5%9F%BA%E7%A1%80%E7%AF%87/"},"url":"/posts/pythonweb-SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6-%E5%9F%BA%E7%A1%80%E7%AF%87/"}</script>
 <!-- End Jekyll SEO tag -->
 
   
 
-  <title>pythonweb SSTI的payload构造思路研究(基础篇) | may1as' blog
+  <title>Pythonweb SSTI的payload构造思路研究(基础篇) | may1as' blog
   </title>
 
   <!--
@@ -449,7 +449,7 @@
         
 
           
-            <span>pythonweb SSTI的payload构造思路研究(基础篇)</span>
+            <span>Pythonweb SSTI的payload构造思路研究(基础篇)</span>
           
 
         
@@ -1250,7 +1250,7 @@
 
 <!-- return -->
 
-<h1 data-toc-skip>pythonweb SSTI的payload构造思路研究(基础篇)</h1>
+<h1 data-toc-skip>Pythonweb SSTI的payload构造思路研究(基础篇)</h1>
 
 <div class="post-meta text-muted">
     <!-- published date -->
@@ -1480,19 +1480,19 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
 
     
       
-        <a href="https://twitter.com/intent/tweet?text=pythonweb%20SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6(%E5%9F%BA%E7%A1%80%E7%AF%87)%20-%20may1as'%20blog&url=%2Fposts%2Fpythonweb-SSTI%25E7%259A%2584payload%25E6%259E%2584%25E9%2580%25A0%25E6%2580%259D%25E8%25B7%25AF%25E7%25A0%2594%25E7%25A9%25B6-%25E5%259F%25BA%25E7%25A1%2580%25E7%25AF%2587%2F" data-toggle="tooltip" data-placement="top"
+        <a href="https://twitter.com/intent/tweet?text=Pythonweb%20SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6(%E5%9F%BA%E7%A1%80%E7%AF%87)%20-%20may1as'%20blog&url=%2Fposts%2Fpythonweb-SSTI%25E7%259A%2584payload%25E6%259E%2584%25E9%2580%25A0%25E6%2580%259D%25E8%25B7%25AF%25E7%25A0%2594%25E7%25A9%25B6-%25E5%259F%25BA%25E7%25A1%2580%25E7%25AF%2587%2F" data-toggle="tooltip" data-placement="top"
           title="Twitter" target="_blank" rel="noopener" aria-label="Twitter">
           <i class="fa-fw fab fa-twitter"></i>
         </a>
     
       
-        <a href="https://www.facebook.com/sharer/sharer.php?title=pythonweb%20SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6(%E5%9F%BA%E7%A1%80%E7%AF%87)%20-%20may1as'%20blog&u=%2Fposts%2Fpythonweb-SSTI%25E7%259A%2584payload%25E6%259E%2584%25E9%2580%25A0%25E6%2580%259D%25E8%25B7%25AF%25E7%25A0%2594%25E7%25A9%25B6-%25E5%259F%25BA%25E7%25A1%2580%25E7%25AF%2587%2F" data-toggle="tooltip" data-placement="top"
+        <a href="https://www.facebook.com/sharer/sharer.php?title=Pythonweb%20SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6(%E5%9F%BA%E7%A1%80%E7%AF%87)%20-%20may1as'%20blog&u=%2Fposts%2Fpythonweb-SSTI%25E7%259A%2584payload%25E6%259E%2584%25E9%2580%25A0%25E6%2580%259D%25E8%25B7%25AF%25E7%25A0%2594%25E7%25A9%25B6-%25E5%259F%25BA%25E7%25A1%2580%25E7%25AF%2587%2F" data-toggle="tooltip" data-placement="top"
           title="Facebook" target="_blank" rel="noopener" aria-label="Facebook">
           <i class="fa-fw fab fa-facebook-square"></i>
         </a>
     
       
-        <a href="https://t.me/share/url?url=%2Fposts%2Fpythonweb-SSTI%25E7%259A%2584payload%25E6%259E%2584%25E9%2580%25A0%25E6%2580%259D%25E8%25B7%25AF%25E7%25A0%2594%25E7%25A9%25B6-%25E5%259F%25BA%25E7%25A1%2580%25E7%25AF%2587%2F&text=pythonweb%20SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6(%E5%9F%BA%E7%A1%80%E7%AF%87)%20-%20may1as'%20blog" data-toggle="tooltip" data-placement="top"
+        <a href="https://t.me/share/url?url=%2Fposts%2Fpythonweb-SSTI%25E7%259A%2584payload%25E6%259E%2584%25E9%2580%25A0%25E6%2580%259D%25E8%25B7%25AF%25E7%25A0%2594%25E7%25A9%25B6-%25E5%259F%25BA%25E7%25A1%2580%25E7%25AF%2587%2F&text=Pythonweb%20SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6(%E5%9F%BA%E7%A1%80%E7%AF%87)%20-%20may1as'%20blog" data-toggle="tooltip" data-placement="top"
           title="Telegram" target="_blank" rel="noopener" aria-label="Telegram">
           <i class="fa-fw fab fa-telegram"></i>
         </a>
@@ -1591,6 +1591,21 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
@@ -1630,12 +1645,90 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
     
   
     
     
     
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
     
   
     
@@ -1671,117 +1764,6 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
         
         
 
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
   
     
     
@@ -1832,6 +1814,22 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
     
     
       
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
     
   
     
@@ -1851,6 +1849,96 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
     
     
     
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
     
   
     
@@ -1872,6 +1960,9 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
       <a class="post-tag" href="/tags/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/">内存取证</a>
     
       
+      <a class="post-tag" href="/tags/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
+    
+      
       <a class="post-tag" href="/tags/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
     
       
@@ -1881,6 +1972,12 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
       <a class="post-tag" href="/tags/disgruntled/">Disgruntled</a>
     
       
+      <a class="post-tag" href="/tags/php-input/">php://input</a>
+    
+      
+      <a class="post-tag" href="/tags/php/">PHP</a>
+    
+      
       <a class="post-tag" href="/tags/pythonssti/">PythonSSTI</a>
     
       
@@ -1888,12 +1985,6 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
     
       
       <a class="post-tag" href="/tags/tryhackme/">Tryhackme</a>
-    
-      
-      <a class="post-tag" href="/tags/writeup/">Writeup</a>
-    
-      
-      <a class="post-tag" href="/tags/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
     
 
     </div>
@@ -2042,20 +2133,33 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
   
 
   
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
     
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
   
 
   
@@ -2173,50 +2277,6 @@ Background
       
       
       <div class="card">
-        <a href="/posts/%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)-%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F/">
-          <div class="card-body">
-            <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-
-<em class="small"
-    data-ts="1673712000"
-    data-df="ll"
-    >
-  Jan 15, 2023
-</em>
-
-            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>蚁剑流量分析(1) 简单解密蚁剑流量</h3>
-            <div class="text-muted small">
-              <p>
-                
-
-
-
-
-
-                文前漫谈
-
-在学习Godzaill流量的时候，我发现了批量解密流量包中蚁剑流量的新思路——py的mitmproxy模块，中间人攻击（Man-in-the-middle attack）的意思
-
-mitmproxy模块就相当于py里的burp suite，更有用的是它支持我们自定义脚本处理http的请求和响应内容（在mitmproxy里叫addon脚本），这正好解决了我的大问题
-
-
-  mitm...
-              </p>
-            </div>
-          </div>
-        </a>
-      </div>
-    
-      
-      
-      <div class="card">
         <a href="/posts/BuckeyeCTF-2022-writeup/">
           <div class="card-body">
             <!--
@@ -2256,6 +2316,46 @@ buckeyenotes/beginner
 
 
   des：Note taking apps are all the rage lately but turns our they’re harder to make than I thought :/. Even in development bucke...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+      
+      
+      <div class="card">
+        <a href="/posts/%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8Evolatility2%E6%9E%84%E5%BB%BA-%E6%96%B0-%E7%89%88%E6%9C%AC%E5%86%85%E6%A0%B8%E7%9A%84profile/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+
+<em class="small"
+    data-ts="1667491200"
+    data-df="ll"
+    >
+  Nov  4, 2022
+</em>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>如何基于volatility2构建“新”版本内核的profile</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                
+  文章水在跳跳糖上了
+
+
               </p>
             </div>
           </div>
@@ -2358,6 +2458,21 @@ buckeyenotes/beginner
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
@@ -2397,12 +2512,90 @@ buckeyenotes/beginner
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
     
   
     
     
     
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
     
   
     
@@ -2438,117 +2631,6 @@ buckeyenotes/beginner
         
         
 
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
   
     
     
@@ -2599,6 +2681,22 @@ buckeyenotes/beginner
     
     
       
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
     
   
     
@@ -2618,6 +2716,96 @@ buckeyenotes/beginner
     
     
     
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+        
+        
+
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
+    
+  
+    
+    
+    
+    
+      
     
   
     
@@ -2639,6 +2827,9 @@ buckeyenotes/beginner
       <a class="post-tag" href="/tags/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/">内存取证</a>
     
       
+      <a class="post-tag" href="/tags/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
+    
+      
       <a class="post-tag" href="/tags/%E7%9E%8E%E6%8A%98%E8%85%BE/">瞎折腾</a>
     
       
@@ -2648,6 +2839,12 @@ buckeyenotes/beginner
       <a class="post-tag" href="/tags/disgruntled/">Disgruntled</a>
     
       
+      <a class="post-tag" href="/tags/php-input/">php://input</a>
+    
+      
+      <a class="post-tag" href="/tags/php/">PHP</a>
+    
+      
       <a class="post-tag" href="/tags/pythonssti/">PythonSSTI</a>
     
       
@@ -2655,12 +2852,6 @@ buckeyenotes/beginner
     
       
       <a class="post-tag" href="/tags/tryhackme/">Tryhackme</a>
-    
-      
-      <a class="post-tag" href="/tags/writeup/">Writeup</a>
-    
-      
-      <a class="post-tag" href="/tags/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/">流量分析</a>
     
 
     </div>
