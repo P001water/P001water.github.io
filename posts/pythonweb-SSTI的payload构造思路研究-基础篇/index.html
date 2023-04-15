@@ -2133,33 +2133,33 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
   
 
   
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
     
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
-  
-
-  
-
-  
-
-  
-
-  
-
-  
-
-
   
 
   
@@ -2223,6 +2223,53 @@ Python 中的每一个函数都拥有一个 <strong>globals</strong> 属性，�
       
       
       <div class="card">
+        <a href="/posts/%E4%BC%AA%E5%8D%8F%E8%AE%AEphp_input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86/">
+          <div class="card-body">
+            <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+
+<em class="small"
+    data-ts="1680796800"
+    data-df="ll"
+    >
+  Apr  7, 2023
+</em>
+
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>伪协议php://input命令执行的原理</h3>
+            <div class="text-muted small">
+              <p>
+                
+
+
+
+
+
+                文前漫谈
+
+
+  文章首发在Freebuf
+
+
+研究几种webshell管理工具时遇见，发现几款常见的webshell管理工具都有对php://input的利用
+
+本文记录我对php://input原理的学习和思考，如有疏漏失错，还请联系告知
+
+$HTTP_RAW_POST_DATA的作用和php://input的作用相同，但是PHP 5.6.0. 被废弃了，后面的版本中就是用php://i...
+              </p>
+            </div>
+          </div>
+        </a>
+      </div>
+    
+      
+      
+      <div class="card">
         <a href="/posts/TryHackMe-Disgruntled/">
           <div class="card-body">
             <!--
@@ -2277,7 +2324,7 @@ Background
       
       
       <div class="card">
-        <a href="/posts/BuckeyeCTF-2022-writeup/">
+        <a href="/posts/%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)-%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F/">
           <div class="card-body">
             <!--
   Date format snippet
@@ -2289,13 +2336,13 @@ Background
 
 
 <em class="small"
-    data-ts="1668182400"
+    data-ts="1673712000"
     data-df="ll"
     >
-  Nov 12, 2022
+  Jan 15, 2023
 </em>
 
-            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>BuckeyeCTF-2022-writeup</h3>
+            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>蚁剑流量分析(1)——简单解密蚁剑流量</h3>
             <div class="text-muted small">
               <p>
                 
@@ -2306,56 +2353,12 @@ Background
 
                 文前漫谈
 
+在学习Godzaill流量的时候，我发现了批量解密流量包流量的新思路——py的mitmproxy模块，中间人攻击（Man-in-the-middle attack）的意思
 
-  比赛地址：https://pwnoh.io/challs
-
-
-Web
-
-buckeyenotes/beginner
+mitmproxy模块就相当于py里的burp suite，更有用的是它支持我们自定义脚本处理http的请求和响应内容（在mitmproxy里叫addon脚本），这正好解决了我的大问题
 
 
-  des：Note taking apps are all the rage lately but turns our they’re harder to make than I thought :/. Even in development bucke...
-              </p>
-            </div>
-          </div>
-        </a>
-      </div>
-    
-      
-      
-      <div class="card">
-        <a href="/posts/%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8Evolatility2%E6%9E%84%E5%BB%BA-%E6%96%B0-%E7%89%88%E6%9C%AC%E5%86%85%E6%A0%B8%E7%9A%84profile/">
-          <div class="card-body">
-            <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-
-<em class="small"
-    data-ts="1667491200"
-    data-df="ll"
-    >
-  Nov  4, 2022
-</em>
-
-            <h3 class="pt-0 mt-1 mb-3" data-toc-skip>如何基于volatility2构建“新”版本内核的profile</h3>
-            <div class="text-muted small">
-              <p>
-                
-
-
-
-
-
-                
-  文章水在跳跳糖上了
-
-
+  mitmpro...
               </p>
             </div>
           </div>

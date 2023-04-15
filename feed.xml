@@ -4,7 +4,7 @@
   <id>/</id>
   <title>may1as' blog</title>
   <subtitle>SEC, may1as, nyist .</subtitle>
-  <updated>2023-04-15T14:27:52+08:00</updated>
+  <updated>2023-04-15T14:30:26+08:00</updated>
   <author>
     <name>may1as</name>
     <uri>/</uri>
@@ -17,6 +17,60 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>伪协议php://input命令执行的原理</title>
+    <link href="/posts/%E4%BC%AA%E5%8D%8F%E8%AE%AEphp_input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86/" rel="alternate" type="text/html" title="伪协议php://input命令执行的原理" />
+    <published>2023-04-07T00:00:00+08:00</published>
+  
+    <updated>2023-04-07T00:00:00+08:00</updated>
+  
+    <id>/posts/%E4%BC%AA%E5%8D%8F%E8%AE%AEphp_input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86/</id>
+    <content src="/posts/%E4%BC%AA%E5%8D%8F%E8%AE%AEphp_input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86/" />
+    <author>
+      <name>may1as</name>
+    </author>
+
+  
+    
+    <category term="PHP" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      文前漫谈
+
+
+  文章首发在Freebuf
+
+
+研究几种webshell管理工具时遇见，发现几款常见的webshell管理工具都有对php://input的利用
+
+本文记录我对php://input原理的学习和思考，如有疏漏失错，还请联系告知
+
+$HTTP_RAW_POST_DATA的作用和php://input的作用相同，但是PHP 5.6.0. 被废弃了，后面的版本中就是用php://input替代。所有本文省略
+
+官方文档的解释
+
+$_POST数组
+
+当 HTTP POST 请求的 Content-Type 是 application/x-www-form-urlencoded或 multipart/form-data时，会将变量以关联数组形式传入当前脚本。
+
+php://input 伪协议
+
+php://input 是个可以访问请求的原始数据的只读流。当请求方式是post，并...
+    </summary>
+  
+
+  </entry>
 
   
   <entry>
@@ -66,6 +120,53 @@ Background
   Not sure if you’ve seen the news, but an employee from the IT department of one of our clients (CyberT) got arrested by the police. The guy was running a successful phishing operation as a side gig.
 
  ...
+    </summary>
+  
+
+  </entry>
+
+  
+  <entry>
+    <title>蚁剑流量分析(1)——简单解密蚁剑流量</title>
+    <link href="/posts/%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)-%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F/" rel="alternate" type="text/html" title="蚁剑流量分析(1)——简单解密蚁剑流量" />
+    <published>2023-01-15T00:00:00+08:00</published>
+  
+    <updated>2023-01-15T00:00:00+08:00</updated>
+  
+    <id>/posts/%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)-%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F/</id>
+    <content src="/posts/%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)-%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F/" />
+    <author>
+      <name>may1as</name>
+    </author>
+
+  
+    
+    <category term="流量分析" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      文前漫谈
+
+在学习Godzaill流量的时候，我发现了批量解密流量包流量的新思路——py的mitmproxy模块，中间人攻击（Man-in-the-middle attack）的意思
+
+mitmproxy模块就相当于py里的burp suite，更有用的是它支持我们自定义脚本处理http的请求和响应内容（在mitmproxy里叫addon脚本），这正好解决了我的大问题
+
+
+  mitmproxy安装后有 3 个命令行工具：mitmproxy, mitmdump, mitmweb
+
+  mitmproxy：交互式；查看流量数据 (请求与响应)；执行自定义脚本
+
+  mitmdump：执行自定义脚本，脚本在 Mitmproxy 中叫做 Addon
+
+  mitmweb：mitmweb是一个基于Web的用户界面，用于与mitmproxy交互和监视HTTP / HTTPS流量。它使开发人员能...
     </summary>
   
 
@@ -151,95 +252,6 @@ https://buckeyenotes.chall.pwnoh.io...
   文章水在跳跳糖上了
 
 
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>2022蓝帽杯遇见的SUID提权</title>
-    <link href="/posts/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84-SUID-%E6%8F%90%E6%9D%83/" rel="alternate" type="text/html" title="2022蓝帽杯遇见的SUID提权" />
-    <published>2022-10-31T00:00:00+08:00</published>
-  
-    <updated>2022-10-31T00:00:00+08:00</updated>
-  
-    <id>/posts/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84-SUID-%E6%8F%90%E6%9D%83/</id>
-    <content src="/posts/2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84-SUID-%E6%8F%90%E6%9D%83/" />
-    <author>
-      <name>may1as</name>
-    </author>
-
-  
-    
-    <category term="提权" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      
-  文章发在跳跳糖上了
-
-
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>CTF中我的USB键盘鼠标流量解密指南和脚本</title>
-    <link href="/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/" rel="alternate" type="text/html" title="CTF中我的USB键盘鼠标流量解密指南和脚本" />
-    <published>2022-10-12T00:00:00+08:00</published>
-  
-    <updated>2022-10-12T00:00:00+08:00</updated>
-  
-    <id>/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/</id>
-    <content src="/posts/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC/" />
-    <author>
-      <name>may1as</name>
-    </author>
-
-  
-    
-    <category term="流量分析" />
-    
-    <category term="USB" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      
-  文章首发于freebuf
-
-
-文前漫谈
-对ctf中的USB做一个了断吧，先摆上一些概念性的东西
-
-USB是 UniversalSerial Bus（通用串行总线）的缩写，是一个外部总线标准，用于规范电脑与外部设备的连接和通讯，例如键盘、鼠标、打印机、磁盘或网络适配器等等。通过对该接口流量的监听，我们可以得到取键盘敲击键、鼠标移动与点击、存储设备的铭文传输通信、USB无线网卡网络传输内容等等。
-
-USB的几种用途
-现在USB协议版本有USB2.0, USB3.1,USB3.2, USB4等，目前USB2.0/3.0比较常用，你在淘宝上买U盘的时候可能看见过很多“USB 3.0”。
-闲谈哈，你可能听过USB3.1的概念，是某苹果为了装逼提出来的，跟USB3.0差别不大，但是人家是老大哥啊，所有慢慢都向大哥看齐，都流行说USB3.1
-
-
-  USB UART
-    
-      异...
     </summary>
   
 
