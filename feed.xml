@@ -4,7 +4,7 @@
   <id>/</id>
   <title>may1as' blog</title>
   <subtitle>Ctfer/RedTeamer 低调求发展,潜心习安全的may1as.</subtitle>
-  <updated>2023-04-17T20:15:16+08:00</updated>
+  <updated>2023-04-17T20:18:41+08:00</updated>
   <author>
     <name>may1as</name>
     <uri>/</uri>
@@ -47,8 +47,12 @@
 
 
       
-  文章发在 面试经典 Redis未授权漏洞与组合拳
+  文章首发先知社区
 
+  [Net-NTLMv2窃取—-By Outlook NTLM Leak](https://xz.aliyun.com/t/12435)
+
+
+后续可能会更新更新
 
     </summary>
   
@@ -238,7 +242,9 @@ mitmproxy模块就相当于py里的burp suite，更有用的是它支持我们�
 
 
       
-  文章发在 面试经典 Redis未授权漏洞与组合拳
+  文章首发freebuf
+
+  面试经典 Redis未授权漏洞与组合拳
 
 
     </summary>
