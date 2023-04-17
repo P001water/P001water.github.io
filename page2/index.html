@@ -363,6 +363,149 @@
 <div id="post-list">
   
     <div class="card post-preview">
+      <a href="/posts/Python-ctf%E8%B5%9B%E4%BA%8B%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%99%A8%E4%BA%BA-%E9%A3%9E%E4%B9%A6%E7%89%88/">
+        <div class="card-body">
+          <h1 class="card-title">
+            Python-ctf赛事通知机器人（飞书版）
+          </h1>
+
+          <div class="card-text post-content">
+            <p>
+              
+
+
+
+
+
+              
+  用的ctfhub的接口，分两个模块，放在云服务器上定时运行
+
+  本来想美化一下赛事发布的消息，增加比赛简介什么的，没啥精力折腾了（可能也没啥人看）
+
+  有需要的话，可以整合一下ctftime的赛事通知
+
+
+import requests
+import re 
+import time
+import json
+import hashlib
+import base64
+import hm...
+            </p>
+          </div>
+
+          <div class="post-meta text-muted d-flex">
+            <div class="mr-auto">
+              <!-- posted date -->
+              <i class="far fa-calendar fa-fw"></i>
+              <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+
+<em class=""
+    data-ts="1659801600"
+    data-df="ll"
+    >
+  Aug  7, 2022
+</em>
+
+
+              <!-- categories -->
+              
+                <i class="far fa-folder-open fa-fw"></i>
+                <span>
+                  
+                    瞎折腾,
+                    比赛通知机器人
+                </span>
+              
+            </div>
+
+            
+          </div>
+          <!-- .post-meta -->
+        </div>
+      </a>
+    </div>
+    <!-- .post-review -->
+  
+    <div class="card post-preview">
+      <a href="/posts/pythonweb-SSTI%E7%9A%84payload%E6%9E%84%E9%80%A0%E6%80%9D%E8%B7%AF%E7%A0%94%E7%A9%B6-%E5%9F%BA%E7%A1%80%E7%AF%87/">
+        <div class="card-body">
+          <h1 class="card-title">
+            Pythonweb SSTI的payload构造思路研究(基础篇)
+          </h1>
+
+          <div class="card-text post-content">
+            <p>
+              
+
+
+
+
+
+              
+  在freebuf上发过，这里的是精简入门版
+
+
+
+文前漫谈
+是一篇基础篇嘛，给新同学入门用，从payload的角度看看SSTI
+
+
+从原点出发
+你会发现，大多数payload总是从下面这段代码出发，延伸出各种各样的花样。而这一步的目的是得到当前模块中所有可以利用的类。得到的结果跟当前模块（py文件）import的库也是有关系的。
+&#39;&#39;.__class__.__base__.__subc...
+            </p>
+          </div>
+
+          <div class="post-meta text-muted d-flex">
+            <div class="mr-auto">
+              <!-- posted date -->
+              <i class="far fa-calendar fa-fw"></i>
+              <!--
+  Date format snippet
+  See: ${JS_ROOT}/utils/locale-dateime.js
+-->
+
+
+
+
+
+<em class=""
+    data-ts="1658592000"
+    data-df="ll"
+    >
+  Jul 24, 2022
+</em>
+
+
+              <!-- categories -->
+              
+                <i class="far fa-folder-open fa-fw"></i>
+                <span>
+                  
+                    PythonSEC,
+                    SSTI
+                </span>
+              
+            </div>
+
+            
+          </div>
+          <!-- .post-meta -->
+        </div>
+      </a>
+    </div>
+    <!-- .post-review -->
+  
+    <div class="card post-preview">
       <a href="/posts/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-vol2-plugins-for-Windows/">
         <div class="card-body">
           <h1 class="card-title">
@@ -421,67 +564,6 @@ python2/3 vol.py -f [image] --profile=...
                   
                     内存取证,
                     vol2
-                </span>
-              
-            </div>
-
-            
-          </div>
-          <!-- .post-meta -->
-        </div>
-      </a>
-    </div>
-    <!-- .post-review -->
-  
-    <div class="card post-preview">
-      <a href="/posts/test/">
-        <div class="card-body">
-          <h1 class="card-title">
-            Writing a New Post
-          </h1>
-
-          <div class="card-text post-content">
-            <p>
-              
-
-
-
-
-
-              This tutorial will guide you how to write a post in the Chirpy template, and it’s worth reading even if you’ve used Jekyll before, as many features require specific variables to be set.
-
-Naming and...
-            </p>
-          </div>
-
-          <div class="post-meta text-muted d-flex">
-            <div class="mr-auto">
-              <!-- posted date -->
-              <i class="far fa-calendar fa-fw"></i>
-              <!--
-  Date format snippet
-  See: ${JS_ROOT}/utils/locale-dateime.js
--->
-
-
-
-
-
-<em class=""
-    data-ts="1565244600"
-    data-df="ll"
-    >
-  Aug  8, 2019
-</em>
-
-
-              <!-- categories -->
-              
-                <i class="far fa-folder-open fa-fw"></i>
-                <span>
-                  
-                    Blogging,
-                    Tutorial
                 </span>
               
             </div>
@@ -669,6 +751,16 @@ Naming and...
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
@@ -728,7 +820,22 @@ Naming and...
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
+    
+  
+    
+    
+    
     
   
     
@@ -794,7 +901,22 @@ Naming and...
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
+    
+  
+    
+    
+    
     
   
     
@@ -1045,6 +1167,9 @@ Naming and...
       <a class="post-tag" href="/tags/disgruntled/">Disgruntled</a>
     
       
+      <a class="post-tag" href="/tags/ntlm/">NTLM</a>
+    
+      
       <a class="post-tag" href="/tags/php-input/">php://input</a>
     
       
@@ -1054,10 +1179,7 @@ Naming and...
       <a class="post-tag" href="/tags/pythonssti/">PythonSSTI</a>
     
       
-      <a class="post-tag" href="/tags/suid%E6%8F%90%E6%9D%83/">SUID提权</a>
-    
-      
-      <a class="post-tag" href="/tags/tryhackme/">Tryhackme</a>
+      <a class="post-tag" href="/tags/redis%E6%9C%AA%E6%8E%88%E6%9D%83/">Redis未授权</a>
     
 
     </div>
@@ -1153,6 +1275,16 @@ Naming and...
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
         
         
@@ -1212,7 +1344,22 @@ Naming and...
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
+    
+  
+    
+    
+    
     
   
     
@@ -1278,7 +1425,22 @@ Naming and...
     
     
     
+  
+    
+    
+    
+    
+  
+    
+    
+    
+    
       
+    
+  
+    
+    
+    
     
   
     
@@ -1529,6 +1691,9 @@ Naming and...
       <a class="post-tag" href="/tags/disgruntled/">Disgruntled</a>
     
       
+      <a class="post-tag" href="/tags/ntlm/">NTLM</a>
+    
+      
       <a class="post-tag" href="/tags/php-input/">php://input</a>
     
       
@@ -1538,10 +1703,7 @@ Naming and...
       <a class="post-tag" href="/tags/pythonssti/">PythonSSTI</a>
     
       
-      <a class="post-tag" href="/tags/suid%E6%8F%90%E6%9D%83/">SUID提权</a>
-    
-      
-      <a class="post-tag" href="/tags/tryhackme/">Tryhackme</a>
+      <a class="post-tag" href="/tags/redis%E6%9C%AA%E6%8E%88%E6%9D%83/">Redis未授权</a>
     
 
     </div>
