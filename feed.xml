@@ -4,7 +4,7 @@
   <id>/</id>
   <title>may1as' blog</title>
   <subtitle>Ctfer/RedTeamer 低调求发展,潜心习安全的may1as.</subtitle>
-  <updated>2023-05-03T17:55:01+08:00</updated>
+  <updated>2023-05-12T22:22:08+08:00</updated>
   <author>
     <name>may1as</name>
     <uri>/</uri>
@@ -17,6 +17,64 @@
   <icon>/assets/img/favicons/favicon.ico</icon>
   <logo>/assets/img/favicons/favicon-96x96.png</logo>
 
+
+  
+  <entry>
+    <title>Godzilla-从三种自带加密器看哥斯拉流量-PHP篇</title>
+    <link href="/posts/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87/" rel="alternate" type="text/html" title="Godzilla-从三种自带加密器看哥斯拉流量-PHP篇" />
+    <published>2023-04-27T14:10:00+08:00</published>
+  
+    <updated>2023-04-27T14:10:00+08:00</updated>
+  
+    <id>/posts/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87/</id>
+    <content src="/posts/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87/" />
+    <author>
+      <name>may1as</name>
+    </author>
+
+  
+    
+    <category term="流量分析" />
+    
+  
+
+  
+    <summary>
+      
+
+
+
+
+
+      文前漫谈
+
+Godzilla - designed by @BeichenDreams
+
+本文记录我对哥斯拉流量的学习，主要分析了php版的shell流量加密解密过程，使用的是当前最新版本的哥斯拉，版本号为v4.01。
+
+
+
+三种自带的加密器
+
+生成Godzillz默认的服务端webshell，自带有三种加密器：
+
+
+  PHP_EVAL_XOR_BASE64
+  PHP_XOR_BASE64
+  PHP_XOR_RAW
+
+
+
+
+PHP_XOR_BASE64加密器
+
+笔者觉得应该从这种加密器先讲起，后面的PHP_EVAL_XOR_BASE64等加密器实现原理和它都相同，只是传输形式上的差别。
+
+从http请求的角度看，PHP_XOR_BASE64加密器和PHP_EVAL_XOR_BASE64加密器的区别就是，命令执行的过程中，PHP_XOR_BASE64加密器的http请求正文长度（...
+    </summary>
+  
+
+  </entry>
 
   
   <entry>
@@ -208,46 +266,6 @@ mitmproxy模块就相当于py里的burp suite，更有用的是它支持我们�
   mitmdump：执行自定义脚本，脚本在 Mitmproxy 中叫做 Addon
 
   mitmweb：mitmweb是一个基于Web的用户界面，用于与mitmproxy交互和监视HTTP / HTTPS流量。它使开发人员能...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>面试经典 Redis未授权漏洞与组合拳</title>
-    <link href="/posts/%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8-Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E6%BC%8F%E6%B4%9E%E4%B8%8E%E7%BB%84%E5%90%88%E6%8B%B3/" rel="alternate" type="text/html" title="面试经典 Redis未授权漏洞与组合拳" />
-    <published>2022-11-14T00:00:00+08:00</published>
-  
-    <updated>2022-11-14T00:00:00+08:00</updated>
-  
-    <id>/posts/%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8-Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E6%BC%8F%E6%B4%9E%E4%B8%8E%E7%BB%84%E5%90%88%E6%8B%B3/</id>
-    <content src="/posts/%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8-Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E6%BC%8F%E6%B4%9E%E4%B8%8E%E7%BB%84%E5%90%88%E6%8B%B3/" />
-    <author>
-      <name>may1as</name>
-    </author>
-
-  
-    
-    <category term="Redis未授权" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      
-  文章首发freebuf
-
-  面试经典 Redis未授权漏洞与组合拳
-
-
-
     </summary>
   
 
