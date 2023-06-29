@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta content="Hello, P001's blog!" property="og:site_name">
+
+  <meta content="CTF---CTF中我的USB键盘鼠标流量解密指南和脚本" property="og:title">
+
+
+  <meta content="article" property="og:type">
+
+
+  <meta content=" <h1>P001water@c:\Users\maylas\.ssh</h1> <h3>Do Enjoy youself in hack life</h3> --------CMD /c 这里是朴水... ... Reply from 1988 !-------" property="og:description">
+
+
+  <meta content="http://localhost:4000/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/usb/2022/10/12/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC.html" property="og:url">
+
+
+  <meta content="2022-10-12T00:00:00+08:00" property="article:published_time">
+  <meta content="http://localhost:4000/about/" property="article:author">
+
+
+  <meta property="og:image" content="">
+
+
+  
+  <meta content="流量分析" property="article:section">
+  
+
+
+  
+  <meta content="流量分析" property="article:tag">
+  
+
+  <title>CTF---CTF中我的USB键盘鼠标流量解密指南和脚本</title>
+  <meta name="description" content="  文章首发于freebuf">
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  
+  <!-- <link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'> -->
+  <!-- <link href='https://fonts.googleapis.com/css?family=Fira+Mono' rel='stylesheet' type='text/css'> -->
+  <!-- <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'> -->
+  <!-- <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,200,300,500,600,700,900' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Gentium+Basic:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Alegreya:400,400italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,400italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,300,500,700' rel='stylesheet' type='text/css'>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-hQpvDQiCJaD2H465dQfA717v7lu5qHWtDbWNPvaTJ0ID5xnPUlVXnKzq7b8YUkbN" crossorigin="anonymous"> -->
+  <link rel="canonical" href="http://localhost:4000/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/usb/2022/10/12/CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC.html">
+  <link rel="alternate" type="application/rss+xml" title="Hello, P001's blog!" href="http://localhost:4000/feed.xml">
+</head>
+
+
+  <body>
+<section>
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Hello, P001's blog!</a>
+    </div>
+    
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        
+        
+        <li><a href="/Lnk/">Lnk</a></li>
+        
+        
+        
+        <li><a href="/about/">About</a></li>
+        
+        
+        
+        
+        
+        
+        
+        
+
+
+      </ul>
+
+    <!--  <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Know More!</a></li>
+
+      </ul>-->
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+</section>
+
+<section>
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="post-title-main" itemprop="name headline">CTF---CTF中我的USB键盘鼠标流量解密指南和脚本</h1>
+      <p class="post-meta"><time datetime="2022-10-12T00:00:00+08:00" itemprop="datePublished">Oct 12, 2022</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">may1as</span></span></p>
+      
+    </div>
+
+</div>
+
+
+  <div class="post-content container" itemprop="articleBody">
+    <blockquote>
+  <p>文章首发于<a href="https://www.freebuf.com/sectool/347971.html">freebuf</a></p>
+</blockquote>
+
+<h1 id="文前漫谈">文前漫谈</h1>
+<blockquote>
+  <p>2023-5-27更新</p>
+
+  <p>整理博客，说点感想吧。从脚本搞定到现在，已经两三场比赛遇见了，如果看了下脚本源码和对USB稍加学习应该是秒杀的。有点惆怅的是什么呢，本来这个脚本是在校队内部分享的，可是没人看，就放出来了。</p>
+
+  <p>到现在搜索引擎的第一位，freebuf上浏览量也十八万（实际也得除以10）了。很多师傅也在用，甚至可以一把梭。可是最初分享的那些好像根本看不见，哈哈。觉得挺没劲的，所以几次分享都懒得准备了，应付应付就算了。最近有点惆怅，说的有点多。</p>
+</blockquote>
+
+<p><img src="/img/image-20230618192917421.png" alt="image-20230618192917421" /></p>
+
+<p>对ctf中的USB做一个了断吧，先摆上一些概念性的东西</p>
+
+<p>USB是 <code class="language-plaintext highlighter-rouge">UniversalSerial Bus</code>（通用串行总线）的缩写，是一个外部总线标准，用于规范电脑与外部设备的连接和通讯，例如键盘、鼠标、打印机、磁盘或网络适配器等等。通过对该接口流量的监听，我们可以得到取键盘敲击键、鼠标移动与点击、存储设备的铭文传输通信、USB无线网卡网络传输内容等等。</p>
+
+<h1 id="usb的几种用途">USB的几种用途</h1>
+<p>现在USB协议版本有<code class="language-plaintext highlighter-rouge">USB2.0, USB3.1,USB3.2, USB4</code>等，目前<code class="language-plaintext highlighter-rouge">USB2.0/3.0</code>比较常用，你在淘宝上买U盘的时候可能看见过很多<code class="language-plaintext highlighter-rouge">“USB 3.0”</code>。
+闲谈哈，你可能听过<code class="language-plaintext highlighter-rouge">USB3.1</code>的概念，是某苹果为了装逼提出来的，跟<code class="language-plaintext highlighter-rouge">USB3.0</code>差别不大，但是人家是老大哥啊，所有慢慢都向大哥看齐，都流行说<code class="language-plaintext highlighter-rouge">USB3.1</code></p>
+
+<ol>
+  <li>USB UART
+    <blockquote>
+      <p>异步串行通信口(UART)就是我们在嵌入式中常说的串口，它还是一种通用的数据通信协议。这种方式下，设备只是简单的将 USB 用于接受和发射数据，除此之外就再没有其他通讯功能了。</p>
+    </blockquote>
+  </li>
+  <li>USB HID（Human Interface Device）
+    <blockquote>
+      <p>HID（Human Interface Device，人机接口设备）是USB设备中常用的设备类型，是直接与人交互的USB设备，例如键盘、鼠标与游戏杆等。在USB设备中，HID设备的成本较低。另外，HID设备并不一定要有人机交互功能，只要符合HID类别规范的设备都是HID设备。</p>
+    </blockquote>
+  </li>
+  <li>USB Memory
+    <blockquote>
+      <p>USB Memory是数据存储
+每一个 USB 设备（尤其是 HID 或者 Memory ）都有一个供应商 ID（Vendor ID） 和产品识别码（Product Id） 。 Vendor ID 是用来标记哪个厂商生产了这个 USB 设备。 Product ID 则用来标记不同的产品。</p>
+    </blockquote>
+  </li>
+</ol>
+
+<h2 id="lsusb命令">lsusb命令</h2>
+<p>lsusb命令用于显示本机的USB设备列表，以及USB设备的详细信息。</p>
+
+<p><img src="/img/1666541348_63556724d69caa532b1d4.jpeg" alt="img" /></p>
+
+<blockquote>
+  <p>Bus 002：指明设备连接到哪条总线
+Device 002：表明这是连接到总线上的第二台设备
+ID：设备的ID
+VMware, Inc. Virtual Mouse：生产商名字和设备名</p>
+</blockquote>
+
+<h1 id="tshark常用参数">Tshark常用参数</h1>
+<p>重点看下面的内容，这里就放几个处理流量包时常用的</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">-</span><span class="n">r</span><span class="p">:</span><span class="n">设置tshark分析的输入文件</span>
+<span class="o">-</span><span class="n">T</span><span class="p">:</span><span class="n">设置解码结果输出的格式</span><span class="err">，</span><span class="n">包括fileds</span><span class="p">,</span><span class="n">text</span><span class="p">,</span><span class="n">ps</span><span class="p">,</span><span class="n">psml和pdml</span><span class="err">，</span><span class="n">默认为text</span>
+<span class="o">-</span><span class="n">e</span><span class="p">:</span><span class="n">导出协议字段</span>
+<span class="o">-</span><span class="n">Y</span><span class="p">:</span><span class="n">对应过滤器的过滤条件</span>
+</code></pre></div></div>
+
+<h1 id="键盘流量">键盘流量</h1>
+<p>以往接触到的，USB协议数据部分在<code class="language-plaintext highlighter-rouge">Leftover Capture Data</code>域中，数据长度为<code class="language-plaintext highlighter-rouge">8</code>个字节。
+击键信息集中在第<code class="language-plaintext highlighter-rouge">3</code>个字节，每次击键都会产生一个数据包。所以如果看到给出的数据包中的信息都是<code class="language-plaintext highlighter-rouge"> 8 </code>个字节，并且只有第 3 个字节不为 <code class="language-plaintext highlighter-rouge">0000</code>，那么几乎可以肯定是一个键盘流量了。</p>
+
+<p><img src="/img/1666541430_63556776eeea926f04c5d.jpeg" alt="img" /></p>
+
+<p>现在在比赛中常见的（2021国赛初赛有个例题)，是这种，<code class="language-plaintext highlighter-rouge">Leftover Capture Data</code>——&gt;<code class="language-plaintext highlighter-rouge">HID Data</code>
+这个改变需要注意什么呢，需要注意<strong>tshark</strong>导出数据时的过滤器字段，看这个对应的过滤器字段，去wireshark的英文文档里找。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tshark -r 数据包文件 -T fields -e 过滤器字段
+
+tshark -r demo.pcap -T fields -e usb.capdata
+#这个usb.capdata就是Leftover Capture Data的field name（字段名）
+tshark -r demo.pcap -T fields -e usbhid.data
+#同样的，这个usbhid.data就是HID data的field name 
+</code></pre></div></div>
+<p><img src="/img/1666541579_6355680bb54c7afd75c48.jpeg" alt="img" /></p>
+
+<p>导出数据之后，就用python对应字典的数据写脚本解密就行，映射表是类似下面。</p>
+
+<p><img src="/img/1666541639_6355684762a980225540c.jpeg" alt="img" /></p>
+
+<h2 id="数据部分详解">数据部分详解：</h2>
+<blockquote>
+  <ul>
+    <li>字节下标（我还没发现这个在哪儿）
+      <ul>
+        <li>0 : 修改键(组合键)</li>
+        <li>1 : OEM 保留</li>
+        <li>2~7 : 按键码</li>
+      </ul>
+    </li>
+    <li>BYTE1
+      <ul>
+        <li>bit0: Left Control 是否按下，按下为 1</li>
+        <li>bit1: Left Shift 是否按下，按下为 1</li>
+        <li>bit2: Left Alt 是否按下，按下为 1</li>
+        <li>bit3: Left WIN/GUI 是否按下，按下为 1</li>
+        <li>bit4: Right Control 是否按下，按下为 1</li>
+        <li>bit5: Right Shift 是否按下，按下为 1</li>
+        <li>bit6: Right Alt 是否按下，按下为 1</li>
+        <li>bit7: Right WIN/GUI 是否按下，按下为 1</li>
+      </ul>
+    </li>
+    <li>BYTE2 - 暂不清楚，有的地方说是保留位</li>
+    <li>BYTE3-BYTE8 - 这六个为普通按键</li>
+    <li>0b10（0x02） 和 0b100000（0x20）都是按下了shift键</li>
+  </ul>
+
+  <p>例如： 键盘发送 02 00 0e 00 00 00 00 00，表示同时按下了 Left Shift + ‘k’，即大写 K。</p>
+
+  <p>具体键位对应 <a href="https://www.usb.org/sites/default/files/documents/hut1_12v2.pdf">Universal Serial Bus HID Usage Tables - USB-IF</a> 53页~59页</p>
+</blockquote>
+
+<h2 id="我的键盘流量解密脚本">我的键盘流量解密脚本</h2>
+<p><a href="https://github.com/may1as/UsbKbCracker">may1as/UsbKbCracker: CTF中常见键盘流量解密脚本 (github.com)</a></p>
+
+<p>根据wangyihang大佬的脚本改的，主要增加了个协议字段的选项
+放在GitHub上了，用2021国赛初赛的举个例子吧</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">python</span> <span class="p">.</span>\<span class="n">UsbKbCracker</span><span class="p">.</span><span class="n">py</span> <span class="o">-</span><span class="n">f</span> <span class="p">.</span>\<span class="n">example</span>\<span class="n">ez_usb</span><span class="p">.</span><span class="n">pcapng</span> <span class="o">-</span><span class="n">e</span> <span class="n">usbhid</span><span class="p">.</span><span class="n">data</span> <span class="o">-</span><span class="n">Y</span> <span class="s">"usb.src==2.8.1"</span>
+</code></pre></div></div>
+<blockquote>
+  <p>2023-5-27更新</p>
+
+  <p>有的比赛里，usb的数据位不一样，在源码里稍作修改就Ok</p>
+</blockquote>
+
+<p><img src="/img/1666541983_6355699f080910b589d61.jpeg" alt="img" /></p>
+
+<h1 id="鼠标流量">鼠标流量</h1>
+<p>鼠标流量同样，<code class="language-plaintext highlighter-rouge">Leftover Capture Data</code>——&gt;<code class="language-plaintext highlighter-rouge">HID Data</code>可能是不同版本协议导致的（我还没去考证哈，别全信）</p>
+
+<p><img src="/img/1666542208_63556a8079fe23ca1faf4.jpeg" alt="img" /></p>
+
+<p><img src="/img/1666542161_63556a515ffdc30d60a05.jpeg" alt="img" /></p>
+
+<h2 id="数据部分详解-1">数据部分详解：</h2>
+<p>与键盘击键的离散性不一样，鼠标移动时表现为连续性，不过实际上鼠标动作所产生的数据包也是离散的
+鼠标数据包的数据长度为<code class="language-plaintext highlighter-rouge">4</code>个字节。</p>
+
+<ul>
+  <li>第一个字节代表按键，当取<code class="language-plaintext highlighter-rouge"> 0x00</code> 时，代表没有按键、为 <code class="language-plaintext highlighter-rouge">0x01</code> 时，代表按左键，为 <code class="language-plaintext highlighter-rouge">0x02</code> 时，代表当前按键为右键。</li>
+  <li>第二个字节可以看成是一个 signed byte 类型，其最高位为符号位，当这个值为正（小于127）时，代表鼠标水平右移多少像素，为负（补码负数，大于127小于255）时，代表水平左移多少像素。</li>
+  <li>第三个字节与第二字节类似，代表垂直上下移动的偏移。</li>
+  <li>第四个是扩展字节，关于滚轮的操作记录
+    <ul>
+      <li>0 - 没有滚轮运动</li>
+      <li>1 - 垂直向上滚动一下</li>
+      <li>0xFF - 垂直向下滚动一下</li>
+      <li>2 - 水平滚动右键一下</li>
+      <li>0xFE - 水平滚动左键单击一下</li>
+    </ul>
+  </li>
+</ul>
+
+<p>例如： 鼠标发送 00 01 fc 00，表示鼠标右移 01 像素，垂直向下移动 124 像素。</p>
+
+<p>就这么多知识，剩下的就是写脚本了</p>
+<h2 id="我的鼠标流量解密脚本">我的鼠标流量解密脚本</h2>
+<p><a href="https://github.com/may1as/UsbmiceCracker">may1as/UsbmiceCracker: CTF中常见鼠标流量解密脚本 (github.com)</a></p>
+
+<p>很多朋友使用wangyihang大佬的鼠标流量解密脚本，出现无法成功显示图片的问题。原因是tshark早前的版本导出数据带冒号，形如这样：<code class="language-plaintext highlighter-rouge">00:00:04:00:00:00:00:00</code>，而现在是<code class="language-plaintext highlighter-rouge">00000000ffff0000</code>，并不带冒号，导致处理数据时出现问题。 这里就处理了一下导出数据格式，增加了命令行里协议字段的选项</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="n">python</span> <span class="p">.</span>\<span class="n">UsbmiceCracker</span><span class="p">.</span><span class="n">py</span> <span class="o">-</span><span class="n">f</span> <span class="p">.</span>\<span class="n">example</span>\<span class="n">usb</span><span class="p">.</span><span class="n">capdata</span><span class="p">.</span><span class="n">pcapng</span> <span class="o">-</span><span class="n">e</span> <span class="n">usb</span><span class="p">.</span><span class="n">capdata</span> <span class="o">-</span><span class="n">a</span> <span class="n">LEFT</span>
+</code></pre></div></div>
+<p><img src="/img/1666542479_63556b8f5acb1c1f4e600.jpeg" alt="1666542479_63556b8f5acb1c1f4e600.png!small?1666542479895" /></p>
+
+<h1 id="完">完</h1>
+
+<h2 id="参考文章">参考文章</h2>
+
+<p><a href="https://www.usb.org/document-library/device-class-definition-hid-111">https://www.usb.org/document-library/device-class-definition-hid-111</a></p>
+
+
+  </div>
+
+</article>
+
+</section>
+<nav class="navbar navbar-default navbar-fixed-bottom">
+  <div class="container footer-content">
+    Happy with <i class ="fa fa-heart"></i> by P001water<br>
+    Powered By May1as 
+  </div>
+</nav>
+
+  </body>
+
+</html>

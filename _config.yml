@@ -1,0 +1,26 @@
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely need to edit after that.
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'jekyll serve'. If you change this file, please restart the server process.
+
+# Site settings
+title: Hello, P001's blog!
+email: P001water@gmail.com
+
+#write html inside the double quotes to display in jumbotron
+description: "
+<h1>P001water@c:\\Users\\maylas\\.ssh</h1>
+<h3>Do Enjoy youself in hack life</h3>
+--------CMD /c 这里是朴水... ... Reply from 1988 !-------"
+
+
+
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "http://yourdomain.com" # the base hostname & protocol for your site
+twitter_username: may1as
+github_username:  may1as
+
+# Build settings
+markdown: kramdown

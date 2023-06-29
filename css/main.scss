@@ -1,0 +1,258 @@
+---
+# Only the main Sass file needs front matter (the dashes are enough)
+---
+@charset "utf-8";
+
+// image in center
+img {
+  display: block;
+  margin: auto;
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.navbar-default{
+  background: #093750 !important;
+  border: none !important;
+}
+
+.navbar-default .navbar-nav > li > a{
+    color:#abc0ca !important;
+}
+.navbar-default .navbar-nav > li > a:hover{
+    color:#03a4fb !important;
+
+}
+.navbar-default .navbar-nav > li > a:focus{
+    color:#03a4fb !important;
+}
+.navbar-default .navbar-brand{
+  color:#abc0ca !important;
+}
+.footer-content{
+  text-align: center;
+  padding: 0.5em;
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+}
+
+body{
+  background-color: #232946  !important;
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  color: #abc0ca !important;
+}
+
+.page-stuff{
+  a {
+    color: #03a4fb !important;
+    text-decoration: none;
+      &:hover{
+        color:#03a4fb !important;
+        text-decoration: none !important;
+        border-bottom: 1px dotted #03a4fb;
+        padding-bottom:0.5em;
+      }
+    }
+  }
+
+  #page-content{
+    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+    padding-bottom: 4em;
+    
+  }
+
+  // post title
+  .post-content h1 {
+    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+    margin-top: 50px;
+    margin-bottom: 5px;
+    font-size: 36px;
+    color: #b5e853;
+  }
+  
+  .post-content h2 {
+    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+    font-size: 22px;
+    color: #b5e853;
+  }
+  
+  .post-content h3 {
+    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+    font-size: 18px;
+    color: #b5e853;
+  }
+  
+  .post-content h4 {
+    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+    font-size: 14px;
+    color: #b5e853;
+  }
+  
+  .post-content h5 {
+    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin: 0 0 5px 0;
+    color: #b5e853;
+  }
+  
+  .post-content h6 {
+    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+    font-size: 12px;
+    text-transform: uppercase;
+    color: #999;
+    margin: 0 0 5px 0;
+  }
+  
+
+.page-stuff{
+  padding-top: 2em;
+  padding-bottom: 5em;
+}
+
+// 宣传栏
+.jumbotron {
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  background: #093750 !important;
+}
+
+a { 
+    font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+    color: #03a4fb;
+    text-decoration: none;
+}
+a:hover{
+  color:#03a4fb !important;
+  text-decoration: none !important;
+  border-bottom: 1px dotted #03a4fb;
+}
+
+.post-list{
+    text-align: left;
+    color: #b5e853;
+}
+.post-box{
+  padding-top: 2em;
+  padding-bottom: 2em;
+}
+.post-title{
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  font-size: 26px !important;
+  color:  #abc0ca !important;
+  // color: #b5e853;
+}
+.post-excerpt{
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  color: white !important;
+  padding-top: 0.5em;
+  padding-bottom: 0.3em;
+}
+.post-title-main{
+  text-align: center;
+  color: #abc0ca !important;
+  font-size: 35px !important;
+  // color: #b5e853;
+}
+.post-content{
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  font-size: 16px;
+  text-align: justify;
+  padding-bottom: 5em;
+}
+.post-meta{
+  color: skyblue !important;
+  // color: #b5e853;
+}
+pre{
+background-color: black !important;
+border:none !important;
+border-radius: 0px !important;
+font-size: 20px !important;
+padding: 1.5em !important;
+color:white !important;
+}
+code{
+  background-color: black !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 0px !important;
+}
+.page-tagline{
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  font-size: 15px;
+  text-align: center;
+}
+
+.download{
+  padding:2em;
+  font-size: 19px;
+}
+.intro{
+  font-size: 15px;
+
+}
+.manual-title{
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  font-size: 15px;
+  padding: 1em;
+  text-transform: uppercase;
+
+}
+.manual-content{
+  text-align: justify;
+  font-size: 19px;
+}
+
+.man-title{
+  font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+  font-size: 22px;
+  text-align: center;
+  padding: 1em;
+  letter-spacing: 2px;  
+
+}
+
+
+// Our variables
+$base-font-family: Monaco, "Bitstream Vera Sans Mono", "Lucida Console", Terminal, monospace;
+$base-font-size:   16px;
+$base-font-weight: 400;
+$small-font-size:  $base-font-size * 0.875;
+$base-line-height: 2.0;
+
+$spacing-unit:     30px;
+
+$text-color:       #111;
+$background-color: #fdfdfd;
+$brand-color:      #25292e;
+
+$grey-color:       #828282;
+$grey-color-light: lighten($grey-color, 40%);
+$grey-color-dark:  darken($grey-color, 25%);
+
+// Width of the content area
+$content-width:    800px;
+
+$on-palm:          600px;
+$on-laptop:        800px;
+
+
+
+// Use media queries like this:
+// @include media-query($on-palm) {
+//     .wrapper {
+//         padding-right: $spacing-unit / 2;
+//         padding-left: $spacing-unit / 2;
+//     }
+// }
+@mixin media-query($device) {
+    @media screen and (max-width: $device) {
+        @content;
+    }
+}
+
+
+
+// Import partials from `sass_dir` (defaults to `_sass`)
+@import
+        "syntax-highlighting"
+;

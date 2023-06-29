@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta content="Hello, P001's blog!" property="og:site_name">
+
+  <meta content="CTF---Python-ctf赛事通知机器人（飞书版）" property="og:title">
+
+
+  <meta content="article" property="og:type">
+
+
+  <meta content=" <h1>P001water@c:\Users\maylas\.ssh</h1> <h3>Do Enjoy youself in hack life</h3> --------CMD /c 这里是朴水... ... Reply from 1988 !-------" property="og:description">
+
+
+  <meta content="http://localhost:4000/%E7%9E%8E%E6%8A%98%E8%85%BE/%E6%AF%94%E8%B5%9B%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%99%A8%E4%BA%BA/2022/08/07/Python-ctf%E8%B5%9B%E4%BA%8B%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%99%A8%E4%BA%BA-%E9%A3%9E%E4%B9%A6%E7%89%88.html" property="og:url">
+
+
+  <meta content="2022-08-07T00:00:00+08:00" property="article:published_time">
+  <meta content="http://localhost:4000/about/" property="article:author">
+
+
+  <meta property="og:image" content="">
+
+
+  
+  <meta content="瞎折腾" property="article:section">
+  
+
+
+  
+  <meta content="瞎折腾" property="article:tag">
+  
+
+  <title>CTF---Python-ctf赛事通知机器人（飞书版）</title>
+  <meta name="description" content="  用的ctfhub的接口，分两个模块，放在云服务器上定时运行  本来想美化一下赛事发布的消息，增加比赛简介什么的，没啥精力折腾了（可能也没啥人看）  有需要的话，可以整合一下ctftime的赛事通知">
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  
+  <!-- <link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'> -->
+  <!-- <link href='https://fonts.googleapis.com/css?family=Fira+Mono' rel='stylesheet' type='text/css'> -->
+  <!-- <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'> -->
+  <!-- <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,200,300,500,600,700,900' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Gentium+Basic:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Alegreya:400,400italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,400italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,300,500,700' rel='stylesheet' type='text/css'>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-hQpvDQiCJaD2H465dQfA717v7lu5qHWtDbWNPvaTJ0ID5xnPUlVXnKzq7b8YUkbN" crossorigin="anonymous"> -->
+  <link rel="canonical" href="http://localhost:4000/%E7%9E%8E%E6%8A%98%E8%85%BE/%E6%AF%94%E8%B5%9B%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%99%A8%E4%BA%BA/2022/08/07/Python-ctf%E8%B5%9B%E4%BA%8B%E9%80%9A%E7%9F%A5%E6%9C%BA%E5%99%A8%E4%BA%BA-%E9%A3%9E%E4%B9%A6%E7%89%88.html">
+  <link rel="alternate" type="application/rss+xml" title="Hello, P001's blog!" href="http://localhost:4000/feed.xml">
+</head>
+
+
+  <body>
+<section>
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Hello, P001's blog!</a>
+    </div>
+    
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        
+        
+        <li><a href="/Lnk/">Lnk</a></li>
+        
+        
+        
+        <li><a href="/about/">About</a></li>
+        
+        
+        
+        
+        
+        
+        
+        
+
+
+      </ul>
+
+    <!--  <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Know More!</a></li>
+
+      </ul>-->
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+</section>
+
+<section>
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="post-title-main" itemprop="name headline">CTF---Python-ctf赛事通知机器人（飞书版）</h1>
+      <p class="post-meta"><time datetime="2022-08-07T00:00:00+08:00" itemprop="datePublished">Aug 7, 2022</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">may1as</span></span></p>
+      
+    </div>
+
+</div>
+
+
+  <div class="post-content container" itemprop="articleBody">
+    <blockquote>
+  <p>用的ctfhub的接口，分两个模块，放在云服务器上定时运行</p>
+
+  <p>本来想美化一下赛事发布的消息，增加比赛简介什么的，没啥精力折腾了（可能也没啥人看）</p>
+
+  <p>有需要的话，可以整合一下ctftime的赛事通知</p>
+</blockquote>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">requests</span>
+<span class="kn">import</span> <span class="n">re</span> 
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">import</span> <span class="n">json</span>
+<span class="kn">import</span> <span class="n">hashlib</span>
+<span class="kn">import</span> <span class="n">base64</span>
+<span class="kn">import</span> <span class="n">hmac</span>
+<span class="kn">from</span> <span class="n">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+
+<span class="c1"># 获取即将到来的比赛ID
+</span><span class="k">def</span> <span class="nf">getupcoming_id</span><span class="p">():</span>
+    <span class="n">upcoming_url</span> <span class="o">=</span> <span class="s">"https://api.ctfhub.com/User_API/Event/getUpcoming"</span> <span class="c1">#获取即将开始的比赛ID
+</span>    <span class="n">upcoming_payload</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'offset'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">'limit'</span><span class="p">:</span> <span class="mi">5</span>
+    <span class="p">}</span> <span class="c1">#POST请求
+</span>    <span class="n">upcoming_request</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="n">upcoming_url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">upcoming_payload</span><span class="p">)</span>
+    <span class="n">upcoming_id</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">upcoming_request</span><span class="p">.</span><span class="nf">json</span><span class="p">()[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"items"</span><span class="p">])):</span>
+        <span class="n">upcoming_id</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">upcoming_request</span><span class="p">.</span><span class="nf">json</span><span class="p">()[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"items"</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s">"id"</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">upcoming_id</span> <span class="c1">#返回比赛ID
+</span>
+    <span class="c1"># 获取正在进行的比赛ID
+</span><span class="k">def</span> <span class="nf">getrunning_id</span><span class="p">():</span>
+    <span class="n">running_url</span> <span class="o">=</span> <span class="s">"https://api.ctfhub.com/User_API/Event/getRunning"</span> <span class="c1">#获取正在进行的比赛ID
+</span>    <span class="n">running_payload</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'offset'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">'limit'</span><span class="p">:</span> <span class="mi">4</span>
+    <span class="p">}</span> <span class="c1">#POST请求参数
+</span>    <span class="n">running_request</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="n">running_url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">running_payload</span><span class="p">)</span>
+    <span class="n">running_id</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">running_request</span><span class="p">.</span><span class="nf">json</span><span class="p">()[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"items"</span><span class="p">])):</span>
+        <span class="n">running_id</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">running_request</span><span class="p">.</span><span class="nf">json</span><span class="p">()[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"items"</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s">"id"</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">running_id</span> <span class="c1">#返回比赛ID
+</span>
+    <span class="c1"># 通过比赛ID获取详细信息
+</span><span class="k">def</span> <span class="nf">getinfo</span><span class="p">(</span><span class="nb">id</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="s">''</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">id</span><span class="p">:</span>
+        <span class="n">info_url</span> <span class="o">=</span> <span class="s">"https://api.ctfhub.com/User_API/Event/getInfo"</span>  <span class="c1">#获取详细信息的网址
+</span>        <span class="n">info_payload</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">"event_id"</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span>
+        <span class="p">}</span> <span class="c1">#POST请求参数
+</span>        <span class="n">info_request</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">info_url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">info_payload</span><span class="p">)</span>
+        <span class="n">js</span> <span class="o">=</span> <span class="n">info_request</span><span class="p">.</span><span class="nf">json</span><span class="p">()</span> <span class="c1">#把返回值转为json格式
+</span>        <span class="n">s</span> <span class="o">+=</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span>\
+        <span class="o">+</span> <span class="s">"📛名称："</span> <span class="o">+</span> <span class="s">"["</span> <span class="o">+</span> <span class="n">js</span><span class="p">[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"title"</span><span class="p">]</span> <span class="o">+</span> <span class="s">"]"</span> <span class="o">+</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span> \
+        <span class="o">+</span> <span class="s">"🕳比赛类型："</span> <span class="o">+</span> <span class="n">js</span><span class="p">[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"class"</span><span class="p">]</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span> \
+        <span class="o">+</span> <span class="s">"🕳比赛形式："</span> <span class="o">+</span> <span class="n">js</span><span class="p">[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"form"</span><span class="p">]</span><span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span> \
+        <span class="o">+</span> <span class="s">"⏰开始时间："</span> <span class="o">+</span> <span class="n">time</span><span class="p">.</span><span class="nf">strftime</span><span class="p">(</span><span class="s">"%Y-%m-%d %H:%M:%S"</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="nf">localtime</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"start_time"</span><span class="p">]))</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span> \
+        <span class="o">+</span> <span class="s">"⏰结束时间："</span> <span class="o">+</span> <span class="n">time</span><span class="p">.</span><span class="nf">strftime</span><span class="p">(</span><span class="s">"%Y-%m-%d %H:%M:%S"</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="nf">localtime</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"end_time"</span><span class="p">]))</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span> \
+        <span class="o">+</span> <span class="s">"✅比赛链接："</span> <span class="o">+</span> <span class="n">js</span><span class="p">[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"official_url"</span><span class="p">]</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span>\
+        <span class="o">+</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+<span class="k">def</span> <span class="nf">sendtobot</span><span class="p">(</span><span class="n">zengyan</span><span class="p">,</span><span class="n">msg</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s">"xxxxx"</span>
+    <span class="n">msgContent</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">"text"</span><span class="p">:</span> <span class="n">zengyan</span><span class="o">+</span><span class="s">"</span><span class="se">\r\n</span><span class="s">"</span><span class="o">+</span><span class="n">msg</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">req</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">"timestamp"</span><span class="p">:</span> <span class="n">timestamp</span><span class="p">,</span>
+        <span class="c1"># "sign": gen_sign(timestamp=timestamp, secret="PyiPNYD2OrHj4LktOqmJMg"),
+</span>        <span class="s">"msg_type"</span><span class="p">:</span> <span class="s">"text"</span><span class="p">,</span>
+        <span class="s">"content"</span><span class="p">:</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">msgContent</span><span class="p">)</span>   
+    <span class="p">}</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">"User-Agent"</span><span class="p">:</span> <span class="s">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.53"</span><span class="p">,</span>
+        <span class="c1"># 'Authorization': 'Bearer xxx', # your access token
+</span>        <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span>
+    <span class="p">}</span>
+
+    <span class="c1">#推送通知
+</span>    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="s">"POST"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">headers</span><span class="p">[</span><span class="s">'X-Tt-Logid'</span><span class="p">])</span> <span class="c1"># for debug or oncall
+</span>    <span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">content</span><span class="p">)</span> <span class="c1"># Print Response
+</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="c1"># 当前日期和时间
+</span>    <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="nf">now</span><span class="p">()</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="nf">timestamp</span><span class="p">(</span><span class="n">now</span><span class="p">)</span>
+    <span class="c1">#发送到飞书
+</span>    <span class="nf">print</span><span class="p">(</span><span class="s">"---正在进行的比赛---"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="nf">getinfo</span><span class="p">(</span><span class="nf">getrunning_id</span><span class="p">()))</span>
+    <span class="nf">sendtobot</span><span class="p">(</span><span class="n">zengyan</span> <span class="o">=</span> <span class="s">"🚩--正在进行的比赛--🏆"</span><span class="p">,</span><span class="n">msg</span> <span class="o">=</span> <span class="nf">getinfo</span><span class="p">(</span><span class="nf">getrunning_id</span><span class="p">()))</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="n">requests</span>
+<span class="kn">import</span> <span class="n">re</span> 
+<span class="kn">import</span> <span class="n">time</span>
+<span class="kn">import</span> <span class="n">json</span>
+<span class="kn">from</span> <span class="n">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+
+
+<span class="c1"># 获取即将到来的比赛ID
+</span><span class="k">def</span> <span class="nf">getupcoming_id</span><span class="p">():</span>
+    <span class="n">upcoming_url</span> <span class="o">=</span> <span class="s">"https://api.ctfhub.com/User_API/Event/getUpcoming"</span> <span class="c1">#获取即将开始的比赛ID
+</span>    <span class="n">upcoming_payload</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'offset'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s">'limit'</span><span class="p">:</span> <span class="mi">3</span>
+    <span class="p">}</span> <span class="c1">#POST请求
+</span>    <span class="n">upcoming_request</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="n">upcoming_url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">upcoming_payload</span><span class="p">)</span>
+    <span class="n">upcoming_id</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="nf">len</span><span class="p">(</span><span class="n">upcoming_request</span><span class="p">.</span><span class="nf">json</span><span class="p">()[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"items"</span><span class="p">])):</span>
+        <span class="n">upcoming_id</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">upcoming_request</span><span class="p">.</span><span class="nf">json</span><span class="p">()[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"items"</span><span class="p">][</span><span class="n">i</span><span class="p">][</span><span class="s">"id"</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">upcoming_id</span> <span class="c1">#返回比赛ID
+</span>
+<span class="c1"># 通过比赛ID获取详细信息
+</span><span class="k">def</span> <span class="nf">getinfo</span><span class="p">(</span><span class="nb">id</span><span class="p">):</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="s">''</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">id</span><span class="p">:</span>
+        <span class="n">info_url</span> <span class="o">=</span> <span class="s">"https://api.ctfhub.com/User_API/Event/getInfo"</span>  <span class="c1">#获取详细信息的网址
+</span>        <span class="n">info_payload</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s">"event_id"</span><span class="p">:</span> <span class="n">i</span><span class="p">,</span>
+        <span class="p">}</span> <span class="c1">#POST请求参数
+</span>        <span class="n">info_request</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">post</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">info_url</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">info_payload</span><span class="p">)</span>
+        <span class="n">js</span> <span class="o">=</span> <span class="n">info_request</span><span class="p">.</span><span class="nf">json</span><span class="p">()</span> <span class="c1">#把返回值转为json格式
+</span>        <span class="n">s</span> <span class="o">+=</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span>\
+             <span class="o">+</span> <span class="s">"📛名称："</span> <span class="o">+</span> <span class="n">js</span><span class="p">[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"title"</span><span class="p">]</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span> \
+             <span class="o">+</span> <span class="s">"🕳比赛类型："</span> <span class="o">+</span> <span class="n">js</span><span class="p">[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"class"</span><span class="p">]</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span> \
+             <span class="o">+</span> <span class="s">"🕳比赛形式："</span> <span class="o">+</span> <span class="n">js</span><span class="p">[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"form"</span><span class="p">]</span><span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span> \
+             <span class="o">+</span> <span class="s">"⏰开始时间："</span> <span class="o">+</span> <span class="n">time</span><span class="p">.</span><span class="nf">strftime</span><span class="p">(</span><span class="s">"%Y-%m-%d %H:%M:%S"</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="nf">localtime</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"start_time"</span><span class="p">]))</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span> \
+             <span class="o">+</span> <span class="s">"⏰结束时间："</span> <span class="o">+</span> <span class="n">time</span><span class="p">.</span><span class="nf">strftime</span><span class="p">(</span><span class="s">"%Y-%m-%d %H:%M:%S"</span><span class="p">,</span> <span class="n">time</span><span class="p">.</span><span class="nf">localtime</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"end_time"</span><span class="p">]))</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span> \
+             <span class="o">+</span> <span class="s">"✅比赛链接："</span> <span class="o">+</span> <span class="n">js</span><span class="p">[</span><span class="s">"data"</span><span class="p">][</span><span class="s">"official_url"</span><span class="p">]</span> <span class="o">+</span> <span class="s">"</span><span class="se">\n</span><span class="s">"</span>\
+            <span class="o">+</span><span class="s">"</span><span class="se">\n</span><span class="s">"</span>
+    <span class="k">return</span> <span class="n">s</span>
+
+<span class="k">def</span> <span class="nf">sendtobot</span><span class="p">(</span><span class="n">zengyan</span><span class="p">,</span><span class="n">msg</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s">"xxxxxxxx"</span>
+    <span class="n">msgContent</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">"text"</span><span class="p">:</span> <span class="n">zengyan</span><span class="o">+</span><span class="s">"</span><span class="se">\r\n</span><span class="s">"</span><span class="o">+</span><span class="n">msg</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="n">req</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">"timestamp"</span><span class="p">:</span> <span class="n">timestamp</span><span class="p">,</span>
+        <span class="c1"># "sign": gen_sign(timestamp=timestamp, secret="PyiPNYD2OrHj4LktOqmJMg"),
+</span>        <span class="s">"msg_type"</span><span class="p">:</span> <span class="s">"text"</span><span class="p">,</span>
+        <span class="s">"content"</span><span class="p">:</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">msgContent</span><span class="p">)</span>   
+    <span class="p">}</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="n">json</span><span class="p">.</span><span class="nf">dumps</span><span class="p">(</span><span class="n">req</span><span class="p">)</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">"User-Agent"</span><span class="p">:</span> <span class="s">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36 Edg/105.0.1343.53"</span><span class="p">,</span>
+        <span class="c1"># 'Authorization': 'Bearer xxx', # your access token
+</span>        <span class="s">'Content-Type'</span><span class="p">:</span> <span class="s">'application/json'</span>
+    <span class="p">}</span>
+
+    <span class="c1">#推送通知
+</span>    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="nf">request</span><span class="p">(</span><span class="s">"POST"</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">headers</span><span class="p">[</span><span class="s">'X-Tt-Logid'</span><span class="p">])</span> <span class="c1"># for debug or oncall
+</span>    <span class="nf">print</span><span class="p">(</span><span class="n">response</span><span class="p">.</span><span class="n">content</span><span class="p">)</span> <span class="c1"># Print Response
+</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="c1"># 当前日期和时间
+</span>    <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="nf">now</span><span class="p">()</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">.</span><span class="nf">timestamp</span><span class="p">(</span><span class="n">now</span><span class="p">)</span>
+    <span class="c1">#发送到飞书
+</span>    <span class="nf">print</span><span class="p">(</span><span class="s">"🚩--即将到来的比赛--🏆"</span><span class="p">)</span>
+    <span class="nf">print</span><span class="p">(</span><span class="nf">getinfo</span><span class="p">(</span><span class="nf">getupcoming_id</span><span class="p">()))</span>
+    <span class="nf">sendtobot</span><span class="p">(</span><span class="n">zengyan</span> <span class="o">=</span> <span class="s">"🚩--即将到来的比赛--🏆"</span><span class="p">,</span><span class="n">msg</span> <span class="o">=</span> <span class="nf">getinfo</span><span class="p">(</span><span class="nf">getupcoming_id</span><span class="p">()))</span>
+
+</code></pre></div></div>
+
+  </div>
+
+</article>
+
+</section>
+<nav class="navbar navbar-default navbar-fixed-bottom">
+  <div class="container footer-content">
+    Happy with <i class ="fa fa-heart"></i> by P001water<br>
+    Powered By May1as 
+  </div>
+</nav>
+
+  </body>
+
+</html>

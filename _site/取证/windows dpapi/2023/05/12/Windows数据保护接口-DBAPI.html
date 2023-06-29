@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta content="Hello, P001's blog!" property="og:site_name">
+
+  <meta content="渗透取证技巧--Windows数据保护接口——DPAPI" property="og:title">
+
+
+  <meta content="article" property="og:type">
+
+
+  <meta content=" <h1>P001water@c:\Users\maylas\.ssh</h1> <h3>Do Enjoy youself in hack life</h3> --------CMD /c 这里是朴水... ... Reply from 1988 !-------" property="og:description">
+
+
+  <meta content="http://localhost:4000/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/Windows%E6%95%B0%E6%8D%AE%E4%BF%9D%E6%8A%A4%E6%8E%A5%E5%8F%A3-DBAPI.html" property="og:url">
+
+
+  <meta content="2023-05-12T00:00:00+08:00" property="article:published_time">
+  <meta content="http://localhost:4000/about/" property="article:author">
+
+
+  <meta property="og:image" content="">
+
+
+  
+  <meta content="取证" property="article:section">
+  
+
+
+  
+
+  <title>渗透取证技巧--Windows数据保护接口——DPAPI</title>
+  <meta name="description" content="文前漫谈">
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  
+  <!-- <link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'> -->
+  <!-- <link href='https://fonts.googleapis.com/css?family=Fira+Mono' rel='stylesheet' type='text/css'> -->
+  <!-- <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'> -->
+  <!-- <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,200,300,500,600,700,900' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Gentium+Basic:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Alegreya:400,400italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,400italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,300,500,700' rel='stylesheet' type='text/css'>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-hQpvDQiCJaD2H465dQfA717v7lu5qHWtDbWNPvaTJ0ID5xnPUlVXnKzq7b8YUkbN" crossorigin="anonymous"> -->
+  <link rel="canonical" href="http://localhost:4000/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/Windows%E6%95%B0%E6%8D%AE%E4%BF%9D%E6%8A%A4%E6%8E%A5%E5%8F%A3-DBAPI.html">
+  <link rel="alternate" type="application/rss+xml" title="Hello, P001's blog!" href="http://localhost:4000/feed.xml">
+</head>
+
+
+  <body>
+<section>
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">Hello, P001's blog!</a>
+    </div>
+    
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        
+        
+        <li><a href="/Lnk/">Lnk</a></li>
+        
+        
+        
+        <li><a href="/about/">About</a></li>
+        
+        
+        
+        
+        
+        
+        
+        
+
+
+      </ul>
+
+    <!--  <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Know More!</a></li>
+
+      </ul>-->
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+</section>
+
+<section>
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="post-title-main" itemprop="name headline">渗透取证技巧--Windows数据保护接口——DPAPI</h1>
+      <p class="post-meta"><time datetime="2023-05-12T00:00:00+08:00" itemprop="datePublished">May 12, 2023</time></p>
+      
+    </div>
+
+</div>
+
+
+  <div class="post-content container" itemprop="articleBody">
+    <h1 id="文前漫谈">文前漫谈</h1>
+
+<blockquote>
+  <p>DPAPI</p>
+</blockquote>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Data Protection Application Programming Interface
+数据保护应用程序编程接口
+</code></pre></div></div>
+
+<p>​	这是windows贴心的为开发者提供的针对用户身份加密的方案——DPAPI。win程序开发者可以方便的使用该API加密保护敏感数据，这种基于用户身份的加密使得该加密数据仅可被对数据进行加密的用户解密，它是Windows中保护敏感数据的首选API之一，被广泛应用于各种应用程序数据保护部分。</p>
+
+<p>DPAPI提供了两种方法：基于用户和基于机器的加密。在基于用户的加密中，系统会根据用户的凭据生成一个唯一的主密钥，并将其存储在用户的配置文件中。此主密钥用于加密和解密用户的私密数据。在基于机器的加密中，系统会根据计算机的凭据生成一个唯一的主密钥，并将其存储在本地计算机上。此主密钥用于加密和解密系统级别的数据。</p>
+
+<p>DPAPI针对用户身份加密的方案可以抽象理解为，不同用户拥有不同的<code class="language-plaintext highlighter-rouge">DPAPI master key</code>，一个用户也可能有不同的master key，这个<code class="language-plaintext highlighter-rouge">DPAPI master key</code> 相当于一个密钥，这个调用`DPAPI master key实施加密的过程由系统直接操作，相当于Windows给开发者封装了个加密算法，直接调用就能实现的敏感数据的加密解密保护</p>
+
+<p><strong>我们渗透场景中的哪些应用采用了DBAPI</strong></p>
+
+<ul>
+  <li>
+    <p>Internet Explorer, Google Chrome浏览器保存的登录凭据</p>
+  </li>
+  <li>Outlook, Windows Mai 等的邮箱账户密码</li>
+  <li>内部FTP管理器帐户密码</li>
+  <li>共享文件夹和资源访问密码</li>
+  <li>无线网络帐户密钥和密码</li>
+  <li>RDP远程桌面连接密码</li>
+</ul>
+
+<h1 id="dpapi中的重要概念">DPAPI中的重要概念</h1>
+
+<h2 id="function-cryptprotectdata-and-cryptunprotectdata">Function CryptProtectData and CryptUnprotectData</h2>
+
+<p>分别是DPAPI的加密和解密函数，详细见文档 <a href="https://learn.microsoft.com/en-us/windows/win32/api/dpapi/nf-dpapi-cryptprotectdata">CryptProtectData function (dpapi.h) - Win32 apps | Microsoft Learn</a></p>
+
+<p>Win32 API中的函数，均在Dpapi.h头文件中</p>
+
+<h2 id="dpapi-blob">DPAPI blob</h2>
+
+<p>在计算机术语中，”blob” 是 “Binary Large Object” 的缩写。它是指一种数据类型或格式，用于存储二进制数据。</p>
+
+<p>在DPAPI中，”DPAPI blob” 是指使用DPAPI进行加密保护的二进制数据块。但是它实际是个结构体，其中包含了我们的密文</p>
+
+<p><img src="/img/dpapi3.png" alt="未记录的 DPAPI blob 结构" /></p>
+
+<h2 id="master-key">Master Key：</h2>
+
+<p>DPAPI的核心</p>
+
+<p>64字节，用于解密DPAPI blob，使用用户登录密码、SID和16字节随机数加密后保存在Master Key file中</p>
+
+<p>Example：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>19c05880b67d50f8231cd8009836e3cdc55610e4877f8b976abd5ca15600d0e759934324c6204b56f02527039e7fc52a1dfb5296d3381aaa7c3eb610dffa32fa
+
+长度是128
+</code></pre></div></div>
+
+<h2 id="master-key-file">Master Key file：</h2>
+
+<p>二进制文件，可使用用户登录密码对其解密，获得Master Key。其所在目录受保护，即使你在资源管理器中开启了显示隐藏文件也看不了，或者cmd的dir命令，也无法看见。不过可以用powershell看，下面介绍。</p>
+
+<p>分两种：</p>
+
+<ul>
+  <li>用户Master Key file，隐藏属性不可解，位于</li>
+</ul>
+
+<blockquote>
+  <p>%APPDATA%\Microsoft\Protect{SID}		//SID是当前用户的安全标识符</p>
+</blockquote>
+
+<p>powershell -Force可以查看（-hidden也能看，不过winows低版本不支持-hidden的参数）</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$path=$env:APPDATA+"\Microsoft\Protect\"+(((iex "whoami /user")|Out-String).Split(' '))[-1];Get-ChildItem -Force $path.trim()
+</code></pre></div></div>
+
+<p><img src="/img/image-20230618192232242.png" alt="image-20230618192232242" /></p>
+
+<ul>
+  <li>系统Master Key file，隐藏属性不可见，位于</li>
+</ul>
+
+<blockquote>
+  <p>%WINDIR%\System32\Microsoft\Protect\S-1-5-18\User</p>
+</blockquote>
+
+<p>powershell查看</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-ChildItem -Force $env:windir\System32\Microsoft\Protect\S-1-5-18\User		
+</code></pre></div></div>
+
+<p><img src="/img/image-20230618174621882.png" alt="image-20230618174621882" /></p>
+
+<h2 id="preferred文件">Preferred文件：</h2>
+
+<p>总是位于Master Key file的同级目录，显示当前系统正在使用的MasterKey及其过期时间，默认90天有效期</p>
+
+<h1 id="如何获得master-key">如何获得Master Key</h1>
+
+<h2 id="mimikatz从lsassexe进程dump">mimikatz从lsass.exe进程dump</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mimikatz.exe privilege::debug sekurlsa::dpapi &gt; dbapi.txt
+</code></pre></div></div>
+
+<p><img src="/img/image-20230618181455536.png" alt="image-20230618181455536" style="zoom:80%;" /></p>
+
+<p>另一种就是离线dump，也差不多就不写了，或许是好处是不需要在对面的机子上用mimikatz？</p>
+
+<h1 id="c-实现dpapi加密和解密">C# 实现DPAPI加密和解密</h1>
+
+<p>从代码实现来说，我们作为开发者写工具的时候，肯定是对上面所说的master key是无感的。这意味着我们开发工具（比如解密浏览器凭据）的时候，是直接调用Windows api里的两个函数的，举个例子</p>
+
+<div class="language-c# highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Security.Cryptography</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Text</span><span class="p">;</span>
+
+<span class="k">namespace</span> <span class="nn">TestDemo</span>
+<span class="p">{</span>
+    <span class="k">class</span> <span class="nc">Program</span>
+    <span class="p">{</span>
+        <span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="n">String</span> <span class="n">en</span> <span class="p">=</span> <span class="nf">Encrypt</span><span class="p">(</span><span class="s">"pool"</span><span class="p">);</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Data encrypt by dpapi：\n"</span> <span class="p">+</span> <span class="n">en</span><span class="p">);</span>
+            <span class="n">String</span> <span class="n">de</span> <span class="p">=</span> <span class="nf">Decrypt</span><span class="p">(</span><span class="n">en</span><span class="p">);</span>
+            <span class="n">Console</span><span class="p">.</span><span class="nf">WriteLine</span><span class="p">(</span><span class="s">"Data decrypt by dpapi：\n"</span> <span class="p">+</span> <span class="n">de</span><span class="p">);</span>
+
+        <span class="p">}</span>
+
+        <span class="k">private</span> <span class="k">static</span> <span class="n">String</span> <span class="nf">Encrypt</span><span class="p">(</span><span class="kt">string</span> <span class="n">text</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// first, convert the text to byte array </span>
+            <span class="kt">byte</span><span class="p">[]</span> <span class="n">originalText</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">Unicode</span><span class="p">.</span><span class="nf">GetBytes</span><span class="p">(</span><span class="n">text</span><span class="p">);</span>
+
+            <span class="c1">// then use Protect() to encrypt your data </span>
+            <span class="kt">byte</span><span class="p">[]</span> <span class="n">encryptedText</span> <span class="p">=</span> <span class="n">ProtectedData</span><span class="p">.</span><span class="nf">Protect</span><span class="p">(</span><span class="n">originalText</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="n">DataProtectionScope</span><span class="p">.</span><span class="n">CurrentUser</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">ToBase64String</span><span class="p">(</span><span class="n">encryptedText</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="k">private</span> <span class="k">static</span> <span class="n">String</span> <span class="nf">Decrypt</span><span class="p">(</span><span class="kt">string</span> <span class="n">text</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="c1">// the encrypted text, converted to byte array </span>
+            <span class="kt">byte</span><span class="p">[]</span> <span class="n">encryptedText</span> <span class="p">=</span> <span class="n">Convert</span><span class="p">.</span><span class="nf">FromBase64String</span><span class="p">(</span><span class="n">text</span><span class="p">);</span>
+
+            <span class="c1">// calling Unprotect() that returns the original text </span>
+            <span class="kt">byte</span><span class="p">[]</span> <span class="n">originalText</span> <span class="p">=</span> <span class="n">ProtectedData</span><span class="p">.</span><span class="nf">Unprotect</span><span class="p">(</span><span class="n">encryptedText</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="n">DataProtectionScope</span><span class="p">.</span><span class="n">CurrentUser</span><span class="p">);</span>
+
+            <span class="k">return</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">Unicode</span><span class="p">.</span><span class="nf">GetString</span><span class="p">(</span><span class="n">originalText</span><span class="p">);</span>
+        <span class="p">}</span>
+
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>调用输出</p>
+
+<p><img src="/img/image-20230627170101035.png" alt="image-20230627170101035" style="zoom:67%;" /></p>
+
+<h1 id="后话">后话</h1>
+
+<p>这是我当时遇见的一些问题</p>
+
+<ol>
+  <li>我们可以使用用户登录密码对Master Key file解密获得Master Key。那么问题来了，只有NTLM Hash的情况下，能否对Master Key file文件解密得到Master Key</li>
+</ol>
+
+<blockquote>
+  <p>分情况，如果NTLM Hash能成功解密，拿到用户明文密码，就能通过解密Master Key file文件得到Master Key;</p>
+
+  <p>如果解密不了，就无法得到Master Key（但是如果能得到NTLM Hash，Master Key大概率也是能抓到的）。</p>
+
+  <p>为什么？因为最初的DPAPI设计中，解密Master key需要用户密码的 NTLM Hash，导致直接能够通过拿到SAM数据库中用户密码哈希，直接解密得到Master Key，进一步解密任何加密的DPAPI data blob，这个问题在DPAPI的第二版就被修复了，现在master key使用 SHA1 哈希进行加密，MS特意回避了能够通过NTLM Hash解密获得master key的情况。</p>
+</blockquote>
+
+
+  </div>
+
+</article>
+
+</section>
+<nav class="navbar navbar-default navbar-fixed-bottom">
+  <div class="container footer-content">
+    Happy with <i class ="fa fa-heart"></i> by P001water<br>
+    Powered By May1as 
+  </div>
+</nav>
+
+  </body>
+
+</html>

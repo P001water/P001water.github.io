@@ -1,276 +1,30 @@
-
-
-<feed xmlns="http://www.w3.org/2005/Atom">
-  <id>/</id>
-  <title>may1as' blog</title>
-  <subtitle>Ctfer/RedTeamer 低调求发展,潜心习安全的may1as.</subtitle>
-  <updated>2023-05-12T22:22:08+08:00</updated>
-  <author>
-    <name>may1as</name>
-    <uri>/</uri>
-  </author>
-  <link rel="self" type="application/atom+xml" href="/feed.xml"/>
-  <link rel="alternate" type="text/html" hreflang="en"
-    href="/"/>
-  <generator uri="https://jekyllrb.com/" version="4.3.2">Jekyll</generator>
-  <rights> © 2023 may1as </rights>
-  <icon>/assets/img/favicons/favicon.ico</icon>
-  <logo>/assets/img/favicons/favicon-96x96.png</logo>
-
-
-  
-  <entry>
-    <title>Godzilla-从三种自带加密器看哥斯拉流量-PHP篇</title>
-    <link href="/posts/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87/" rel="alternate" type="text/html" title="Godzilla-从三种自带加密器看哥斯拉流量-PHP篇" />
-    <published>2023-04-27T14:10:00+08:00</published>
-  
-    <updated>2023-04-27T14:10:00+08:00</updated>
-  
-    <id>/posts/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87/</id>
-    <content src="/posts/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87/" />
-    <author>
-      <name>may1as</name>
-    </author>
-
-  
-    
-    <category term="流量分析" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      文前漫谈
-
-Godzilla - designed by @BeichenDreams
-
-本文记录我对哥斯拉流量的学习，主要分析了php版的shell流量加密解密过程，使用的是当前最新版本的哥斯拉，版本号为v4.01。
-
-
-
-三种自带的加密器
-
-生成Godzillz默认的服务端webshell，自带有三种加密器：
-
-
-  PHP_EVAL_XOR_BASE64
-  PHP_XOR_BASE64
-  PHP_XOR_RAW
-
-
-
-
-PHP_XOR_BASE64加密器
-
-笔者觉得应该从这种加密器先讲起，后面的PHP_EVAL_XOR_BASE64等加密器实现原理和它都相同，只是传输形式上的差别。
-
-从http请求的角度看，PHP_XOR_BASE64加密器和PHP_EVAL_XOR_BASE64加密器的区别就是，命令执行的过程中，PHP_XOR_BASE64加密器的http请求正文长度（...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>Net-NTLMv2窃取----By Outlook NTLM Leak</title>
-    <link href="/posts/Net-NTLMv2%E7%AA%83%E5%8F%96-By-Outlook-NTLM-Leak/" rel="alternate" type="text/html" title="Net-NTLMv2窃取----By Outlook NTLM Leak" />
-    <published>2023-04-17T00:00:00+08:00</published>
-  
-    <updated>2023-04-17T00:00:00+08:00</updated>
-  
-    <id>/posts/Net-NTLMv2%E7%AA%83%E5%8F%96-By-Outlook-NTLM-Leak/</id>
-    <content src="/posts/Net-NTLMv2%E7%AA%83%E5%8F%96-By-Outlook-NTLM-Leak/" />
-    <author>
-      <name>may1as</name>
-    </author>
-
-  
-    
-    <category term="NTLM" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      
-  文章首发先知社区
-
-  [Net-NTLMv2窃取—-By Outlook NTLM Leak]
-
-
-后续可能会更新更新
-
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>伪协议php://input命令执行的原理</title>
-    <link href="/posts/%E4%BC%AA%E5%8D%8F%E8%AE%AEphp-input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86/" rel="alternate" type="text/html" title="伪协议php://input命令执行的原理" />
-    <published>2023-04-07T20:55:00+08:00</published>
-  
-    <updated>2023-04-07T20:55:00+08:00</updated>
-  
-    <id>/posts/%E4%BC%AA%E5%8D%8F%E8%AE%AEphp-input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86/</id>
-    <content src="/posts/%E4%BC%AA%E5%8D%8F%E8%AE%AEphp-input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86/" />
-    <author>
-      <name>may1as</name>
-    </author>
-
-  
-    
-    <category term="PHP" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      文前漫谈
-
-
-  文章首发在Freebuf
-
-
-研究几种webshell管理工具时遇见，发现几款常见的webshell管理工具都有对php://input的利用
-
-本文记录我对php://input原理的学习和思考，如有疏漏失错，还请联系告知
-
-$HTTP_RAW_POST_DATA的作用和php://input的作用相同，但是PHP 5.6.0. 被废弃了，后面的版本中就是用php://input替代。所有本文省略
-
-官方文档的解释
-
-$_POST数组
-
-当 HTTP POST 请求的 Content-Type 是 application/x-www-form-urlencoded或 multipart/form-data时，会将变量以关联数组形式传入当前脚本。
-
-php://input 伪协议
-
-php://input 是个可以访问请求的原始数据的只读流。当请求方式是post，并...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>TryHackMe-Disgruntled-一个关于Linux日志文件取证的房间</title>
-    <link href="/posts/TryHackMe-Disgruntled/" rel="alternate" type="text/html" title="TryHackMe-Disgruntled-一个关于Linux日志文件取证的房间" />
-    <published>2023-03-29T14:10:00+08:00</published>
-  
-    <updated>2023-03-29T14:10:00+08:00</updated>
-  
-    <id>/posts/TryHackMe-Disgruntled/</id>
-    <content src="/posts/TryHackMe-Disgruntled/" />
-    <author>
-      <name>may1as</name>
-    </author>
-
-  
-    
-    <category term="Tryhackme" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      Room - Disgruntled  which for Linux_forensics
-
-一个Linux取证的房间，主要关于基本的日志文件和历史命令的记录，包括计划任务，sudo命令记录文件等，搁tryhackme上玩的第一个房间
-
-这东西挺适合那些搞信息学竞赛的中学生的
-
-为了不让哥们的钱白花，只写思路了，不提及答案
-
-review
-
-
-
-Begin
-
-Background
-
-
-  Not sure if you’ve seen the news, but an employee from the IT department of one of our clients (CyberT) got arrested by the police. The guy was running a successful phishing operation as a side gig.
-
- ...
-    </summary>
-  
-
-  </entry>
-
-  
-  <entry>
-    <title>流量分析——简单解密蚁剑流量</title>
-    <link href="/posts/%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)-%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F/" rel="alternate" type="text/html" title="流量分析——简单解密蚁剑流量" />
-    <published>2023-01-15T14:10:00+08:00</published>
-  
-    <updated>2023-01-15T14:10:00+08:00</updated>
-  
-    <id>/posts/%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)-%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F/</id>
-    <content src="/posts/%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90(1)-%E7%AE%80%E5%8D%95%E8%A7%A3%E5%AF%86%E8%9A%81%E5%89%91%E6%B5%81%E9%87%8F/" />
-    <author>
-      <name>may1as</name>
-    </author>
-
-  
-    
-    <category term="流量分析" />
-    
-  
-
-  
-    <summary>
-      
-
-
-
-
-
-      文前漫谈
-
-在学习Godzaill流量的时候，我发现了批量解密流量包流量的新思路——py的mitmproxy模块，中间人攻击（Man-in-the-middle attack）的意思
-
-mitmproxy模块就相当于py里的burp suite，更有用的是它支持我们自定义脚本处理http的请求和响应内容（在mitmproxy里叫addon脚本），这正好解决了我的大问题
-
-
-  mitmproxy安装后有 3 个命令行工具：mitmproxy, mitmdump, mitmweb
-
-  mitmproxy：交互式；查看流量数据 (请求与响应)；执行自定义脚本
-
-  mitmdump：执行自定义脚本，脚本在 Mitmproxy 中叫做 Addon
-
-  mitmweb：mitmweb是一个基于Web的用户界面，用于与mitmproxy交互和监视HTTP / HTTPS流量。它使开发人员能...
-    </summary>
-  
-
-  </entry>
-
-</feed>
-
-
+---
+layout: null
+---
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>{{ site.title | xml_escape }}</title>
+    <description>{{ site.description | xml_escape }}</description>
+    <link>{{ site.url }}{{ site.baseurl }}/</link>
+    <atom:link href="{{ "/feed.xml" | prepend: site.baseurl | prepend: site.url }}" rel="self" type="application/rss+xml"/>
+    <pubDate>{{ site.time | date_to_rfc822 }}</pubDate>
+    <lastBuildDate>{{ site.time | date_to_rfc822 }}</lastBuildDate>
+    <generator>Jekyll v{{ jekyll.version }}</generator>
+    {% for post in site.posts limit:10 %}
+      <item>
+        <title>{{ post.title | xml_escape }}</title>
+        <description>{{ post.content | xml_escape }}</description>
+        <pubDate>{{ post.date | date_to_rfc822 }}</pubDate>
+        <link>{{ post.url | prepend: site.baseurl | prepend: site.url }}</link>
+        <guid isPermaLink="true">{{ post.url | prepend: site.baseurl | prepend: site.url }}</guid>
+        {% for tag in post.tags %}
+        <category>{{ tag | xml_escape }}</category>
+        {% endfor %}
+        {% for cat in post.categories %}
+        <category>{{ cat | xml_escape }}</category>
+        {% endfor %}
+      </item>
+    {% endfor %}
+  </channel>
+</rss>
