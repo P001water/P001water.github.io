@@ -171,29 +171,29 @@
   <thead>
     <tr>
       <th style="text-align: left">文件类型</th>
-      <th style="text-align: left">必需</th>
+      <th style="text-align: center">必需</th>
       <th style="text-align: left">作用</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td style="text-align: left"><a href="https://developers.weixin.qq.com/miniprogram/dev/framework/app-service/page.html">.js</a></td>
-      <td style="text-align: left">是</td>
+      <td style="text-align: center">是</td>
       <td style="text-align: left">页面逻辑</td>
     </tr>
     <tr>
       <td style="text-align: left"><a href="https://developers.weixin.qq.com/miniprogram/dev/framework/view/wxml/">.wxml</a></td>
-      <td style="text-align: left">是</td>
+      <td style="text-align: center">是</td>
       <td style="text-align: left">页面结构</td>
     </tr>
     <tr>
       <td style="text-align: left"><a href="https://developers.weixin.qq.com/miniprogram/dev/framework/config.html#页面配置">.json</a></td>
-      <td style="text-align: left">否</td>
+      <td style="text-align: center">否</td>
       <td style="text-align: left">页面配置</td>
     </tr>
     <tr>
       <td style="text-align: left"><a href="https://developers.weixin.qq.com/miniprogram/dev/framework/view/wxss.html">.wxss</a></td>
-      <td style="text-align: left">否</td>
+      <td style="text-align: center">否</td>
       <td style="text-align: left">页面样式表</td>
     </tr>
   </tbody>
@@ -205,7 +205,7 @@
 
 <h2 id="重要文件-appjs">重要文件 app.js</h2>
 
-<p>每个小程序都需要在 <code class="language-plaintext highlighter-rouge">app.js</code> 中调用 <code class="language-plaintext highlighter-rouge">App</code> 方法注册小程序实例，绑定生命周期回调函数、错误监听和页面不存在监听函数等。</p>
+<p>每个小程序都需要在 <code class="language-plaintext highlighter-rouge">app.js</code> 中调用 <code class="language-plaintext highlighter-rouge">App()</code> 方法注册小程序实例，绑定生命周期回调函数、错误监听和页面不存在监听函数等。</p>
 
 <div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// app.js</span>
 <span class="nc">App</span><span class="p">({</span>

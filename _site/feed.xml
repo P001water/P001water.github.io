@@ -5,8 +5,8 @@
     <description> &lt;h1&gt;P001water@c:\Users\maylas\.ssh&lt;/h1&gt; &lt;h3&gt;Do Enjoy youself in hack life&lt;/h3&gt; --------CMD /c 这里是朴水... ... Reply from 1988 !-------</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 09 Jul 2023 17:07:13 +0800</pubDate>
-    <lastBuildDate>Sun, 09 Jul 2023 17:07:13 +0800</lastBuildDate>
+    <pubDate>Sun, 09 Jul 2023 21:06:09 +0800</pubDate>
+    <lastBuildDate>Sun, 09 Jul 2023 21:06:09 +0800</lastBuildDate>
     <generator>Jekyll v4.3.2</generator>
     
       <item>
@@ -66,29 +66,29 @@
   &lt;thead&gt;
     &lt;tr&gt;
       &lt;th style=&quot;text-align: left&quot;&gt;文件类型&lt;/th&gt;
-      &lt;th style=&quot;text-align: left&quot;&gt;必需&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;必需&lt;/th&gt;
       &lt;th style=&quot;text-align: left&quot;&gt;作用&lt;/th&gt;
     &lt;/tr&gt;
   &lt;/thead&gt;
   &lt;tbody&gt;
     &lt;tr&gt;
       &lt;td style=&quot;text-align: left&quot;&gt;&lt;a href=&quot;https://developers.weixin.qq.com/miniprogram/dev/framework/app-service/page.html&quot;&gt;.js&lt;/a&gt;&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;是&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;是&lt;/td&gt;
       &lt;td style=&quot;text-align: left&quot;&gt;页面逻辑&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td style=&quot;text-align: left&quot;&gt;&lt;a href=&quot;https://developers.weixin.qq.com/miniprogram/dev/framework/view/wxml/&quot;&gt;.wxml&lt;/a&gt;&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;是&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;是&lt;/td&gt;
       &lt;td style=&quot;text-align: left&quot;&gt;页面结构&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td style=&quot;text-align: left&quot;&gt;&lt;a href=&quot;https://developers.weixin.qq.com/miniprogram/dev/framework/config.html#页面配置&quot;&gt;.json&lt;/a&gt;&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;否&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;否&lt;/td&gt;
       &lt;td style=&quot;text-align: left&quot;&gt;页面配置&lt;/td&gt;
     &lt;/tr&gt;
     &lt;tr&gt;
       &lt;td style=&quot;text-align: left&quot;&gt;&lt;a href=&quot;https://developers.weixin.qq.com/miniprogram/dev/framework/view/wxss.html&quot;&gt;.wxss&lt;/a&gt;&lt;/td&gt;
-      &lt;td style=&quot;text-align: left&quot;&gt;否&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;否&lt;/td&gt;
       &lt;td style=&quot;text-align: left&quot;&gt;页面样式表&lt;/td&gt;
     &lt;/tr&gt;
   &lt;/tbody&gt;
@@ -100,7 +100,7 @@
 
 &lt;h2 id=&quot;重要文件-appjs&quot;&gt;重要文件 app.js&lt;/h2&gt;
 
-&lt;p&gt;每个小程序都需要在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;app.js&lt;/code&gt; 中调用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;App&lt;/code&gt; 方法注册小程序实例，绑定生命周期回调函数、错误监听和页面不存在监听函数等。&lt;/p&gt;
+&lt;p&gt;每个小程序都需要在 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;app.js&lt;/code&gt; 中调用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;App()&lt;/code&gt; 方法注册小程序实例，绑定生命周期回调函数、错误监听和页面不存在监听函数等。&lt;/p&gt;
 
 &lt;div class=&quot;language-js highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// app.js&lt;/span&gt;
 &lt;span class=&quot;nc&quot;&gt;App&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
