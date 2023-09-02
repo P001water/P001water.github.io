@@ -9,7 +9,7 @@ categories: Potatoes家族
 
 
 
-> 文章首发于[Windows 命名管道客户端模拟和 PrintSpoofer 原理探究 (seebug.org)](https://paper.seebug.org/2090/)
+> 文章首发于Seebug Paper [Windows 命名管道客户端模拟和 PrintSpoofer 原理探究 (seebug.org)](https://paper.seebug.org/2090/)
 
 
 

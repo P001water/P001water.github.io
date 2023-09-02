@@ -111,6 +111,30 @@
   
   <div class="post-box">
     <div class="post-title">
+    <a class="post-title" href="/hvv/2023/08/25/Hvv%E6%BC%AB%E6%B8%B8%E6%97%A5%E8%AE%B0%E4%B8%8E%E6%80%9D%E8%80%83.html" > 2023 Hvv漫游日记与思考</a>
+    </div>
+    <div class="post-excerpt">
+      那些年我们护网的日子…… 一、探路 Hvv的路还是有些曲折的，很多zj在卡年龄，薪资之类的。 毕竟这东西在现场，也只是少部分能干活的人干活。所以慢慢给大多数人的印象就是不需要干活。如果不需要干活，不就一定程度上说明这届红队不太行嘛。 也面试了不少中介，有的中介出于卡薪资的心态，会问很多rt中高的内容，cs，操作系统原理都得给你来点儿，甚至整场面试不涉及蓝队相关的内容，最后随便问两个流量特征草草了之，这种纯纯卡人卡钱的都是**，还得是gy。不过不用被问的emo，毕竟我们和中介是双向选择，找下家就行了。 说是薪资低了，实际上是他们赚的更多了。想拿高点的话就做好能干活的准备，找找学校工作的学长也可能有门路，但也可能被不当人一天发三百。还是那句话，没人脉就拿实力拿钱，没实力拿人脉换钱，又有实力又有人脉就活该你拿钱。 二、上路 最后还是成功上车了，360，面向某省单位。大哥说还是很轻松的，活少钱多。于是准备愉快的当猴子了。 到地方了刚和销售对接上（后来才知道可能是项目经理才和销售对接）。当时我问销售：“姐，这次咱们谁主防，听谁的”，姐 热络的：“这次咱们主防啊，都听你的，待会儿还会给你配几个人”。当时我噎了一下，心里直接麻了，这台本来之前可没对过啊，我tm成真身了。硬着头皮上去了。幸亏咱能扯，和信息中心的老大哥们扯东扯西能对付过去。 三、经历 总的下来，个人觉得打一场蓝队对未来的RT们来说还是很有必要的，当然前提是能发挥点作用的职位。如果是个应急岗，也能收获不少，毕竟哪有那么多的应急真实环境让你锻炼，可以说都是喂出来的。 整场hvv下来，让我看见了一个真实环境下的极大的业务网络拓扑情况和当前肯下功夫的防守方所做的防御建设（zf单位，舍得在安全建设上花钱）。因为是主防，所以大哥很耐心的给我讲解整个的网络拓扑分配。 设备情况应该各家单位大差不差： 防火墙 防火墙基本都是上的硬件防火墙，策略也是白名单，流量入口出口给你限制的死死的。老大哥甚至能清楚的说出对每一块区域甚至单个主机配的策略，md他那主机策略几百条来着，因为下边单位众多，配的相对详细。据他说没优化前可能更多。手动苦笑 态势感知 各家的产品一般都是放个探针的在流量出口，一般是交换机等等上。然后数据由探针上报到态势感知分析展示。后来老大哥们甚至想统筹全省，搁下属单位都放个探索，上报流量。这样一算我还可能帮销售卖出几百万设备：） 上网行为管理软件 额，最出名的就是深信服的了，听老大哥说深信服在此深耕数十年，附带有邮件收发管理，钓鱼邮件检测。记得刚开始第一天就来了个钓鱼邮件，也是深信服的检测到的。...
+    </div>
+    <div class="posted">
+      posted on
+      <span class="posted-on">
+
+        Friday, August 25, 2023
+      </span>
+      <span class="in">
+        in
+      </span>
+      <span class="categories-on">
+        
+        hvv &nbsp;
+        
+      </span>
+    </div>
+  </div>
+  
+  <div class="post-box">
+    <div class="post-title">
     <a class="post-title" href="/2023/07/25/Hello!-Java-SEC.html" > 7.25 —— Hello!  Java SEC</a>
     </div>
     <div class="post-excerpt">
@@ -136,7 +160,7 @@
     <a class="post-title" href="/potatoes%E5%AE%B6%E6%97%8F/2023/07/24/Windows%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%A8%A1%E6%8B%9F%E5%92%8CPrintSpoofer%E5%8E%9F%E7%90%86%E6%8E%A2%E7%A9%B6.html" > Windows命名管道客户端模拟和PrintSpoofer原理探究</a>
     </div>
     <div class="post-excerpt">
-      文章首发于Windows 命名管道客户端模拟和 PrintSpoofer 原理探究 (seebug.org) 前言 在Windows的实际渗透中，提权方面我们最常用到的就是众多的土豆家族 关于各种土豆的原理，似乎很多人印象中一直都是这样：利用COM interface的某些特性，诱骗具有System权限的帐户连接我们可控的RPC服务端进行身份验证，然后NTLM relay的过程，拿到System的权限。 现实是，基于这种想法利用的potatoes在win10 1089和server 2019之后基本都已失效了，现在正火热的RoguePotato (NG)，Sweetpotato(集成了Printspoofer等)，BadPotato，GodPotato等，都是结合了命名管道客户端模拟的老技术 命名管道客户端模拟（Named_Pipe_Client_Impersonation）可以说是中后期土豆家族的关键之处，由于微软官方认为从具有SeImpersonate privilege特权的Windows服务账户提升至 NT AUTHORITY/SYSTEM 权限是预期行为。所以此后的很长一段时间，基于命名管道客户端模拟的potato都能成为利器。 本文就通过命名管道客户端模拟（Name_pipe_client_Impersonation）的学习，初窥正活跃的potatoes家族中的成员，探究...
+      文章首发于Seebug Paper Windows 命名管道客户端模拟和 PrintSpoofer 原理探究 (seebug.org) 前言 在Windows的实际渗透中，提权方面我们最常用到的就是众多的土豆家族 关于各种土豆的原理，似乎很多人印象中一直都是这样：利用COM interface的某些特性，诱骗具有System权限的帐户连接我们可控的RPC服务端进行身份验证，然后NTLM relay的过程，拿到System的权限。 现实是，基于这种想法利用的potatoes在win10 1089和server 2019之后基本都已失效了，现在正火热的RoguePotato (NG)，Sweetpotato(集成了Printspoofer等)，BadPotato，GodPotato等，都是结合了命名管道客户端模拟的老技术 命名管道客户端模拟（Named_Pipe_Client_Impersonation）可以说是中后期土豆家族的关键之处，由于微软官方认为从具有SeImpersonate privilege特权的Windows服务账户提升至 NT AUTHORITY/SYSTEM...
     </div>
     <div class="posted">
       posted on
