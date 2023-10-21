@@ -48,3 +48,14 @@ inputStream.readObject();
 
 
 
+* 动态代理
+
+[Java进阶  Proxy动态代理机制详解 - 知了一笑 - 博客园 (cnblogs.com)](https://www.cnblogs.com/cicada-smile/p/14942945.html)
+
+理解动态代理，先理解静态代理
+
+
+
+* 二次反序列化
+
+[二次反序列化 看我一命通关 - 跳跳糖 (tttang.com)](https://tttang.com/archive/1701/#toc_signedobject)
