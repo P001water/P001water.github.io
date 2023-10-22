@@ -5,9 +5,28 @@
     <description> &lt;h1&gt;P001water@c:\Users\maylas\.ssh&lt;/h1&gt; &lt;h3&gt;Do Enjoy youself in hack life&lt;/h3&gt; --------CMD /c 这里是朴水... ... Reply from 1988 !-------</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sat, 21 Oct 2023 20:45:40 +0800</pubDate>
-    <lastBuildDate>Sat, 21 Oct 2023 20:45:40 +0800</lastBuildDate>
+    <pubDate>Sun, 22 Oct 2023 11:11:58 +0800</pubDate>
+    <lastBuildDate>Sun, 22 Oct 2023 11:11:58 +0800</lastBuildDate>
     <generator>Jekyll v4.3.2</generator>
+    
+      <item>
+        <title>Windows cmd and Powershell Obfuscation</title>
+        <description>&lt;p&gt;开个坑&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.wietzebeukema.nl/blog/windows-command-line-obfuscation&quot;&gt;Windows Command-Line Obfuscation (wietzebeukema.nl)&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.wietzebeukema.nl/blog/powershell-obfuscation-using-securestring&quot;&gt;PowerShell Obfuscation using SecureString (wietzebeukema.nl)&lt;/a&gt;&lt;/p&gt;
+</description>
+        <pubDate>Sun, 22 Oct 2023 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/cmd/powershell/2023/10/22/Hvv%E6%BC%AB%E6%B8%B8%E6%97%A5%E8%AE%B0%E4%B8%8E%E6%80%9D%E8%80%83-(copy).html</link>
+        <guid isPermaLink="true">http://localhost:4000/cmd/powershell/2023/10/22/Hvv%E6%BC%AB%E6%B8%B8%E6%97%A5%E8%AE%B0%E4%B8%8E%E6%80%9D%E8%80%83-(copy).html</guid>
+        
+        
+        <category>cmd</category>
+        
+        <category>powershell</category>
+        
+      </item>
     
       <item>
         <title>2023 Hvv漫游日记与思考</title>
@@ -1608,197 +1627,6 @@ namespace ChromeThief
         <pubDate>Fri, 12 May 2023 00:00:00 +0800</pubDate>
         <link>http://localhost:4000/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/Chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E5%87%AD%E6%8D%AE%E7%AA%83%E5%8F%96%E5%92%8CC-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0.html</link>
         <guid isPermaLink="true">http://localhost:4000/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/Chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E5%87%AD%E6%8D%AE%E7%AA%83%E5%8F%96%E5%92%8CC-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0.html</guid>
-        
-        
-        <category>取证</category>
-        
-        <category>windows DPAPI</category>
-        
-      </item>
-    
-      <item>
-        <title>渗透取证技巧--Windows数据保护接口——DPAPI</title>
-        <description>&lt;h1 id=&quot;文前漫谈&quot;&gt;文前漫谈&lt;/h1&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;DPAPI&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Data Protection Application Programming Interface
-数据保护应用程序编程接口
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;​	这是windows贴心的为开发者提供的针对用户身份加密的方案——DPAPI。win程序开发者可以方便的使用该API加密保护敏感数据，这种基于用户身份的加密使得该加密数据仅可被对数据进行加密的用户解密，它是Windows中保护敏感数据的首选API之一，被广泛应用于各种应用程序数据保护部分。&lt;/p&gt;
-
-&lt;p&gt;DPAPI提供了两种方法：基于用户和基于机器的加密。在基于用户的加密中，系统会根据用户的凭据生成一个唯一的主密钥，并将其存储在用户的配置文件中。此主密钥用于加密和解密用户的私密数据。在基于机器的加密中，系统会根据计算机的凭据生成一个唯一的主密钥，并将其存储在本地计算机上。此主密钥用于加密和解密系统级别的数据。&lt;/p&gt;
-
-&lt;p&gt;DPAPI针对用户身份加密的方案可以抽象理解为，不同用户拥有不同的&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DPAPI master key&lt;/code&gt;，一个用户也可能有不同的master key，这个&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;DPAPI master key&lt;/code&gt; 相当于一个密钥，这个调用`DPAPI master key实施加密的过程由系统直接操作，相当于Windows给开发者封装了个加密算法，直接调用就能实现的敏感数据的加密解密保护&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;我们渗透场景中的哪些应用采用了DBAPI&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;
-    &lt;p&gt;Internet Explorer, Google Chrome浏览器保存的登录凭据&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;Outlook, Windows Mai 等的邮箱账户密码&lt;/li&gt;
-  &lt;li&gt;内部FTP管理器帐户密码&lt;/li&gt;
-  &lt;li&gt;共享文件夹和资源访问密码&lt;/li&gt;
-  &lt;li&gt;无线网络帐户密钥和密码&lt;/li&gt;
-  &lt;li&gt;RDP远程桌面连接密码&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h1 id=&quot;dpapi中的重要概念&quot;&gt;DPAPI中的重要概念&lt;/h1&gt;
-
-&lt;h2 id=&quot;function-cryptprotectdata-and-cryptunprotectdata&quot;&gt;Function CryptProtectData and CryptUnprotectData&lt;/h2&gt;
-
-&lt;p&gt;分别是DPAPI的加密和解密函数，详细见文档 &lt;a href=&quot;https://learn.microsoft.com/en-us/windows/win32/api/dpapi/nf-dpapi-cryptprotectdata&quot;&gt;CryptProtectData function (dpapi.h) - Win32 apps | Microsoft Learn&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;Win32 API中的函数，均在Dpapi.h头文件中&lt;/p&gt;
-
-&lt;h2 id=&quot;dpapi-blob&quot;&gt;DPAPI blob&lt;/h2&gt;
-
-&lt;p&gt;在计算机术语中，”blob” 是 “Binary Large Object” 的缩写。它是指一种数据类型或格式，用于存储二进制数据。&lt;/p&gt;
-
-&lt;p&gt;在DPAPI中，”DPAPI blob” 是指使用DPAPI进行加密保护的二进制数据块。但是它实际是个结构体，其中包含了我们的密文&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/dpapi3.png&quot; alt=&quot;未记录的 DPAPI blob 结构&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;master-key&quot;&gt;Master Key：&lt;/h2&gt;
-
-&lt;p&gt;DPAPI的核心&lt;/p&gt;
-
-&lt;p&gt;64字节，用于解密DPAPI blob，使用用户登录密码、SID和16字节随机数加密后保存在Master Key file中&lt;/p&gt;
-
-&lt;p&gt;Example：&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;19c05880b67d50f8231cd8009836e3cdc55610e4877f8b976abd5ca15600d0e759934324c6204b56f02527039e7fc52a1dfb5296d3381aaa7c3eb610dffa32fa
-
-长度是128
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h2 id=&quot;master-key-file&quot;&gt;Master Key file：&lt;/h2&gt;
-
-&lt;p&gt;二进制文件，可使用用户登录密码对其解密，获得Master Key。其所在目录受保护，即使你在资源管理器中开启了显示隐藏文件也看不了，或者cmd的dir命令，也无法看见。不过可以用powershell看，下面介绍。&lt;/p&gt;
-
-&lt;p&gt;分两种：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;用户Master Key file，隐藏属性不可解，位于&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;%APPDATA%\Microsoft\Protect{SID}		//SID是当前用户的安全标识符&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;powershell -Force可以查看（-hidden也能看，不过winows低版本不支持-hidden的参数）&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$path=$env:APPDATA+&quot;\Microsoft\Protect\&quot;+(((iex &quot;whoami /user&quot;)|Out-String).Split(&apos; &apos;))[-1];Get-ChildItem -Force $path.trim()
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230618192232242.png&quot; alt=&quot;image-20230618192232242&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;系统Master Key file，隐藏属性不可见，位于&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;%WINDIR%\System32\Microsoft\Protect\S-1-5-18\User&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;powershell查看&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;Get-ChildItem -Force $env:windir\System32\Microsoft\Protect\S-1-5-18\User		
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230618174621882.png&quot; alt=&quot;image-20230618174621882&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;preferred文件&quot;&gt;Preferred文件：&lt;/h2&gt;
-
-&lt;p&gt;总是位于Master Key file的同级目录，显示当前系统正在使用的MasterKey及其过期时间，默认90天有效期&lt;/p&gt;
-
-&lt;h1 id=&quot;如何获得master-key&quot;&gt;如何获得Master Key&lt;/h1&gt;
-
-&lt;h2 id=&quot;mimikatz从lsassexe进程dump&quot;&gt;mimikatz从lsass.exe进程dump&lt;/h2&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;mimikatz.exe privilege::debug sekurlsa::dpapi &amp;gt; dbapi.txt
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230618181455536.png&quot; alt=&quot;image-20230618181455536&quot; style=&quot;zoom:80%;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;另一种就是离线dump，也差不多就不写了，或许是好处是不需要在对面的机子上用mimikatz？&lt;/p&gt;
-
-&lt;h1 id=&quot;c-实现dpapi加密和解密&quot;&gt;C# 实现DPAPI加密和解密&lt;/h1&gt;
-
-&lt;p&gt;从代码实现来说，我们作为开发者写工具的时候，肯定是对上面所说的master key是无感的。这意味着我们开发工具（比如解密浏览器凭据）的时候，是直接调用Windows api里的两个函数的，举个例子&lt;/p&gt;
-
-&lt;div class=&quot;language-c# highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;System.Security.Cryptography&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;using&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;System.Text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;k&quot;&gt;namespace&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;TestDemo&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-    &lt;span class=&quot;k&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Program&lt;/span&gt;
-    &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-        &lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Main&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;en&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Encrypt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;pool&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;WriteLine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Data encrypt by dpapi：\n&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;en&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;de&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Decrypt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;en&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-            &lt;span class=&quot;n&quot;&gt;Console&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;WriteLine&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Data decrypt by dpapi：\n&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;de&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Encrypt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// first, convert the text to byte array &lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;originalText&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Encoding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Unicode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;GetBytes&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-            &lt;span class=&quot;c1&quot;&gt;// then use Protect() to encrypt your data &lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;encryptedText&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ProtectedData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Protect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;originalText&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataProtectionScope&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CurrentUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Convert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;ToBase64String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encryptedText&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-        &lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;Decrypt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
-            &lt;span class=&quot;c1&quot;&gt;// the encrypted text, converted to byte array &lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;encryptedText&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Convert&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;FromBase64String&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;text&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-            &lt;span class=&quot;c1&quot;&gt;// calling Unprotect() that returns the original text &lt;/span&gt;
-            &lt;span class=&quot;kt&quot;&gt;byte&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;originalText&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ProtectedData&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;Unprotect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;encryptedText&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;DataProtectionScope&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;CurrentUser&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-
-            &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Encoding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Unicode&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nf&quot;&gt;GetString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;originalText&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;调用输出&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230627170101035.png&quot; alt=&quot;image-20230627170101035&quot; style=&quot;zoom:67%;&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;后话&quot;&gt;后话&lt;/h1&gt;
-
-&lt;p&gt;这是我当时遇见的一些问题&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;我们可以使用用户登录密码对Master Key file解密获得Master Key。那么问题来了，只有NTLM Hash的情况下，能否对Master Key file文件解密得到Master Key&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;分情况，如果NTLM Hash能成功解密，拿到用户明文密码，就能通过解密Master Key file文件得到Master Key;&lt;/p&gt;
-
-  &lt;p&gt;如果解密不了，就无法得到Master Key（但是如果能得到NTLM Hash，Master Key大概率也是能抓到的）。&lt;/p&gt;
-
-  &lt;p&gt;为什么？因为最初的DPAPI设计中，解密Master key需要用户密码的 NTLM Hash，导致直接能够通过拿到SAM数据库中用户密码哈希，直接解密得到Master Key，进一步解密任何加密的DPAPI data blob，这个问题在DPAPI的第二版就被修复了，现在master key使用 SHA1 哈希进行加密，MS特意回避了能够通过NTLM Hash解密获得master key的情况。&lt;/p&gt;
-&lt;/blockquote&gt;
-
-</description>
-        <pubDate>Fri, 12 May 2023 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/Windows%E6%95%B0%E6%8D%AE%E4%BF%9D%E6%8A%A4%E6%8E%A5%E5%8F%A3-DBAPI.html</link>
-        <guid isPermaLink="true">http://localhost:4000/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/Windows%E6%95%B0%E6%8D%AE%E4%BF%9D%E6%8A%A4%E6%8E%A5%E5%8F%A3-DBAPI.html</guid>
         
         
         <category>取证</category>
