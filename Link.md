@@ -22,3 +22,10 @@ permalink: /Lnk/
 
 <a href="https://www.zcgonvh.com/">草泥马之家-Windows与.Net..... </a> <br />
 
+
+
+
+
+个人学习积累
+
+<a href="https://p001water.gitbook.io/hou-shen-tou-shou-shu-shi/">后渗透笔记 </a> <br />
