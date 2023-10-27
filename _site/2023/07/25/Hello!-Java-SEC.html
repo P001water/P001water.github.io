@@ -166,6 +166,199 @@ inputStream.readObject();
 
 <p><a href="https://tttang.com/archive/1701/#toc_signedobject">二次反序列化 看我一命通关 - 跳跳糖 (tttang.com)</a></p>
 
+<p>2023.10.25</p>
+
+<hr />
+
+<h1 id="hashmap">HashMap</h1>
+
+<p>java.util.HashMap，java原生类。经典的URLDNS链子</p>
+
+<p>入口 readObject()</p>
+
+<p>用于进入到任意类的hashCode()方法</p>
+
+<h1 id="lazymap">LazyMap</h1>
+
+<p>CC 依赖里的</p>
+
+<p>入口get()方法</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   //利用 get 方法可实现调用 ChainedTransformer#transform()
+    public Object get(Object key) {
+        if (!super.map.containsKey(key)) {
+            //关键点
+            Object value = this.factory.transform(key);
+            super.map.put(key, value);
+            return value;
+        } else {
+            return super.map.get(key);
+        }
+    }
+</code></pre></div></div>
+
+<p>CC 1-7里 几条链子的不同之处就是LazyMap的get()方法</p>
+
+<h1 id="badattributevalueexception">BadAttributeValueException</h1>
+
+<p>javax.management.BadAttributeValueException</p>
+
+<p>入口 readObject()方法</p>
+
+<p>用于触发任意类的 toString() 方法，通常是getter()方法的跳板</p>
+
+<p><img src="./img/image-20231021200240625-1698373075262-2.png" alt="image-20231021200240625" style="zoom: 67%;" /></p>
+
+<p>构造</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>BadAttributeValueExpException poc2 = new BadAttributeValueExpException(1);
+Field val2 =
+Class.forName("javax.management.BadAttributeValueExpException").getDeclaredField("val");
+val2.setAccessible(true);
+val2.set(poc2,json2);
+</code></pre></div></div>
+
+<h1 id="templatesimpl">TemplatesImpl</h1>
+
+<p>经典的加载恶意字节码的链子，是几种链子的入口</p>
+
+<p>入口一 newTransformer()
+newTransformer() -
+ getTransletInstance() -
+  defineTransletClasses() - 
+   loader.defineClass(_bytecodes[i])</p>
+
+<p>入口二 getter()
+getOutputProperties() - 
+ newTransformer().getOutputProperties()</p>
+
+<h1 id="urldns链子">URLDNS链子</h1>
+
+<p>也是串链，Hashmap类的入口配上URL类的触发</p>
+
+<p>入口算是 hashCode()方法</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HashMap.readObject() -
+ HashMap.putVal()
+  HashMap.hash() 
+   key.hashCode()   //key可控，指定为为URL.hashCode()
+    handler.hashCode(); //进入到URL类里
+     HashCode()#getHostAddress()
+</code></pre></div></div>
+
+<p><a href="https://xz.aliyun.com/t/9409#toc-1">CC链 1-7 分析 - 先知社区 (aliyun.com)</a></p>
+
+<h1 id="cc1">CC1</h1>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	Gadget chain:
+		ObjectInputStream.readObject()
+			AnnotationInvocationHandler.readObject()
+				Map(Proxy).entrySet()
+					AnnotationInvocationHandler.invoke()
+						LazyMap.get()
+							ChainedTransformer.transform()
+								ConstantTransformer.transform()
+								InvokerTransformer.transform()
+									Method.invoke()
+										Class.getMethod()
+								InvokerTransformer.transform()
+									Method.invoke()
+										Runtime.getRuntime()
+								InvokerTransformer.transform()
+									Method.invoke()
+										Runtime.exec()
+</code></pre></div></div>
+
+<h1 id="cc2">CC2</h1>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>	Gadget chain:
+		ObjectInputStream.readObject()
+			PriorityQueue.readObject()
+				...
+					TransformingComparator.compare()
+						InvokerTransformer.transform()
+							Method.invoke()
+								Runtime.exec()
+</code></pre></div></div>
+
+<h1 id="cc3">CC3</h1>
+
+<h1 id="-cc4"># CC4</h1>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/*
+ * Variation on CommonsCollections2 that uses InstantiateTransformer instead of
+ * InvokerTransformer.
+ */
+</code></pre></div></div>
+
+<h1 id="cc5">CC5</h1>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/*
+    Gadget chain:
+        ObjectInputStream.readObject()
+            BadAttributeValueExpException.readObject()
+                TiedMapEntry.toString()
+                    LazyMap.get()
+                        ChainedTransformer.transform()
+                            ConstantTransformer.transform()
+                            InvokerTransformer.transform()
+                                Method.invoke()
+                                    Class.getMethod()
+                            InvokerTransformer.transform()
+                                Method.invoke()
+                                    Runtime.getRuntime()
+                            InvokerTransformer.transform()
+                                Method.invoke()
+                                    Runtime.exec()
+
+    Requires:
+       commons-collections
+ */
+/*
+This only works in JDK 8u76 and WITHOUT a security manager
+</code></pre></div></div>
+
+<h1 id="cc6">CC6</h1>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/*
+    Gadget chain:
+        java.io.ObjectInputStream.readObject()
+            java.util.HashSet.readObject()
+                java.util.HashMap.put()
+                java.util.HashMap.hash()
+                    org.apache.commons.collections.keyvalue.TiedMapEntry.hashCode()
+                    org.apache.commons.collections.keyvalue.TiedMapEntry.getValue()
+                        org.apache.commons.collections.map.LazyMap.get()
+                            org.apache.commons.collections.functors.ChainedTransformer.transform()
+                            org.apache.commons.collections.functors.InvokerTransformer.transform()
+                            java.lang.reflect.Method.invoke()
+                                java.lang.Runtime.exec()
+
+    by @matthias_kaiser
+*/
+</code></pre></div></div>
+
+<h1 id="cc7">CC7</h1>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/*
+    Payload method chain:
+
+    java.util.Hashtable.readObject
+    java.util.Hashtable.reconstitutionPut
+    org.apache.commons.collections.map.AbstractMapDecorator.equals
+    java.util.AbstractMap.equals
+    org.apache.commons.collections.map.LazyMap.get
+    org.apache.commons.collections.functors.ChainedTransformer.transform
+    org.apache.commons.collections.functors.InvokerTransformer.transform
+    java.lang.reflect.Method.invoke
+    sun.reflect.DelegatingMethodAccessorImpl.invoke
+    sun.reflect.NativeMethodAccessorImpl.invoke
+    sun.reflect.NativeMethodAccessorImpl.invoke0
+    java.lang.Runtime.exec
+*/
+</code></pre></div></div>
+
+
   </div>
 
 </article>
