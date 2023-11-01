@@ -188,6 +188,52 @@
   <li>微信小程序反编译</li>
 </ul>
 
+<h1 id="六大云元数据地址速查">六大云元数据地址速查</h1>
+
+<p>AWS
+http://169.254.169.254/latest/meta-data/</p>
+
+<p>Google Cloud
+http://metadata/computeMetadata/v1/</p>
+
+<p>Azure
+http://169.254.169.254/metadata/instance?api-version=2017-04-02</p>
+
+<p>Oracle Cloud
+http://169.254.169.254/opc/v1/instance/</p>
+
+<p>阿里云http://100.100.100.200/latest/meta-data/</p>
+
+<p>腾讯云
+http://metadata.tencentyun.com/latest/meta-data/</p>
+
+<p>华为云
+<a href="http://169.254.169.254/">http://169.254.169.254</a></p>
+
+<h1 id="k8s常用命令">k8s常用命令</h1>
+
+<h2 id="etcd数据库">etcd数据库</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kubectl  get pods etcd-master -n kube-system -owide
+#查看etcd的pod在哪个节点上
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>etcdctl get / --prefix=true --keys-only     #列出整个根目录的keys
+
+\etcdctl.exe --endpoints=42.247.81.54:2379 member list #etcd 指定远程节点
+
+
+</code></pre></div></div>
+
+<p>云原生 4C 安全模型，是指在四个层面上考虑云原生的安全：</p>
+
+<ul>
+  <li>Cloud（云或基础设施层）</li>
+  <li>Cluster（Kubernetes 集群层）</li>
+  <li>Container（容器层）</li>
+  <li>Code（代码层）</li>
+</ul>
+
 <hr />
 
 <p>未完……</p>
