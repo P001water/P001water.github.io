@@ -18,7 +18,7 @@ description: "
 
 
 baseurl: "" # the subpath of your site, e.g. /blog
-url: "http://yourdomain.com" # the base hostname & protocol for your site
+url: "https://p001water.github.io/" # the base hostname & protocol for your site
 twitter_username: may1as
 github_username:  may1as
 
