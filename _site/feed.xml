@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Hello, P001&apos;s blog!</title>
-    <description> &lt;h1&gt;P001water@c:\Users\maylas\.ssh&lt;/h1&gt; &lt;h3&gt;Do Enjoy youself in hack life&lt;/h3&gt; --------CMD /c 这里是朴水... -------</description>
-    <link>http://localhost:4000/</link>
-    <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Tue, 04 Jun 2024 23:36:30 +0800</pubDate>
-    <lastBuildDate>Tue, 04 Jun 2024 23:36:30 +0800</lastBuildDate>
+    <title>P001&apos;s blog</title>
+    <description> &lt;h1&gt;P001water&lt;/h1&gt; &lt;h4&gt;红队攻防、安全开发和安全研究&lt;/h4&gt; </description>
+    <link>https://p001water.github.io//</link>
+    <atom:link href="https://p001water.github.io//feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Mon, 23 Sep 2024 13:59:58 +0800</pubDate>
+    <lastBuildDate>Mon, 23 Sep 2024 13:59:58 +0800</lastBuildDate>
     <generator>Jekyll v4.3.2</generator>
     
       <item>
@@ -80,8 +80,8 @@
 
 </description>
         <pubDate>Sun, 22 Oct 2023 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/%E6%8C%81%E4%B9%85%E5%8C%96/2023/10/22/%E6%8C%81%E4%B9%85%E5%8C%96-GhostTask-%E5%88%86%E6%9E%90%E5%92%8C%E5%AD%A6%E4%B9%A0.html</link>
-        <guid isPermaLink="true">http://localhost:4000/%E6%8C%81%E4%B9%85%E5%8C%96/2023/10/22/%E6%8C%81%E4%B9%85%E5%8C%96-GhostTask-%E5%88%86%E6%9E%90%E5%92%8C%E5%AD%A6%E4%B9%A0.html</guid>
+        <link>https://p001water.github.io//%E6%8C%81%E4%B9%85%E5%8C%96/2023/10/22/%E6%8C%81%E4%B9%85%E5%8C%96-GhostTask-%E5%88%86%E6%9E%90%E5%92%8C%E5%AD%A6%E4%B9%A0.html</link>
+        <guid isPermaLink="true">https://p001water.github.io//%E6%8C%81%E4%B9%85%E5%8C%96/2023/10/22/%E6%8C%81%E4%B9%85%E5%8C%96-GhostTask-%E5%88%86%E6%9E%90%E5%92%8C%E5%AD%A6%E4%B9%A0.html</guid>
         
         
         <category>持久化</category>
@@ -89,26 +89,7 @@
       </item>
     
       <item>
-        <title>Windows cmd and Powershell Obfuscation</title>
-        <description>&lt;p&gt;开个坑&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.wietzebeukema.nl/blog/windows-command-line-obfuscation&quot;&gt;Windows Command-Line Obfuscation (wietzebeukema.nl)&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://www.wietzebeukema.nl/blog/powershell-obfuscation-using-securestring&quot;&gt;PowerShell Obfuscation using SecureString (wietzebeukema.nl)&lt;/a&gt;&lt;/p&gt;
-</description>
-        <pubDate>Sun, 22 Oct 2023 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/cmd/powershell/2023/10/22/Windows-cmd-and-Powershell-Obfuscation.html</link>
-        <guid isPermaLink="true">http://localhost:4000/cmd/powershell/2023/10/22/Windows-cmd-and-Powershell-Obfuscation.html</guid>
-        
-        
-        <category>cmd</category>
-        
-        <category>powershell</category>
-        
-      </item>
-    
-      <item>
-        <title>Windows命名管道客户端模拟和PrintSpoofer原理探究</title>
+        <title>渗透技巧--Windows命名管道客户端模拟和PrintSpoofer原理探究</title>
         <description>&lt;blockquote&gt;
   &lt;p&gt;文章首发于Seebug Paper &lt;a href=&quot;https://paper.seebug.org/2090/&quot;&gt;Windows 命名管道客户端模拟和 PrintSpoofer 原理探究 (seebug.org)&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -668,203 +649,11 @@ beacon_exploit_register(&quot;PrintSpoofer&quot;, &quot;PrintSpoofer local eleca
 
 </description>
         <pubDate>Mon, 24 Jul 2023 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/potatoes%E5%AE%B6%E6%97%8F/2023/07/24/Windows%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%A8%A1%E6%8B%9F%E5%92%8CPrintSpoofer%E5%8E%9F%E7%90%86%E6%8E%A2%E7%A9%B6.html</link>
-        <guid isPermaLink="true">http://localhost:4000/potatoes%E5%AE%B6%E6%97%8F/2023/07/24/Windows%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%A8%A1%E6%8B%9F%E5%92%8CPrintSpoofer%E5%8E%9F%E7%90%86%E6%8E%A2%E7%A9%B6.html</guid>
+        <link>https://p001water.github.io//potatoes%E5%AE%B6%E6%97%8F/2023/07/24/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-Windows%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%A8%A1%E6%8B%9F%E5%92%8CPrintSpoofer%E5%8E%9F%E7%90%86%E6%8E%A2%E7%A9%B6.html</link>
+        <guid isPermaLink="true">https://p001water.github.io//potatoes%E5%AE%B6%E6%97%8F/2023/07/24/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-Windows%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%A8%A1%E6%8B%9F%E5%92%8CPrintSpoofer%E5%8E%9F%E7%90%86%E6%8E%A2%E7%A9%B6.html</guid>
         
         
         <category>Potatoes家族</category>
-        
-      </item>
-    
-      <item>
-        <title>红队邮差-邮件安全协议和Swaks伪造邮件</title>
-        <description>&lt;h1 id=&quot;文前漫谈&quot;&gt;文前漫谈&lt;/h1&gt;
-
-&lt;p&gt;打不进去，研究研究钓鱼，21年的DataCon有这个内容，按照paper来的&lt;/p&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://datacon.qianxin.com/blog/archives/277&quot;&gt;DataCon2021优秀解题思路分享-邮件发件人伪造（武汉大学 10TG） – DataCon社区 (qianxin.com)&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;钓鱼邮件还是关注两部分的内容，发件人伪造和如何不进垃圾箱。&lt;/p&gt;
-
-&lt;h1 id=&quot;0x01-前言&quot;&gt;0x01 前言&lt;/h1&gt;
-
-&lt;p&gt;邮件发件协议主要是SMTP(Simple Mail Transfer Protocol)，但是SMTP协议设计之初并没有考虑到太多安全相关的功能，因此导致邮件发件人伪造的攻击层出不穷。&lt;/p&gt;
-
-&lt;p&gt;一个典型的邮件从发送方编写到接收方看到邮件内容的过程如下图所示&lt;/p&gt;
-
-&lt;p&gt;邮件发送流程图&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20211027142825953-1689046605295-4.png&quot; alt=&quot;邮件发送流程图&quot; style=&quot;zoom:80%;&quot; /&gt;&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;发送方通过SMTP协议发给发送方的MTA(Mail Transmission Agent)&lt;/li&gt;
-  &lt;li&gt;发送方的MTA通过SMTP协议发给接收方的MTA&lt;/li&gt;
-  &lt;li&gt;最终接收方使用POP3(Post Office Protocol)或IMAP(Internet Message Access Protocol)协议接收邮件&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;需要注意的是，SMTP协议只能发送邮件，不接受邮件，邮件的接收需要POP3或IMAP来完成&lt;/p&gt;
-
-&lt;p&gt;在这个过程中传输的邮件有很多个字段都是用来指定发送方身份的&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;MailFrom &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SMTP.From&lt;/code&gt;, 这个字段可以理解为信封上指定的发件人&lt;/li&gt;
-  &lt;li&gt;From &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Message.From&lt;/code&gt;, 展示给用户看到的信息上的发件人&lt;/li&gt;
-  &lt;li&gt;Sender, 一般在代发邮件中用来标识代发邮件的来源&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;这些多种的字段就导致实际邮件服务解析时不同邮件客户端可能对显示的内容处理方案不同，从而就导致了发件人伪造的攻击。&lt;/p&gt;
-
-&lt;h1 id=&quot;0x02-邮件安全协议&quot;&gt;0x02 邮件安全协议&lt;/h1&gt;
-
-&lt;p&gt;由于SMTP设计时并没有考虑相关的安全机制，并没有确定邮件来源、邮件内容的可信，为了保证其安全性陆续推出了SPF、DKIM、DMARC等安全协议。&lt;/p&gt;
-
-&lt;h2 id=&quot;spf-域名验证协议&quot;&gt;SPF 域名验证协议&lt;/h2&gt;
-
-&lt;p&gt;SPF，Sender Policy Framework（发件人策略框架），主要作用是防止伪造邮件地址&lt;/p&gt;
-
-&lt;p&gt;SPF记录的本质，是向收件人宣告：本域名的邮件从清单上所列IP发出的都是合法邮件。当在DNS中定义了域名的SPF记录后，为了确认邮件声称发件人不是伪造的，邮件接收方首先检查邮件域名的SPF记录，来确定发件人的IP地址是否被包含在SPF记录中，若包含，则认为是一封正确的邮件，返回 PASS，否则认为是一封伪造的邮件并退回，或将其标记为垃圾/仿冒邮件，返回 FAIL。&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&quot;v=spf1 -all&quot; （拒绝所有，表示这个域名不会发出邮件）
-&quot;v=spf1 +all&quot; （接受所有）
-&quot;v=spf1 ip4:192.168.0.1/16 -all&quot;（只允许 192.168.0.1/16 范围内的IP发送邮件）
-&quot;v=spf1 mx -all&quot;（允许当前域名的 mx 记录对应的IP地址发送邮件）
-&quot;v=spf1 mx mx:test.example.com -all&quot;（允许当前域名和 test.example.com 的 mx 记录对应的IP地址发送邮件）
-&quot;v=spf1 a mx ip4:173.194.72.103 -all&quot;（允许当前域名的 a 记录和 mx 记录和一个给定的IP地址发送邮件）
-&quot;v=spf1 include:example.com -all&quot;（采用和 example.com 一样的SPF记录）
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;以qq.com为例&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230711210048805.png&quot; alt=&quot;image-20230711210048805&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;dkim-邮件防篡改协议&quot;&gt;DKIM 邮件防篡改协议&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20211114120702953.png&quot; alt=&quot;image-20211114120702953&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;DKIM是利用到密码学的签名协议，发件方首先需要在DNS记录上增加自己的公钥，发件时使用自己的私钥对邮件的内容进行签名，并将签名的结果写在邮件内容中，当收件人收到信件时向DNS请求公钥对信件内容进行校验。&lt;/p&gt;
-
-&lt;p&gt;DKIM中几个比较重要的字段有：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;d 表示实际校验的域名&lt;/li&gt;
-  &lt;li&gt;h 表示签名内容的涵盖范围&lt;/li&gt;
-  &lt;li&gt;l 是可选参数，表示body的长度&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;其中l这个参数最初的目的是用于一些商业邮件底部的Unsubscribe相关按钮&lt;/p&gt;
-
-&lt;p&gt;指定了l参数的邮件有可能被伪造body&lt;/p&gt;
-
-&lt;h2 id=&quot;dmarc-身份验证协议&quot;&gt;DMARC 身份验证协议&lt;/h2&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20211114124939276.png&quot; alt=&quot;image-20211114124939276&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;由于SPF协议只能保证发件人的IP是否是域名允许的IP，DKIM只能保证邮件的内容没有经过篡改，两者都没有保护最终收件人看到的From字段是否是一个正确且真实的，因此增加了DMARC协议。&lt;/p&gt;
-
-&lt;p&gt;DMARC协议会根据SPF、DKIM两者验证的返回结果，以及对From字段做的&lt;strong&gt;一致性检查&lt;/strong&gt;，最终给出一个结论，判断这封邮件是应当拒收还是接收。&lt;/p&gt;
-
-&lt;h1 id=&quot;邮件伪造工具-swaks&quot;&gt;邮件伪造工具 Swaks&lt;/h1&gt;
-
-&lt;p&gt;Swaks 命令行邮件伪造工具&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;–to test@gmail.com //接件人邮箱；
-–from test@qq.com //发件人邮箱；
-–ehlo qq.com //伪造邮件ehlo头，即是发件人邮箱的域名。提供身份认证；
-–server mail.smtp2go.com //服务邮件域
-–body “test” //引号中的内容即为邮件正文，可直接引用文件；
-–data ./Desktop/email.txt //将正常源邮件的内容保存成TXT文件，再作为正常邮件发送；
-–header “Subject:标题” //邮件标题;
-–header-X-Mailer gmail.com //X-Mailer标头表示用于起草和发送原始电子邮件的程序
-–h-From: &apos;boss admin@gmail.com&apos; //伪造的发件人邮箱；
-–attach /root/test.txt //附件，必须是绝对路径
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;spf-绕过&quot;&gt;SPF 绕过&lt;/h1&gt;
-
-&lt;p&gt;首先判断是否邮箱地址是否配置了SPF，将结合和上面的描述对照&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;dig -t txt qq.com  //linux&lt;/li&gt;
-  &lt;li&gt;nslookup -type=txt qq.com //windows&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;不存在spf&quot;&gt;不存在SPF&lt;/h2&gt;
-
-&lt;p&gt;指定From字段伪造发件人，不存在SPF时伪造较为简单，但是这里仅仅时网易邮箱客户端的，并没有放入垃圾箱。qq邮箱客户端等会直接放入垃圾箱&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;swaks -to p001water@163.com -from root@seebug.org \
---header-X-Mailer SMTP  --ehlo seebug.org --body &apos;这是钓鱼内容&apos; \	
---attach /app/email/fish.docx --header &quot;Subject:这是一封钓鱼邮件&quot;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/3.jpg&quot; alt=&quot;3&quot; style=&quot;zoom:67%;&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;存在spf&quot;&gt;存在SPF&lt;/h2&gt;
-
-&lt;h3 id=&quot;message-body绕过&quot;&gt;Message Body绕过&lt;/h3&gt;
-
-&lt;p&gt;以qq.com为例，把From字段写在body里&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;swaks --to p001water@163.com --data /app/email/level.eml
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;From: admin@qq.com
-Subject:这是一封钓鱼邮件
-X-Mailer: SMTP
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary=&quot;----=_MIME_BOUNDARY_000_7617&quot;
-X-CM-TRANSID:_____wBXGAQvQK5knv03AA--.3326S2
-Authentication-Results: zwqz-mx-mta-g0-0; spf=none smtp.mail=root@seeb
-	ug.org;
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUIdcTDUUUU
-
-------=_MIME_BOUNDARY_000_7617
-Content-Type: text/plain
-
-这是钓鱼内容
-------=_MIME_BOUNDARY_000_7617
-Content-Type: application/octet-stream; name=&quot;fish.docx&quot;
-Content-Description: fish.docx
-Content-Disposition: attachment; filename=&quot;fish.docx&quot;
-Content-Transfer-Encoding: BASE64
-
-dGVzdAo=
-
-------=_MIME_BOUNDARY_000_7617--
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;缺点就是会显示代发提醒&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230712163022999.png&quot; alt=&quot;image-20230712163022999&quot; style=&quot;zoom:80%;&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;邮件代发&quot;&gt;邮件代发&lt;/h3&gt;
-
-&lt;p&gt;找有信誉的SMTP服务器转发邮件增加可信度，避免邮件直接扔进垃圾箱。缺点就是会有代发记录，现在的思路就是利用邮件客户端的UI Rendering绕过&lt;/p&gt;
-
-&lt;p&gt;常用的代发平台&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://www.sendcloud.net/ //注册简单，推荐
-https://www.smtp2go.com/ //注册难
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;说实话，也挺麻烦&lt;/p&gt;
-
-&lt;h1 id=&quot;如何不进垃圾箱&quot;&gt;如何不进垃圾箱&lt;/h1&gt;
-
-&lt;p&gt;比较中肯的方法还是选择邮件代发平台代发，是否被放入垃圾箱也看对方邮件客户端的安全规则。如果是网易的客户端，直接发也不会被放入垃圾箱&lt;/p&gt;
-
-&lt;p&gt;客户端规则较严直接就进垃圾箱了。或者自己配置邮件服务器，SPF，DKIM，DMARC都通过验证。否则还是只进垃圾箱。&lt;/p&gt;
-
-&lt;p&gt;没找到什么好的方法，没突破。暂完&lt;/p&gt;
-
-</description>
-        <pubDate>Sat, 08 Jul 2023 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/%E9%82%AE%E4%BB%B6%E9%92%93%E9%B1%BC/2023/07/08/%E7%BA%A2%E9%98%9F%E9%82%AE%E5%B7%AE-%E9%82%AE%E4%BB%B6%E5%AE%89%E5%85%A8%E5%8D%8F%E8%AE%AE%E5%92%8CSwaks%E4%BC%AA%E9%80%A0%E9%82%AE%E4%BB%B6.html</link>
-        <guid isPermaLink="true">http://localhost:4000/%E9%82%AE%E4%BB%B6%E9%92%93%E9%B1%BC/2023/07/08/%E7%BA%A2%E9%98%9F%E9%82%AE%E5%B7%AE-%E9%82%AE%E4%BB%B6%E5%AE%89%E5%85%A8%E5%8D%8F%E8%AE%AE%E5%92%8CSwaks%E4%BC%AA%E9%80%A0%E9%82%AE%E4%BB%B6.html</guid>
-        
-        
-        <category>邮件钓鱼</category>
         
       </item>
     
@@ -1061,8 +850,8 @@ https://www.smtp2go.com/ //注册难
 &lt;p&gt;拿到代码后就各自发挥了: )&lt;/p&gt;
 </description>
         <pubDate>Mon, 03 Jul 2023 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/vx%E5%B0%8F%E7%A8%8B%E5%BA%8F/2023/07/03/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-vx%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90%E5%92%8C%E5%8F%8D%E7%BC%96%E8%AF%91%E6%8B%BF%E6%BA%90%E7%A0%81.html</link>
-        <guid isPermaLink="true">http://localhost:4000/vx%E5%B0%8F%E7%A8%8B%E5%BA%8F/2023/07/03/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-vx%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90%E5%92%8C%E5%8F%8D%E7%BC%96%E8%AF%91%E6%8B%BF%E6%BA%90%E7%A0%81.html</guid>
+        <link>https://p001water.github.io//vx%E5%B0%8F%E7%A8%8B%E5%BA%8F/2023/07/03/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-vx%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90%E5%92%8C%E5%8F%8D%E7%BC%96%E8%AF%91%E6%8B%BF%E6%BA%90%E7%A0%81.html</link>
+        <guid isPermaLink="true">https://p001water.github.io//vx%E5%B0%8F%E7%A8%8B%E5%BA%8F/2023/07/03/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-vx%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90%E5%92%8C%E5%8F%8D%E7%BC%96%E8%AF%91%E6%8B%BF%E6%BA%90%E7%A0%81.html</guid>
         
         
         <category>vx小程序</category>
@@ -1195,8 +984,8 @@ http://metadata.tencentyun.com/latest/meta-data/&lt;/p&gt;
 
 </description>
         <pubDate>Mon, 12 Jun 2023 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/%E4%BA%91%E5%AE%89%E5%85%A8/2023/06/12/%E4%BA%91%E4%B8%8A-%E4%BA%91%E4%B8%8A%E5%A4%87%E5%BF%98%E5%BD%95%E5%92%8C%E6%9D%82%E5%AD%A6.html</link>
-        <guid isPermaLink="true">http://localhost:4000/%E4%BA%91%E5%AE%89%E5%85%A8/2023/06/12/%E4%BA%91%E4%B8%8A-%E4%BA%91%E4%B8%8A%E5%A4%87%E5%BF%98%E5%BD%95%E5%92%8C%E6%9D%82%E5%AD%A6.html</guid>
+        <link>https://p001water.github.io//%E4%BA%91%E5%AE%89%E5%85%A8/2023/06/12/%E4%BA%91%E4%B8%8A-%E4%BA%91%E4%B8%8A%E5%A4%87%E5%BF%98%E5%BD%95%E5%92%8C%E6%9D%82%E5%AD%A6.html</link>
+        <guid isPermaLink="true">https://p001water.github.io//%E4%BA%91%E5%AE%89%E5%85%A8/2023/06/12/%E4%BA%91%E4%B8%8A-%E4%BA%91%E4%B8%8A%E5%A4%87%E5%BF%98%E5%BD%95%E5%92%8C%E6%9D%82%E5%AD%A6.html</guid>
         
         
         <category>云安全</category>
@@ -1204,7 +993,7 @@ http://metadata.tencentyun.com/latest/meta-data/&lt;/p&gt;
       </item>
     
       <item>
-        <title>渗透取证技巧--Chrome浏览器密码凭据窃取和C#实现</title>
+        <title>渗透取证--Chrome浏览器密码凭据窃取和C#实现</title>
         <description>&lt;h1 id=&quot;文前漫谈&quot;&gt;文前漫谈&lt;/h1&gt;
 
 &lt;p&gt;权限维持的重要步骤，抓密码。本文通过对Windows DPAPI的基本认识和chrome密码加密机制的理解基础上，编写C#代码实现对chrome浏览器密码的解密&lt;/p&gt;
@@ -1397,8 +1186,8 @@ namespace ChromeThief
 
 </description>
         <pubDate>Fri, 12 May 2023 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/Chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E5%87%AD%E6%8D%AE%E7%AA%83%E5%8F%96%E5%92%8CC-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0.html</link>
-        <guid isPermaLink="true">http://localhost:4000/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/Chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E5%87%AD%E6%8D%AE%E7%AA%83%E5%8F%96%E5%92%8CC-%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0.html</guid>
+        <link>https://p001water.github.io//%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/%E6%B8%97%E9%80%8F%E5%8F%96%E8%AF%81-Chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AF%86%E7%A0%81%E5%87%AD%E6%8D%AE%E7%AA%83%E5%8F%96%E5%92%8CC-%E5%AE%9E%E7%8E%B0.html</link>
+        <guid isPermaLink="true">https://p001water.github.io//%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/%E6%B8%97%E9%80%8F%E5%8F%96%E8%AF%81-Chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AF%86%E7%A0%81%E5%87%AD%E6%8D%AE%E7%AA%83%E5%8F%96%E5%92%8CC-%E5%AE%9E%E7%8E%B0.html</guid>
         
         
         <category>取证</category>
@@ -1408,7 +1197,7 @@ namespace ChromeThief
       </item>
     
       <item>
-        <title>渗透取证技巧--Windows数据保护接口——DPAPI</title>
+        <title>渗透取证--Windows数据保护接口——DPAPI</title>
         <description>&lt;h1 id=&quot;文前漫谈&quot;&gt;文前漫谈&lt;/h1&gt;
 
 &lt;blockquote&gt;
@@ -1588,8 +1377,8 @@ namespace ChromeThief
 
 </description>
         <pubDate>Fri, 12 May 2023 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/Windows%E6%95%B0%E6%8D%AE%E4%BF%9D%E6%8A%A4%E6%8E%A5%E5%8F%A3-DBAPI.html</link>
-        <guid isPermaLink="true">http://localhost:4000/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/Windows%E6%95%B0%E6%8D%AE%E4%BF%9D%E6%8A%A4%E6%8E%A5%E5%8F%A3-DBAPI.html</guid>
+        <link>https://p001water.github.io//%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/%E6%B8%97%E9%80%8F%E5%8F%96%E8%AF%81-Windows%E6%95%B0%E6%8D%AE%E4%BF%9D%E6%8A%A4%E6%8E%A5%E5%8F%A3-DPAPI.html</link>
+        <guid isPermaLink="true">https://p001water.github.io//%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/%E6%B8%97%E9%80%8F%E5%8F%96%E8%AF%81-Windows%E6%95%B0%E6%8D%AE%E4%BF%9D%E6%8A%A4%E6%8E%A5%E5%8F%A3-DPAPI.html</guid>
         
         
         <category>取证</category>
@@ -1599,7 +1388,7 @@ namespace ChromeThief
       </item>
     
       <item>
-        <title>Godzilla-从三种自带加密器看哥斯拉流量-PHP篇</title>
+        <title>Godzilla--从三种自带加密器看哥斯拉流量-PHP篇</title>
         <description>&lt;h1 id=&quot;文前漫谈&quot;&gt;文前漫谈&lt;/h1&gt;
 
 &lt;p&gt;Godzilla - designed by &lt;a href=&quot;https://github.com/BeichenDream&quot;&gt;@BeichenDream&lt;/a&gt;s&lt;/p&gt;
@@ -3020,8 +2809,8 @@ namespace ChromeThief
 
 </description>
         <pubDate>Thu, 27 Apr 2023 14:10:00 +0800</pubDate>
-        <link>http://localhost:4000/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/2023/04/27/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87.html</link>
-        <guid isPermaLink="true">http://localhost:4000/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/2023/04/27/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87.html</guid>
+        <link>https://p001water.github.io//%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/2023/04/27/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87.html</link>
+        <guid isPermaLink="true">https://p001water.github.io//%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/2023/04/27/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87.html</guid>
         
         <category>流量分析，Godzilla</category>
         
@@ -3031,7 +2820,7 @@ namespace ChromeThief
       </item>
     
       <item>
-        <title>漏洞追踪————Net-NTLMv2窃取----By Outlook NTLM Leak</title>
+        <title>漏洞追踪--Net-NTLMv2窃取--By Outlook NTLM Leak</title>
         <description>&lt;blockquote&gt;
   &lt;p&gt;文章首发先知社区&lt;/p&gt;
 
@@ -3041,8 +2830,8 @@ namespace ChromeThief
 &lt;p&gt;后续可能会更新更新&lt;/p&gt;
 </description>
         <pubDate>Mon, 17 Apr 2023 00:00:00 +0800</pubDate>
-        <link>http://localhost:4000/ntlm/2023/04/17/Net-NTLMv2%E7%AA%83%E5%8F%96-By-Outlook-NTLM-Leak.html</link>
-        <guid isPermaLink="true">http://localhost:4000/ntlm/2023/04/17/Net-NTLMv2%E7%AA%83%E5%8F%96-By-Outlook-NTLM-Leak.html</guid>
+        <link>https://p001water.github.io//ntlm/2023/04/17/%E6%BC%8F%E6%B4%9E%E8%BF%BD%E8%B8%AA-Net-NTLMv2%E7%AA%83%E5%8F%96-By-Outlook-NTLM-Leak.html</link>
+        <guid isPermaLink="true">https://p001water.github.io//ntlm/2023/04/17/%E6%BC%8F%E6%B4%9E%E8%BF%BD%E8%B8%AA-Net-NTLMv2%E7%AA%83%E5%8F%96-By-Outlook-NTLM-Leak.html</guid>
         
         <category>内网渗透</category>
         
@@ -3050,6 +2839,566 @@ namespace ChromeThief
         
         
         <category>NTLM</category>
+        
+      </item>
+    
+      <item>
+        <title>渗透技巧--伪协议php://input命令执行的原理</title>
+        <description>&lt;h1 id=&quot;文前漫谈&quot;&gt;文前漫谈&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;文章首发在Freebuf&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;研究几种webshell管理工具时遇见，发现几款常见的webshell管理工具都有对php://input的利用&lt;/p&gt;
+
+&lt;p&gt;本文记录我对php://input原理的学习和思考，如有疏漏失错，还请联系告知&lt;/p&gt;
+
+&lt;p&gt;$HTTP_RAW_POST_DATA的作用和php://input的作用相同，但是PHP 5.6.0. 被废弃了，后面的版本中就是用php://input替代。所有本文省略&lt;/p&gt;
+
+&lt;h1 id=&quot;官方文档的解释&quot;&gt;官方文档的解释&lt;/h1&gt;
+
+&lt;h2 id=&quot;_post数组&quot;&gt;$_POST数组&lt;/h2&gt;
+
+&lt;p&gt;当 HTTP POST 请求的 Content-Type 是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;application/x-www-form-urlencoded&lt;/code&gt;或 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;multipart/form-data&lt;/code&gt;时，会将变量以关联数组形式传入当前脚本。&lt;/p&gt;
+
+&lt;h2 id=&quot;phpinput-伪协议&quot;&gt;php://input 伪协议&lt;/h2&gt;
+
+&lt;p&gt;php://input 是个可以访问请求的原始数据的只读流。当请求方式是post，并且Content-Type不等于&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&quot;multipart/form-data&quot;&lt;/code&gt;时，可以使用php://input来获取原始请求的数据。&lt;/p&gt;
+
+&lt;h1 id=&quot;从post的几种content-type看php的_post-与-phpinput&quot;&gt;从POST的几种Content-Type看PHP的$_POST []与 php://input&lt;/h1&gt;
+
+&lt;p&gt;通常的，在php中我们用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$POST[]&lt;/code&gt;数组来处理封装好的POST请求正文中的内容，下面从http post上传时几种不同的表单编码格式分析$POST[]数组和php://input伪协议在处理post内容时的差别&lt;/p&gt;
+
+&lt;p&gt;POST表单上传时常见有这几种编码：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;multipart/form-data&lt;/li&gt;
+  &lt;li&gt;application/x-www-data-urlencoded&lt;/li&gt;
+  &lt;li&gt;application/json&lt;/li&gt;
+  &lt;li&gt;text/plain&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&quot;multipartform-data-文件上传时的编码&quot;&gt;multipart/form-data (文件上传时的编码)&lt;/h2&gt;
+
+&lt;p&gt;服务端代码&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;form&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;enctype=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;multipart/form-data&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;post&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;name&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;file&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;upload_file&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;button&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;submit&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;submit&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Submit&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Submit&lt;span class=&quot;nt&quot;&gt;&amp;lt;/button&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\$&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;_POST[]: &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;var_dump&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_POST&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;br&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;br&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;php://input: &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;var_dump&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;file_get_contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;php://input&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;上传 upload.txt , form表单如下，文件上传的post包就不多解释了&lt;/p&gt;
+
+&lt;p&gt;boundary=—-WebKitFormBoundaryHwjtGxAgxib9xeFe就是multipart分块传输的分界线&lt;/p&gt;
+
+&lt;p&gt;这个http包我精简过，注意Content-Type即可&lt;/p&gt;
+
+&lt;div class=&quot;language-http highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nf&quot;&gt;POST&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;/test/demo.php&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;192.168.1.136&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Content-Length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;398&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Cache-Control&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;max-age=0&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Upgrade-Insecure-Requests&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Origin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://192.168.1.136&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Content-Type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;multipart/form-data; boundary=----WebKitFormBoundaryHwjtGxAgxib9xeFe&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;User-Agent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Accept&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Referer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://192.168.1.136/test/demo.php&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Accept-Encoding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;gzip, deflate&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Accept-Language&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;en,zh-CN;q=0.9,zh;q=0.8&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Connection&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;close&lt;/span&gt;
+
+------WebKitFormBoundaryHwjtGxAgxib9xeFe
+Content-Disposition: form-data; name=&quot;name&quot;
+
+123456
+------WebKitFormBoundaryHwjtGxAgxib9xeFe
+Content-Disposition: form-data; name=&quot;upload_file&quot;; filename=&quot;upload.txt&quot;
+Content-Type: text/plain
+
+upload test
+------WebKitFormBoundaryHwjtGxAgxib9xeFe
+Content-Disposition: form-data; name=&quot;submit&quot;
+
+Submit
+------WebKitFormBoundaryHwjtGxAgxib9xeFe--
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;看见后端只有$POST[] 数组接收了form表单上传的内容，正如上面说的，当Content-Type: multipart/form-data;，php://input并不起作用&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230403225438175-1680843364971-1.png&quot; alt=&quot;image-20230403225438175&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;applicationx-www-data-urlencoded&quot;&gt;application/x-www-data-urlencoded&lt;/h2&gt;
+
+&lt;p&gt;服务端代码&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;form&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;enctype=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;application/x-www-data-urlencoded&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;post&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;name&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;button&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;submit&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;submit&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Submit&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Submit&lt;span class=&quot;nt&quot;&gt;&amp;lt;/button&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\$&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;_POST[]: &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;var_dump&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_POST&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;br&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;br&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;php://input: &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;var_dump&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;file_get_contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;php://input&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;form表单的内容&lt;/p&gt;
+
+&lt;div class=&quot;language-http highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nf&quot;&gt;POST&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;/test/demo.php&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;192.168.1.136&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Content-Length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;23&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Cache-Control&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;max-age=0&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Upgrade-Insecure-Requests&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Origin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://192.168.1.136&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Content-Type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;application/x-www-form-urlencoded&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;User-Agent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Accept&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Referer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://192.168.1.136/test/demo.php&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Accept-Encoding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;gzip, deflate&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Accept-Language&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;en,zh-CN;q=0.9,zh;q=0.8&lt;/span&gt;
+&lt;span class=&quot;na&quot;&gt;Connection&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;close&lt;/span&gt;
+
+name=demo&amp;amp;submit=Submit
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;$_POST[] 和 php://input都能接收到form表单的内容，也正如上面所说，php://input访问的时原始数据的只读流，后端接收到的和http传输的是相同的，但是解析的结果依然不同&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230403230323508.png&quot; alt=&quot;image-20230403230323508&quot; style=&quot;zoom:67%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这里我突发奇想看看试试如果url编码的结果是什么&lt;/p&gt;
+
+&lt;p&gt;把 ‘demo’ 进行再一次编码url全编码，相当于url二次编码了&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;demo
+-&amp;gt;urlencode
+%31%32%37%2e%30%2e%30%2e%31
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230403231001651.png&quot; alt=&quot;image-20230403231001651&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;这里两者之间就有些差别了，具体原因就是浏览器发包时还会对post请求进行一次url编码，$_POST[]数组的内容是urldecode()之后的，而php://input访问的还是原始数据，也就没有解码&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230403233824446.png&quot; alt=&quot;image-20230403233824446&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;applicationjson&quot;&gt;application/json&lt;/h3&gt;
+
+&lt;p&gt;json格式通常在传输数据时使用，我直接在post包中发送json格式的数据了。其实理所应当的能想到$_POST[]数组是处理不了json格式的数据的，这种情况php只能用php://input读post的数据&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230403234723112.png&quot; alt=&quot;image-20230403234723112&quot; style=&quot;zoom: 50%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;总的来说&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;php://input会接收除了Content_Type: multipart/form-data情况下的内容&lt;/p&gt;
+
+  &lt;p&gt;而$_POST[]数组只处理类型为&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;application/x-www-form-urlencoded&lt;/code&gt; 或 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;multipart/form-data&lt;/code&gt;的情况，因为只有这两种能被直接写成关联数组的形式（就是字典的形式）&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;phpinput-命令执行的原理&quot;&gt;php://input 命令执行的原理&lt;/h2&gt;
+
+&lt;p&gt;请求头中的Content-Type字段告诉服务器后端用户交互上传的是什么类型的数据，$_POST能处理form表单上传的键值对格式（类似字典）的内容，但是处理如上的json格式或者其他格式内容并不会生效。何况php的Content-Type类型且不止这三种&lt;/p&gt;
+
+&lt;p&gt;上面的三个例子也更好的说明了php://input是怎样和为什么要从原始数据的只读流处理post请求包的内容，但这不是php://input能进行命令执行的关键&lt;/p&gt;
+
+&lt;p&gt;它能进行命令执行的关键还是看它和什么函数联动，它本身并不能进行RCE，是处理php://input内容的函数出了问题&lt;/p&gt;
+
+&lt;p&gt;比如经典的远程文件包含&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;include&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_GET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;file&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;file接收php://input的内容，post body里就是完整的php文件内容，这里的关键就是include()函数，它会解析&amp;lt;?php标签，并把后面的代码当作php代码执行，直到读到?&amp;gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230404001117124.png&quot; alt=&quot;image-20230404001117124&quot; style=&quot;zoom:67%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;或者说直接是&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;k&quot;&gt;eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;file_get_contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;php://input&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这种情况根据上面所说，直接在post body里输入php代码就行，连标签都不用加。（注意php://input和全局变量$_POST不同，它通常配合file_get_contents()函数使用）&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230404001948080.png&quot; alt=&quot;image-20230404001948080&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;比如冰蝎4的默认shell&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20230404145214389.png&quot; alt=&quot;image-20230404145214389&quot; style=&quot;zoom: 50%;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;完&quot;&gt;完&lt;/h1&gt;
+
+</description>
+        <pubDate>Fri, 07 Apr 2023 20:55:00 +0800</pubDate>
+        <link>https://p001water.github.io//php/2023/04/07/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-%E4%BC%AA%E5%8D%8F%E8%AE%AEphp-input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86.html</link>
+        <guid isPermaLink="true">https://p001water.github.io//php/2023/04/07/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-%E4%BC%AA%E5%8D%8F%E8%AE%AEphp-input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86.html</guid>
+        
+        <category>PHP</category>
+        
+        <category>php://input</category>
+        
+        
+        <category>PHP</category>
+        
+      </item>
+    
+      <item>
+        <title>CTF--volatility2/3命令小记和闲谈</title>
+        <description>&lt;h2 id=&quot;文前漫谈&quot;&gt;文前漫谈&lt;/h2&gt;
+
+&lt;p&gt;本文记录vol2/3常用命令，同时记录我的使用样例。以前初学时写过一篇，但是太过臃肿了，精简一下方便查阅。&lt;/p&gt;
+
+&lt;p&gt;从CTF的角度，取证和流量分析的题目一定是越来越多的，可能和“我们”的大方向有关，毕竟我们“攻是为了防”；&lt;/p&gt;
+
+&lt;p&gt;从渗透的角度，取证和流量分析大概是Misc里和渗透关系最近的。chrome浏览器的密码解密、Windows的DPAPI机制、webshell加密和解密流量分析等等，比找个工具跑跑脚本就从图片里提出个flag有意思，也更有意义。&lt;/p&gt;
+
+&lt;p&gt;取证是个各显神通的方向，显神通指的就是各位用的是哪家厂商的设备，这种东西事半功倍的效果立竿见影，也就是博客里常见的“一把嗦”。瞎扯了&lt;/p&gt;
+
+&lt;h2 id=&quot;简介&quot;&gt;简介&lt;/h2&gt;
+
+&lt;p&gt;内存取证各家似乎都没有好用的产品，记得某古石，取个正常的内存进行要扫半个小时往上&lt;/p&gt;
+
+&lt;p&gt;建议去看看R-Studio，一款数据恢复软件，结合内存取证有奇效，其他的就看经验和积累了。比如，好东西总是在桌面上，如果不在，就骂出题人吧&lt;/p&gt;
+
+&lt;p&gt;闲谈结束，下面也就是我记得命令笔记了，没啥好看的&lt;/p&gt;
+
+&lt;h1 id=&quot;vol2&quot;&gt;Vol2&lt;/h1&gt;
+
+&lt;p&gt;离线手册：&lt;a href=&quot;https://github.com/volatilityfoundation/volatility/raw/gh-pages/docs/VolatilityCheatSheet.pdf&quot;&gt;Volatility Cheat Sheet&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;to make sure Volatility supports that sample type, run&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;python vol.py imageinfo -f &amp;lt;imagename&amp;gt;&apos; or &apos;python vol.py kdbgscan -f &amp;lt;imagename&amp;gt;&apos;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;here are common commands，带 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; 的常用命令&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;amcache                    - Print AmCache information
+apihooks                   - Detect API hooks in process and kernel memory
+atoms                      - Print session and window station atom tables
+atomscan                   - Pool scanner for atom tables
+auditpol                   - Prints out the Audit Policies from HKLM\SECURITY\Policy\PolAdtEv
+bigpools                   - Dump the big page pools using BigPagePoolScanner
+bioskbd                    - Reads the keyboard buffer from Real Mode memory
+cachedump                  - Dumps cached domain hashes from memory
+callbacks                  - Print system-wide notification routines
+clipboard                  - Extract the contents of the windows clipboard
+*cmdline                    - Display process command-line arguments
+*cmdscan                    - Extract command history by scanning for _COMMAND_HISTORY
+connections                - Print list of open connections [Windows XP and 2003 Only]
+connscan                   - Pool scanner for tcp connections
+consoles                   - Extract command history by scanning for _CONSOLE_INFORMATION
+crashinfo                  - Dump crash-dump information
+deskscan                   - Poolscaner for tagDESKTOP (desktops)
+devicetree                 - Show device tree
+dlldump                    - Dump DLLs from a process address space
+dlllist                    - Print list of loaded dlls for each process
+driverirp                  - Driver IRP hook detection
+drivermodule               - Associate driver objects to kernel modules
+driverscan                 - Pool scanner for driver objects
+dumpcerts                  - Dump RSA private and public SSL keys
+dumpfiles                  - Extract memory mapped and cached files
+dumpregistry               - Dumps registry files out to disk
+editbox                    - Displays information about Edit controls. (Listbox experimental.)
+envars                     - Display process environment variables
+eventhooks                 - Print details on windows event hooks
+evtlogs                    - Extract Windows Event Logs (XP/2003 only)
+*filescan                   - Pool scanner for file objects
+gahti                      - Dump the USER handle type information
+gditimers                  - Print installed GDI timers and callbacks
+gdt                        - Display Global Descriptor Table
+getservicesids             - Get the names of services in the Registry and return Calculated SID
+getsids                    - Print the SIDs owning each process
+handles                    - Print list of open handles for each process
+hashdump                   - Dumps passwords hashes (LM/NTLM) from memory
+hibinfo                    - Dump hibernation file information
+hivedump                   - Prints out a hive
+hivelist                   - Print list of registry hives.
+hivescan                   - Pool scanner for registry hives
+hpakextract                - Extract physical memory from an HPAK file
+hpakinfo                   - Info on an HPAK file
+idt                        - Display Interrupt Descriptor Table
+iehistory                  - Reconstruct Internet Explorer cache / history
+imagecopy                  - Copies a physical address space out as a raw DD image
+imageinfo                  - Identify information for the image
+impscan                    - Scan for calls to imported functions
+joblinks                   - Print process job link information
+kdbgscan                   - Search for and dump potential KDBG values
+kpcrscan                   - Search for and dump potential KPCR values
+ldrmodules                 - Detect unlinked DLLs
+limeinfo                   - Dump Lime file format information
+linux_apihooks             - Checks for userland apihooks
+linux_arp                  - Print the ARP table
+linux_aslr_shift           - Automatically detect the Linux ASLR shift
+linux_banner               - Prints the Linux banner information
+linux_bash                 - Recover bash history from bash process memory
+linux_bash_env             - Recover a process&apos; dynamic environment variables
+linux_bash_hash            - Recover bash hash table from bash process memory
+linux_check_afinfo         - Verifies the operation function pointers of network protocols
+linux_check_creds          - Checks if any processes are sharing credential structures
+linux_check_evt_arm        - Checks the Exception Vector Table to look for syscall table hooking
+linux_check_fop            - Check file operation structures for rootkit modifications
+linux_check_idt            - Checks if the IDT has been altered
+linux_check_inline_kernel  - Check for inline kernel hooks
+linux_check_modules        - Compares module list to sysfs info, if available
+linux_check_syscall        - Checks if the system call table has been altered
+linux_check_syscall_arm    - Checks if the system call table has been altered
+linux_check_tty            - Checks tty devices for hooks
+linux_cpuinfo              - Prints info about each active processor
+linux_dentry_cache         - Gather files from the dentry cache
+linux_dmesg                - Gather dmesg buffer
+linux_dump_map             - Writes selected memory mappings to disk
+linux_dynamic_env          - Recover a process&apos; dynamic environment variables
+linux_elfs                 - Find ELF binaries in process mappings
+linux_enumerate_files      - Lists files referenced by the filesystem cache
+linux_find_file            - Lists and recovers files from memory
+linux_getcwd               - Lists current working directory of each process
+linux_hidden_modules       - Carves memory to find hidden kernel modules
+linux_ifconfig             - Gathers active interfaces
+linux_info_regs            - It&apos;s like &apos;info registers&apos; in GDB. It prints out all the
+linux_iomem                - Provides output similar to /proc/iomem
+linux_kernel_opened_files  - Lists files that are opened from within the kernel
+linux_keyboard_notifiers   - Parses the keyboard notifier call chain
+linux_ldrmodules           - Compares the output of proc maps with the list of libraries from libdl
+linux_library_list         - Lists libraries loaded into a process
+linux_librarydump          - Dumps shared libraries in process memory to disk
+linux_list_raw             - List applications with promiscuous sockets
+linux_lsmod                - Gather loaded kernel modules
+linux_lsof                 - Lists file descriptors and their path
+linux_malfind              - Looks for suspicious process mappings
+linux_memmap               - Dumps the memory map for linux tasks
+linux_moddump              - Extract loaded kernel modules
+linux_mount                - Gather mounted fs/devices
+linux_mount_cache          - Gather mounted fs/devices from kmem_cache
+linux_netfilter            - Lists Netfilter hooks
+linux_netscan              - Carves for network connection structures
+linux_netstat              - Lists open sockets
+linux_pidhashtable         - Enumerates processes through the PID hash table
+linux_pkt_queues           - Writes per-process packet queues out to disk
+linux_plthook              - Scan ELF binaries&apos; PLT for hooks to non-NEEDED images
+linux_proc_maps            - Gathers process memory maps
+linux_proc_maps_rb         - Gathers process maps for linux through the mappings red-black tree
+linux_procdump             - Dumps a process&apos;s executable image to disk
+linux_process_hollow       - Checks for signs of process hollowing
+linux_psaux                - Gathers processes along with full command line and start time
+linux_psenv                - Gathers processes along with their static environment variables
+linux_pslist               - Gather active tasks by walking the task_struct-&amp;gt;task list
+linux_pslist_cache         - Gather tasks from the kmem_cache
+linux_psscan               - Scan physical memory for processes
+linux_pstree               - Shows the parent/child relationship between processes
+linux_psxview              - Find hidden processes with various process listings
+linux_recover_filesystem   - Recovers the entire cached file system from memory
+linux_route_cache          - Recovers the routing cache from memory
+linux_sk_buff_cache        - Recovers packets from the sk_buff kmem_cache
+linux_slabinfo             - Mimics /proc/slabinfo on a running machine
+linux_strings              - Match physical offsets to virtual addresses (may take a while, VERY verbose)
+linux_threads              - Prints threads of processes
+linux_tmpfs                - Recovers tmpfs filesystems from memory
+linux_truecrypt_passphrase - Recovers cached Truecrypt passphrases
+linux_vma_cache            - Gather VMAs from the vm_area_struct cache
+linux_volshell             - Shell in the memory image
+linux_yarascan             - A shell in the Linux memory image
+lsadump                    - Dump (decrypted) LSA secrets from the registry
+mac_adium                  - Lists Adium messages
+mac_apihooks               - Checks for API hooks in processes
+mac_apihooks_kernel        - Checks to see if system call and kernel functions are hooked
+mac_arp                    - Prints the arp table
+mac_bash                   - Recover bash history from bash process memory
+mac_bash_env               - Recover bash&apos;s environment variables
+mac_bash_hash              - Recover bash hash table from bash process memory
+mac_calendar               - Gets calendar events from Calendar.app
+mac_check_fop              - Validate File Operation Pointers
+mac_check_mig_table        - Lists entires in the kernel&apos;s MIG table
+mac_check_syscall_shadow   - Looks for shadow system call tables
+mac_check_syscalls         - Checks to see if system call table entries are hooked
+mac_check_sysctl           - Checks for unknown sysctl handlers
+mac_check_trap_table       - Checks to see if mach trap table entries are hooked
+mac_compressed_swap        - Prints Mac OS X VM compressor stats and dumps all compressed pages
+mac_contacts               - Gets contact names from Contacts.app
+mac_dead_procs             - Prints terminated/de-allocated processes
+mac_dead_sockets           - Prints terminated/de-allocated network sockets
+mac_dead_vnodes            - Lists freed vnode structures
+mac_devfs                  - Lists files in the file cache
+mac_dmesg                  - Prints the kernel debug buffer
+mac_dump_file              - Dumps a specified file
+mac_dump_maps              - Dumps memory ranges of process(es), optionally including pages in compressed swap
+mac_dyld_maps              - Gets memory maps of processes from dyld data structures
+mac_find_aslr_shift        - Find the ASLR shift value for 10.8+ images
+mac_get_profile            - Automatically detect Mac profiles
+mac_ifconfig               - Lists network interface information for all devices
+mac_interest_handlers      - Lists IOKit Interest Handlers
+mac_ip_filters             - Reports any hooked IP filters
+mac_kernel_classes         - Lists loaded c++ classes in the kernel
+mac_kevents                - Show parent/child relationship of processes
+mac_keychaindump           - Recovers possbile keychain keys. Use chainbreaker to open related keychain files
+mac_ldrmodules             - Compares the output of proc maps with the list of libraries from libdl
+mac_librarydump            - Dumps the executable of a process
+mac_list_files             - Lists files in the file cache
+mac_list_kauth_listeners   - Lists Kauth Scope listeners
+mac_list_kauth_scopes      - Lists Kauth Scopes and their status
+mac_list_raw               - List applications with promiscuous sockets
+mac_list_sessions          - Enumerates sessions
+mac_list_zones             - Prints active zones
+mac_lsmod                  - Lists loaded kernel modules
+mac_lsmod_iokit            - Lists loaded kernel modules through IOkit
+mac_lsmod_kext_map         - Lists loaded kernel modules
+mac_lsof                   - Lists per-process opened files
+mac_machine_info           - Prints machine information about the sample
+mac_malfind                - Looks for suspicious process mappings
+mac_memdump                - Dump addressable memory pages to a file
+mac_moddump                - Writes the specified kernel extension to disk
+mac_mount                  - Prints mounted device information
+mac_netstat                - Lists active per-process network connections
+mac_network_conns          - Lists network connections from kernel network structures
+mac_notesapp               - Finds contents of Notes messages
+mac_notifiers              - Detects rootkits that add hooks into I/O Kit (e.g. LogKext)
+mac_orphan_threads         - Lists threads that don&apos;t map back to known modules/processes
+mac_pgrp_hash_table        - Walks the process group hash table
+mac_pid_hash_table         - Walks the pid hash table
+mac_print_boot_cmdline     - Prints kernel boot arguments
+mac_proc_maps              - Gets memory maps of processes
+mac_procdump               - Dumps the executable of a process
+mac_psaux                  - Prints processes with arguments in user land (**argv)
+mac_psenv                  - Prints processes with environment in user land (**envp)
+mac_pslist                 - List Running Processes
+mac_pstree                 - Show parent/child relationship of processes
+mac_psxview                - Find hidden processes with various process listings
+mac_recover_filesystem     - Recover the cached filesystem
+mac_route                  - Prints the routing table
+mac_socket_filters         - Reports socket filters
+mac_strings                - Match physical offsets to virtual addresses (may take a while, VERY verbose)
+mac_tasks                  - List Active Tasks
+mac_threads                - List Process Threads
+mac_threads_simple         - Lists threads along with their start time and priority
+mac_timers                 - Reports timers set by kernel drivers
+mac_trustedbsd             - Lists malicious trustedbsd policies
+mac_version                - Prints the Mac version
+mac_vfsevents              - Lists processes filtering file system events
+mac_volshell               - Shell in the memory image
+mac_yarascan               - Scan memory for yara signatures
+machoinfo                  - Dump Mach-O file format information
+malfind                    - Find hidden and injected code
+mbrparser                  - Scans for and parses potential Master Boot Records (MBRs)
+memdump                    - Dump the addressable memory for a process
+memmap                     - Print the memory map
+messagehooks               - List desktop and thread window message hooks
+mftparser                  - Scans for and parses potential MFT entries
+moddump                    - Dump a kernel driver to an executable file sample
+modscan                    - Pool scanner for kernel modules
+modules                    - Print list of loaded modules
+multiscan                  - Scan for various objects at once
+mutantscan                 - Pool scanner for mutex objects
+netscan                    - Scan a Vista (or later) image for connections and sockets
+notepad                    - List currently displayed notepad text
+objtypescan                - Scan for Windows object type objects
+patcher                    - Patches memory based on page scans
+poolpeek                   - Configurable pool scanner plugin
+pooltracker                - Show a summary of pool tag usage
+printkey                   - Print a registry key, and its subkeys and values
+privs                      - Display process privileges
+procdump                   - Dump a process to an executable file sample
+pslist                     - Print all running processes by following the EPROCESS lists
+psscan                     - Pool scanner for process objects
+pstree                     - Print process list as a tree
+psxview                    - Find hidden processes with various process listings
+qemuinfo                   - Dump Qemu information
+raw2dmp                    - Converts a physical memory sample to a windbg crash dump
+screenshot                 - Save a pseudo-screenshot based on GDI windows
+servicediff                - List Windows services (ala Plugx)
+sessions                   - List details on _MM_SESSION_SPACE (user logon sessions)
+shellbags                  - Prints ShellBags info
+shimcache                  - Parses the Application Compatibility Shim Cache registry key
+shutdowntime               - Print ShutdownTime of machine from registry
+sockets                    - Print list of open sockets
+sockscan                   - Pool scanner for tcp socket objects
+ssdt                       - Display SSDT entries
+strings                    - Match physical offsets to virtual addresses (may take a while, VERY verbose)
+svcscan                    - Scan for Windows services
+symlinkscan                - Pool scanner for symlink objects
+thrdscan                   - Pool scanner for thread objects
+threads                    - Investigate _ETHREAD and _KTHREADs
+timeliner                  - Creates a timeline from various artifacts in memory
+timers                     - Print kernel timers and associated module DPCs
+truecryptmaster            - Recover TrueCrypt 7.1a Master Keys
+truecryptpassphrase        - TrueCrypt Cached Passphrase Finder
+truecryptsummary           - TrueCrypt Summary
+unloadedmodules            - Print list of unloaded modules
+userassist                 - Print userassist registry keys and information
+userhandles                - Dump the USER handle tables
+vaddump                    - Dumps out the vad sections to a file
+vadinfo                    - Dump the VAD info
+vadtree                    - Walk the VAD tree and display in tree format
+vadwalk                    - Walk the VAD tree
+vboxinfo                   - Dump virtualbox information
+verinfo                    - Prints out the version information from PE images
+vmwareinfo                 - Dump VMware VMSS/VMSN information
+volshell                   - Shell in the memory image
+win10cookie                - Find the ObHeaderCookie value for Windows 10
+windows                    - Print Desktop Windows (verbose details)
+wintree                    - Print Z-Order Desktop Windows Tree
+wndscan                    - Pool scanner for window stations
+yarascan                   - Scan process or kernel memory with Yara signatures
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;vol3&quot;&gt;vol3&lt;/h1&gt;
+
+&lt;p&gt;vol3不用识别image了，直接用插件就ok，但是查符号表要联网，有时候需要魔法上网&lt;/p&gt;
+
+&lt;p&gt;查找可用的插件&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ python3 vol.py --help | grep windows | head -n 5
+    windows.bigpools.BigPools
+    windows.cmdline.CmdLine
+    windows.crashinfo.Crashinfo
+    windows.dlllist.DllList
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;使用，以hashdump为例&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ python3 vol.py -f MemDump.DMP windows.hashdump
+Volatility 3 Framework 2.0.3
+Progress:  100.00           PDB scanning finished
+User        rid     lmhash  nthash
+
+Administrator       500         aad3b435b51404eeaad3b435b51404ee    31d6cfe0d16ae931b73c59d7e0c089c0
+Guest               501         aad3b435b51404eeaad3b435b51404ee    31d6cfe0d16ae931b73c59d7e0c089c0
+Frank Reynolds      1000    aad3b435b51404eeaad3b435b51404ee        a88d1e18706d3aa676e01e5943d15911
+HomeGroupUser$      1002    aad3b435b51404eeaad3b435b51404ee        af10ecac6ea817d2bb56e3e5c33ce1cd
+Dennis              1003    aad3b435b51404eeaad3b435b51404ee        cf96684bbc7877920adaa9663698bf54
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;暂时结束--实时更新&quot;&gt;暂时结束- 实时更新&lt;/h1&gt;
+
+</description>
+        <pubDate>Sun, 12 Mar 2023 00:00:00 +0800</pubDate>
+        <link>https://p001water.github.io//%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/vol2/3/2023/03/12/volatility23%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%B0%E5%92%8C%E9%97%B2%E8%B0%88.html</link>
+        <guid isPermaLink="true">https://p001water.github.io//%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/vol2/3/2023/03/12/volatility23%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%B0%E5%92%8C%E9%97%B2%E8%B0%88.html</guid>
+        
+        <category>内存取证</category>
+        
+        
+        <category>内存取证</category>
+        
+        <category>vol2/3</category>
         
       </item>
     

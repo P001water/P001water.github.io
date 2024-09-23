@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta content="P001's blog" property="og:site_name">
+
+  <meta content="渗透技巧--伪协议php://input命令执行的原理" property="og:title">
+
+
+  <meta content="article" property="og:type">
+
+
+  <meta content=" <h1>P001water</h1> <h4>红队攻防、安全开发和安全研究</h4> " property="og:description">
+
+
+  <meta content="https://p001water.github.io//php/2023/04/07/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-%E4%BC%AA%E5%8D%8F%E8%AE%AEphp-input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86.html" property="og:url">
+
+
+  <meta content="2023-04-07T20:55:00+08:00" property="article:published_time">
+  <meta content="https://p001water.github.io//about/" property="article:author">
+
+
+  <meta property="og:image" content="">
+
+
+  
+  <meta content="PHP" property="article:section">
+  
+
+
+  
+  <meta content="PHP" property="article:tag">
+  
+  <meta content="php://input" property="article:tag">
+  
+
+  <title>渗透技巧--伪协议php://input命令执行的原理</title>
+  <meta name="description" content="文前漫谈">
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> -->
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  
+  <!-- <link href='https://fonts.googleapis.com/css?family=PT+Sans' rel='stylesheet' type='text/css'> -->
+  <!-- <link href='https://fonts.googleapis.com/css?family=Fira+Mono' rel='stylesheet' type='text/css'> -->
+  <!-- <link href='https://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'> -->
+  <!-- <link href='https://fonts.googleapis.com/css?family=Source+Code+Pro:400,200,300,500,600,700,900' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Gentium+Basic:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Alegreya:400,400italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Lora:400,400italic,700' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Fira+Sans:400,300,500,700' rel='stylesheet' type='text/css'>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-hQpvDQiCJaD2H465dQfA717v7lu5qHWtDbWNPvaTJ0ID5xnPUlVXnKzq7b8YUkbN" crossorigin="anonymous"> -->
+  <link rel="canonical" href="https://p001water.github.io//php/2023/04/07/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-%E4%BC%AA%E5%8D%8F%E8%AE%AEphp-input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86.html">
+  <link rel="alternate" type="application/rss+xml" title="P001's blog" href="https://p001water.github.io//feed.xml">
+</head>
+
+
+  <body>
+<section>
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">P001's blog</a>
+    </div>
+    
+
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <!-- <ul class="nav navbar-nav">
+        
+        
+        <li><a href="/p1-tools/">P1-tools</a></li>
+        
+        
+        
+        <li><a href="/about/">About me</a></li>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <li><a href="/Posts/">Posts Archive</a></li>
+        
+        
+      </ul> -->
+      <ul class="nav navbar-nav">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <li><a href="/p1-tools/">P1-tools</a></li>
+        
+        
+        
+        <li><a href="/Posts/">Posts Archive</a></li>
+        
+        
+        
+        <li><a href="/about/">About me</a></li>
+        
+        
+      </ul>
+
+    <!--  <ul class="nav navbar-nav navbar-right">
+        <li><a href="#">Know More!</a></li>
+
+      </ul>-->
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+</section>
+
+<section>
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="post-title-main" itemprop="name headline">渗透技巧--伪协议php://input命令执行的原理</h1>
+      <p class="post-meta"><time datetime="2023-04-07T20:55:00+08:00" itemprop="datePublished">Apr 7, 2023</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">P001water</span></span></p>
+      
+    </div>
+
+</div>
+
+
+  <div class="post-content container" itemprop="articleBody">
+    <h1 id="文前漫谈">文前漫谈</h1>
+
+<blockquote>
+  <p>文章首发在Freebuf</p>
+</blockquote>
+
+<p>研究几种webshell管理工具时遇见，发现几款常见的webshell管理工具都有对php://input的利用</p>
+
+<p>本文记录我对php://input原理的学习和思考，如有疏漏失错，还请联系告知</p>
+
+<p>$HTTP_RAW_POST_DATA的作用和php://input的作用相同，但是PHP 5.6.0. 被废弃了，后面的版本中就是用php://input替代。所有本文省略</p>
+
+<h1 id="官方文档的解释">官方文档的解释</h1>
+
+<h2 id="_post数组">$_POST数组</h2>
+
+<p>当 HTTP POST 请求的 Content-Type 是 <code class="language-plaintext highlighter-rouge">application/x-www-form-urlencoded</code>或 <code class="language-plaintext highlighter-rouge">multipart/form-data</code>时，会将变量以关联数组形式传入当前脚本。</p>
+
+<h2 id="phpinput-伪协议">php://input 伪协议</h2>
+
+<p>php://input 是个可以访问请求的原始数据的只读流。当请求方式是post，并且Content-Type不等于<code class="language-plaintext highlighter-rouge">"multipart/form-data"</code>时，可以使用php://input来获取原始请求的数据。</p>
+
+<h1 id="从post的几种content-type看php的_post-与-phpinput">从POST的几种Content-Type看PHP的$_POST []与 php://input</h1>
+
+<p>通常的，在php中我们用<code class="language-plaintext highlighter-rouge">$POST[]</code>数组来处理封装好的POST请求正文中的内容，下面从http post上传时几种不同的表单编码格式分析$POST[]数组和php://input伪协议在处理post内容时的差别</p>
+
+<p>POST表单上传时常见有这几种编码：</p>
+
+<ul>
+  <li>multipart/form-data</li>
+  <li>application/x-www-data-urlencoded</li>
+  <li>application/json</li>
+  <li>text/plain</li>
+</ul>
+
+<h2 id="multipartform-data-文件上传时的编码">multipart/form-data (文件上传时的编码)</h2>
+
+<p>服务端代码</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;form</span> <span class="na">enctype=</span><span class="s">"multipart/form-data"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"name"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"file"</span> <span class="na">name=</span><span class="s">"upload_file"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">name=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"Submit"</span><span class="nt">&gt;</span>Submit<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+<span class="cp">&lt;?php</span>
+<span class="k">echo</span> <span class="s2">"</span><span class="se">\$</span><span class="s2">_POST[]: "</span><span class="p">;</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">);</span>
+<span class="k">echo</span> <span class="s2">"&lt;br&gt;"</span><span class="p">;</span><span class="k">echo</span> <span class="s2">"&lt;br&gt;"</span><span class="p">;</span>
+<span class="k">echo</span> <span class="s2">"php://input: "</span><span class="p">;</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nb">file_get_contents</span><span class="p">(</span><span class="s2">"php://input"</span><span class="p">));</span>
+<span class="cp">?&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>上传 upload.txt , form表单如下，文件上传的post包就不多解释了</p>
+
+<p>boundary=—-WebKitFormBoundaryHwjtGxAgxib9xeFe就是multipart分块传输的分界线</p>
+
+<p>这个http包我精简过，注意Content-Type即可</p>
+
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">POST</span> <span class="nn">/test/demo.php</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">192.168.1.136</span>
+<span class="na">Content-Length</span><span class="p">:</span> <span class="s">398</span>
+<span class="na">Cache-Control</span><span class="p">:</span> <span class="s">max-age=0</span>
+<span class="na">Upgrade-Insecure-Requests</span><span class="p">:</span> <span class="s">1</span>
+<span class="na">Origin</span><span class="p">:</span> <span class="s">http://192.168.1.136</span>
+<span class="na">Content-Type</span><span class="p">:</span> <span class="s">multipart/form-data; boundary=----WebKitFormBoundaryHwjtGxAgxib9xeFe</span>
+<span class="na">User-Agent</span><span class="p">:</span> <span class="s">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span>
+<span class="na">Referer</span><span class="p">:</span> <span class="s">http://192.168.1.136/test/demo.php</span>
+<span class="na">Accept-Encoding</span><span class="p">:</span> <span class="s">gzip, deflate</span>
+<span class="na">Accept-Language</span><span class="p">:</span> <span class="s">en,zh-CN;q=0.9,zh;q=0.8</span>
+<span class="na">Connection</span><span class="p">:</span> <span class="s">close</span>
+
+------WebKitFormBoundaryHwjtGxAgxib9xeFe
+Content-Disposition: form-data; name="name"
+
+123456
+------WebKitFormBoundaryHwjtGxAgxib9xeFe
+Content-Disposition: form-data; name="upload_file"; filename="upload.txt"
+Content-Type: text/plain
+
+upload test
+------WebKitFormBoundaryHwjtGxAgxib9xeFe
+Content-Disposition: form-data; name="submit"
+
+Submit
+------WebKitFormBoundaryHwjtGxAgxib9xeFe--
+
+</code></pre></div></div>
+
+<p>看见后端只有$POST[] 数组接收了form表单上传的内容，正如上面说的，当Content-Type: multipart/form-data;，php://input并不起作用</p>
+
+<p><img src="/img/image-20230403225438175-1680843364971-1.png" alt="image-20230403225438175" style="zoom:50%;" /></p>
+
+<h2 id="applicationx-www-data-urlencoded">application/x-www-data-urlencoded</h2>
+
+<p>服务端代码</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;form</span> <span class="na">enctype=</span><span class="s">"application/x-www-data-urlencoded"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"name"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">name=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"Submit"</span><span class="nt">&gt;</span>Submit<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+<span class="cp">&lt;?php</span>
+<span class="k">echo</span> <span class="s2">"</span><span class="se">\$</span><span class="s2">_POST[]: "</span><span class="p">;</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">);</span>
+<span class="k">echo</span> <span class="s2">"&lt;br&gt;"</span><span class="p">;</span><span class="k">echo</span> <span class="s2">"&lt;br&gt;"</span><span class="p">;</span>
+<span class="k">echo</span> <span class="s2">"php://input: "</span><span class="p">;</span>
+<span class="nb">var_dump</span><span class="p">(</span><span class="nb">file_get_contents</span><span class="p">(</span><span class="s2">"php://input"</span><span class="p">));</span>
+<span class="cp">?&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>form表单的内容</p>
+
+<div class="language-http highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nf">POST</span> <span class="nn">/test/demo.php</span> <span class="k">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="na">Host</span><span class="p">:</span> <span class="s">192.168.1.136</span>
+<span class="na">Content-Length</span><span class="p">:</span> <span class="s">23</span>
+<span class="na">Cache-Control</span><span class="p">:</span> <span class="s">max-age=0</span>
+<span class="na">Upgrade-Insecure-Requests</span><span class="p">:</span> <span class="s">1</span>
+<span class="na">Origin</span><span class="p">:</span> <span class="s">http://192.168.1.136</span>
+<span class="na">Content-Type</span><span class="p">:</span> <span class="s">application/x-www-form-urlencoded</span>
+<span class="na">User-Agent</span><span class="p">:</span> <span class="s">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54</span>
+<span class="na">Accept</span><span class="p">:</span> <span class="s">text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span>
+<span class="na">Referer</span><span class="p">:</span> <span class="s">http://192.168.1.136/test/demo.php</span>
+<span class="na">Accept-Encoding</span><span class="p">:</span> <span class="s">gzip, deflate</span>
+<span class="na">Accept-Language</span><span class="p">:</span> <span class="s">en,zh-CN;q=0.9,zh;q=0.8</span>
+<span class="na">Connection</span><span class="p">:</span> <span class="s">close</span>
+
+name=demo&amp;submit=Submit
+</code></pre></div></div>
+
+<p>$_POST[] 和 php://input都能接收到form表单的内容，也正如上面所说，php://input访问的时原始数据的只读流，后端接收到的和http传输的是相同的，但是解析的结果依然不同</p>
+
+<p><img src="/img/image-20230403230323508.png" alt="image-20230403230323508" style="zoom:67%;" /></p>
+
+<p>这里我突发奇想看看试试如果url编码的结果是什么</p>
+
+<p>把 ‘demo’ 进行再一次编码url全编码，相当于url二次编码了</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>demo
+-&gt;urlencode
+%31%32%37%2e%30%2e%30%2e%31
+</code></pre></div></div>
+
+<p><img src="/img/image-20230403231001651.png" alt="image-20230403231001651" style="zoom:50%;" /></p>
+
+<p>这里两者之间就有些差别了，具体原因就是浏览器发包时还会对post请求进行一次url编码，$_POST[]数组的内容是urldecode()之后的，而php://input访问的还是原始数据，也就没有解码</p>
+
+<p><img src="/img/image-20230403233824446.png" alt="image-20230403233824446" style="zoom:50%;" /></p>
+
+<h3 id="applicationjson">application/json</h3>
+
+<p>json格式通常在传输数据时使用，我直接在post包中发送json格式的数据了。其实理所应当的能想到$_POST[]数组是处理不了json格式的数据的，这种情况php只能用php://input读post的数据</p>
+
+<p><img src="/img/image-20230403234723112.png" alt="image-20230403234723112" style="zoom: 50%;" /></p>
+
+<p>总的来说</p>
+
+<blockquote>
+  <p>php://input会接收除了Content_Type: multipart/form-data情况下的内容</p>
+
+  <p>而$_POST[]数组只处理类型为<code class="language-plaintext highlighter-rouge">application/x-www-form-urlencoded</code> 或 <code class="language-plaintext highlighter-rouge">multipart/form-data</code>的情况，因为只有这两种能被直接写成关联数组的形式（就是字典的形式）</p>
+</blockquote>
+
+<h2 id="phpinput-命令执行的原理">php://input 命令执行的原理</h2>
+
+<p>请求头中的Content-Type字段告诉服务器后端用户交互上传的是什么类型的数据，$_POST能处理form表单上传的键值对格式（类似字典）的内容，但是处理如上的json格式或者其他格式内容并不会生效。何况php的Content-Type类型且不止这三种</p>
+
+<p>上面的三个例子也更好的说明了php://input是怎样和为什么要从原始数据的只读流处理post请求包的内容，但这不是php://input能进行命令执行的关键</p>
+
+<p>它能进行命令执行的关键还是看它和什么函数联动，它本身并不能进行RCE，是处理php://input内容的函数出了问题</p>
+
+<p>比如经典的远程文件包含</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">include</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'file'</span><span class="p">]);</span>
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+
+<p>file接收php://input的内容，post body里就是完整的php文件内容，这里的关键就是include()函数，它会解析&lt;?php标签，并把后面的代码当作php代码执行，直到读到?&gt;</p>
+
+<p><img src="/img/image-20230404001117124.png" alt="image-20230404001117124" style="zoom:67%;" /></p>
+
+<p>或者说直接是</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="k">eval</span><span class="p">(</span><span class="nb">file_get_contents</span><span class="p">(</span><span class="s2">"php://input"</span><span class="p">));</span>
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+
+<p>这种情况根据上面所说，直接在post body里输入php代码就行，连标签都不用加。（注意php://input和全局变量$_POST不同，它通常配合file_get_contents()函数使用）</p>
+
+<p><img src="/img/image-20230404001948080.png" alt="image-20230404001948080" style="zoom:50%;" /></p>
+
+<p>比如冰蝎4的默认shell</p>
+
+<p><img src="/img/image-20230404145214389.png" alt="image-20230404145214389" style="zoom: 50%;" /></p>
+
+<h1 id="完">完</h1>
+
+
+  </div>
+
+</article>
+
+</section>
+<nav class="navbar navbar-default navbar-fixed-bottom">
+  <div class="container footer-content">
+    ByteDance with P001water<br>
+    公众号: 朴过安全的水
+  </div>
+</nav>
+
+  </body>
+
+</html>

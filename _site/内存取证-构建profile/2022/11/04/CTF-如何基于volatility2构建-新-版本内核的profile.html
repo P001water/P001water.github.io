@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta content="P001's blog" property="og:site_name">
 
-  <meta content="About me" property="og:title">
+  <meta content="CTF--如何基于volatility2构建“新”版本内核的profile" property="og:title">
 
 
   <meta content="article" property="og:type">
@@ -16,16 +16,25 @@
   <meta content=" <h1>P001water</h1> <h4>红队攻防、安全开发和安全研究</h4> " property="og:description">
 
 
-  <meta content="https://p001water.github.io//about/" property="og:url">
+  <meta content="https://p001water.github.io//%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-%E6%9E%84%E5%BB%BAprofile/2022/11/04/CTF-%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8Evolatility2%E6%9E%84%E5%BB%BA-%E6%96%B0-%E7%89%88%E6%9C%AC%E5%86%85%E6%A0%B8%E7%9A%84profile.html" property="og:url">
 
+
+  <meta content="2022-11-04T00:00:00+08:00" property="article:published_time">
+  <meta content="https://p001water.github.io//about/" property="article:author">
 
 
   <meta property="og:image" content="">
 
 
+  
+  <meta content="内存取证-构建profile" property="article:section">
+  
 
-  <title>About me</title>
-  <meta name="description" content=" <h1>P001water</h1> <h4>红队攻防、安全开发和安全研究</h4> ">
+
+  
+
+  <title>CTF--如何基于volatility2构建“新”版本内核的profile</title>
+  <meta name="description" content="  取证里算不上难，但是也算中等难度。这种题只能只能出一次  文章发在跳跳糖上了">
 <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script> -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> -->
   <link rel="stylesheet" href="/css/main.css">
@@ -43,7 +52,7 @@
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
   <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-hQpvDQiCJaD2H465dQfA717v7lu5qHWtDbWNPvaTJ0ID5xnPUlVXnKzq7b8YUkbN" crossorigin="anonymous"> -->
-  <link rel="canonical" href="https://p001water.github.io//about/">
+  <link rel="canonical" href="https://p001water.github.io//%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-%E6%9E%84%E5%BB%BAprofile/2022/11/04/CTF-%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8Evolatility2%E6%9E%84%E5%BB%BA-%E6%96%B0-%E7%89%88%E6%9C%AC%E5%86%85%E6%A0%B8%E7%9A%84profile.html">
   <link rel="alternate" type="application/rss+xml" title="P001's blog" href="https://p001water.github.io//feed.xml">
 </head>
 
@@ -119,46 +128,28 @@
 </section>
 
 <section>
-<div class="jumbotron">
-<div class="container">
-  <h1 class="post-title-main" itemprop="name headline">About me</h1>
-<center>  <h4 class="post-title-main" itemprop="name headline"></h4></center>
-</div>
-</div>
-
-<div class="container page-stuff">
-
-  <section>
-    <div class="jumbotron">
-        <div class="container">
-             <h1>P001water</h1> <h4>关于我</h4> 
-        </div>
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="post-title-main" itemprop="name headline">CTF--如何基于volatility2构建“新”版本内核的profile</h1>
+      <p class="post-meta"><time datetime="2022-11-04T00:00:00+08:00" itemprop="datePublished">Nov 4, 2022</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">may1as</span></span></p>
+      
     </div>
-</section>
 
-<div class="manual manual-title">
-  有价值作者通讯录
-</div>
-<div class="manual-content">
 </div>
 
 
+  <div class="post-content container" itemprop="articleBody">
+    <blockquote>
+  <p>取证里算不上难，但是也算中等难度。这种题只能只能出一次</p>
 
-<ul style="list-style-type: none; padding: 0; font-family: Arial, sans-serif; max-width: 600px; margin: 20px auto;">
-  <li style="margin-bottom: 15px; padding: 10px; border: 1px solid #e0e0e0; border-radius: 5px; transition: background-color 0.3s ease;">
-      <a href="https://decoder.cloud/" style="color: #1a73e8; text-decoration: none; font-weight: bold; font-size: 16px; display: block; margin-bottom: 5px;">Decoder's Blog</a>
-      <span style="color: #5f6368; font-size: 14px;">IT Security Tips and Tricks</span>
-  </li>
-  <li style="margin-bottom: 15px; padding: 10px; border: 1px solid #e0e0e0; border-radius: 5px; transition: background-color 0.3s ease;">
-      <a href="https://itm4n.github.io/" style="color: #1a73e8; text-decoration: none; font-weight: bold; font-size: 16px; display: block; margin-bottom: 5px;">itm4n's blog</a>
-      <span style="color: #5f6368; font-size: 14px;">Security Research and Discoveries</span>
-  </li>
-  <li style="margin-bottom: 15px; padding: 10px; border: 1px solid #e0e0e0; border-radius: 5px; transition: background-color 0.3s ease;">
-      <a href="https://www.zcgonvh.com/" style="color: #1a73e8; text-decoration: none; font-weight: bold; font-size: 16px; display: block; margin-bottom: 5px;">草泥马之家</a>
-      <span style="color: #5f6368; font-size: 14px;">Windows与.Net技术探索</span>
-  </li>
-</ul>
-</div>
+  <p>文章发在<a href="https://tttang.com/archive/1801/">跳跳糖</a>上了</p>
+</blockquote>
+
+
+  </div>
+
+</article>
 
 </section>
 <nav class="navbar navbar-default navbar-fixed-bottom">

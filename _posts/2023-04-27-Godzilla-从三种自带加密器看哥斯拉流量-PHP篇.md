@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Godzilla-从三种自带加密器看哥斯拉流量-PHP篇
-author: may1as
+title: Godzilla--从三种自带加密器看哥斯拉流量-PHP篇
+author: P001water
 date: 2023-04-27 14:10:00 +0800
 tags: [流量分析，Godzilla]
 categories: [流量分析]

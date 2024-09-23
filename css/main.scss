@@ -250,6 +250,13 @@ $on-laptop:        800px;
     }
 }
 
+.post-item {
+  display: block;
+  position: relative;
+  line-height: 24px;
+  padding-bottom: 5px;
+  margin: 5px 0;
+}
 
 
 // Import partials from `sass_dir` (defaults to `_sass`)

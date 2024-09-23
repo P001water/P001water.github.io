@@ -6,21 +6,32 @@
 # 'jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
-title: Hello, P001's blog!
+title: P001's blog
 email: P001water@gmail.com
 
 #write html inside the double quotes to display in jumbotron
 description: "
-<h1>P001water@c:\\Users\\maylas\\.ssh</h1>
-<h3>Do Enjoy youself in hack life</h3>
---------CMD /c 这里是朴水... -------"
+<h1>P001water</h1>                               
+<h4>红队攻防、安全开发和安全研究</h4>
+"
 
+postdescription: "
+<h1>P001water</h1>                               
+<h4>文章合集</h4>
+"
 
+p1toolsdescription: "
+<h1>P001water</h1>                               
+<h4>正在维护的工具</h4>
+"
+
+aboutdescription: "
+<h1>P001water</h1>                               
+<h4>关于我</h4>
+"
 
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://p001water.github.io/" # the base hostname & protocol for your site
-twitter_username: may1as
-github_username:  may1as
 
 # Build settings
 markdown: kramdown
