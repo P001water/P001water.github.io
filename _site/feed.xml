@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>P001&apos;s blog</title>
+    <title>P001water-攻防笔记</title>
     <description> &lt;h1&gt;P001water&lt;/h1&gt; &lt;h4&gt;红队攻防、安全开发和安全研究&lt;/h4&gt; </description>
     <link>https://p001water.github.io//</link>
     <atom:link href="https://p001water.github.io//feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 11 Oct 2024 19:35:53 +0800</pubDate>
-    <lastBuildDate>Fri, 11 Oct 2024 19:35:53 +0800</lastBuildDate>
+    <pubDate>Fri, 11 Oct 2024 19:49:47 +0800</pubDate>
+    <lastBuildDate>Fri, 11 Oct 2024 19:49:47 +0800</lastBuildDate>
     <generator>Jekyll v4.3.4</generator>
     
       <item>
