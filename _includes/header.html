@@ -12,15 +12,7 @@
       <a class="navbar-brand" href="{{site.baseurl}}/">{{site.title}}</a>
     </div>
     
-
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-      <!-- <ul class="nav navbar-nav">
-        {% for page in site.pages %}
-        {% if page.title %}
-        <li><a href="{{page.permalink | prepend: site.baseurl }}">{{page.title}}</a></li>
-        {% endif %}
-        {% endfor %}
-      </ul> -->
       <ul class="nav navbar-nav">
         {% assign sorted_pages = site.pages | sort: 'Serialnumber' %}
         {% for page in sorted_pages %}
@@ -30,11 +22,7 @@
         {% endfor %}
       </ul>
 
-    <!--  <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Know More!</a></li>
-
-      </ul>-->
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+    </div>
+  </div>
 </nav>
 </section>

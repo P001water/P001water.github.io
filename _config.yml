@@ -35,3 +35,7 @@ url: "https://p001water.github.io/" # the base hostname & protocol for your site
 
 # Build settings
 markdown: kramdown
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
