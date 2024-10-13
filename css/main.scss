@@ -2,7 +2,7 @@
 # Only the main Sass file needs front matter (the dashes are enough)
 ---
 @charset "utf-8";
-@use "sass:color";
+
 // image in center
 img {
   display: block;
@@ -29,7 +29,6 @@ img {
 .navbar-default .navbar-brand{
   color:#abc0ca !important;
 }
-
 .footer-content{
   text-align: center;
   padding: 0.5em;
@@ -227,8 +226,8 @@ $background-color: #fdfdfd;
 $brand-color:      #25292e;
 
 $grey-color:       #828282;
-$grey-color-light: color.scale($grey-color, $lightness: 40%);
-$grey-color-dark: color.scale($grey-color, $lightness: -25%);
+$grey-color-light: lighten($grey-color, 40%);
+$grey-color-dark:  darken($grey-color, 25%);
 
 // Width of the content area
 $content-width:    800px;
