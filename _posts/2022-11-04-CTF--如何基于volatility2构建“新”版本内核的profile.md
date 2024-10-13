@@ -1,6 +1,6 @@
 ---
 layout: post
-title: CTF--如何基于volatility2构建“新”版本内核的profile
+title: CTF -- 如何基于volatility2构建“新”版本内核的profile
 author: may1as
 date: 2022-11-04
 categories: [内存取证-构建profile]

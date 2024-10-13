@@ -6,7 +6,7 @@
 # 'jekyll serve'. If you change this file, please restart the server process.
 
 # Site settings
-title: P001water-攻防笔记
+title: P001water-Blog
 email: P001water@163.com
 
 #write html inside the double quotes to display in jumbotron
@@ -28,6 +28,11 @@ p1toolsdescription: "
 aboutdescription: "
 <h1>P001water</h1>                               
 <h4>关于我</h4>
+"
+
+lifesharedescription: "
+<h1>P001water</h1>                               
+<h4>天下行走</h4>
 "
 
 baseurl: "" # the subpath of your site, e.g. /blog

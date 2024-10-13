@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <meta content="P001water-攻防笔记" property="og:title">
+  <meta content="P001water-Blog" property="og:title">
 
 
   <meta content="website" property="og:type">
@@ -22,7 +22,7 @@
 
 
 
-  <title>P001water-攻防笔记</title>
+  <title>P001water-Blog</title>
   <meta name="description" content=" <h1>P001water</h1> <h4>红队攻防、安全开发和安全研究</h4> ">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/bootstrap.min.css">
@@ -30,20 +30,20 @@
   <link rel="canonical" href="https://p001water.github.io//">
 
   <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="ATOM Feed" /> <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>P001water-攻防笔记 | P001water 红队攻防、安全开发和安全研究</title>
+<title>P001water-Blog | P001water 红队攻防、安全开发和安全研究</title>
 <meta name="generator" content="Jekyll v4.3.4" />
-<meta property="og:title" content="P001water-攻防笔记" />
+<meta property="og:title" content="P001water-Blog" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="P001water 红队攻防、安全开发和安全研究" />
 <meta property="og:description" content="P001water 红队攻防、安全开发和安全研究" />
 <link rel="canonical" href="https://p001water.github.io//" />
 <meta property="og:url" content="https://p001water.github.io//" />
-<meta property="og:site_name" content="P001water-攻防笔记" />
+<meta property="og:site_name" content="P001water-Blog" />
 <meta property="og:type" content="website" />
 <meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="P001water-攻防笔记" />
+<meta property="twitter:title" content="P001water-Blog" />
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","description":"P001water 红队攻防、安全开发和安全研究","headline":"P001water-攻防笔记","name":"P001water-攻防笔记","url":"https://p001water.github.io//"}</script>
+{"@context":"https://schema.org","@type":"WebSite","description":"P001water 红队攻防、安全开发和安全研究","headline":"P001water-Blog","name":"P001water-Blog","url":"https://p001water.github.io//"}</script>
 <!-- End Jekyll SEO tag -->
 
 </head>
@@ -60,7 +60,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/">P001water-攻防笔记</a>
+      <a class="navbar-brand" href="/">P001water-Blog</a>
     </div>
     
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -68,21 +68,25 @@
         
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
         <li><a href="/p1-tools/">P1-tools</a></li>
         
         
         
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         <li><a href="/Posts/">Posts Archive</a></li>
+        
+        
+        
+        <li><a href="/life-share/">Life 一角</a></li>
         
         
         
@@ -113,7 +117,53 @@
   
   <div class="post-box">
     <div class="post-title">
-    <a class="post-title" href="/%E6%8C%81%E4%B9%85%E5%8C%96/2023/10/22/%E6%8C%81%E4%B9%85%E5%8C%96-GhostTask-%E5%88%86%E6%9E%90%E5%92%8C%E5%AD%A6%E4%B9%A0.html" > 持久化-GhostTask-注册表创建计划任务-分析和学习</a>
+    <a class="post-title" href="/%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80%EF%BC%8C%E6%AD%A6%E5%99%A8%E5%8C%96/2024/10/12/%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80-rcube_webmail%E7%89%88%E6%9C%AC%E6%8E%A2%E6%B5%8B.html" > 渗透基础 -- rcube_webmail邮服版本探测思路和代码实现</a>
+    </div>
+    <div class="post-excerpt">
+      简介 本文介绍了开源产品RoundCube webmail邮件系统的版本探测思路，并用go语言实现工具化、自动化探测。 文章首发于 渗透基础-rcube_webmail版本探测 - 先知社区 (aliyun.com) 正文 0x01 探测思路研究 探测系统版本，最理想的方法就是系统主页html代码中有特定的字符串，比如特定版本对应的hash在主页的html代码中等等。 对于rcube mail，我们先查看它的主页html代码 稍作分析，发现上面html正文中，?s后面的字符串可能符合要求 ?s=1716107237 这里有个验证的小技巧，可以用 1716107237 作为fofa的语句搜索（body=”1716107237”），看是否有足够多的资产的html代码中都有这串字符串，如果结果足够多，那很可能就可以依次判断。不过也只是可能，具体是否可以以此为依据还得从代码中看 1716107237...
+    </div>
+    <div class="posted">
+      posted on
+      <span class="posted-on">
+        Saturday, October 12, 2024
+      </span>
+      <span class="in">
+        in
+      </span>
+      <span class="categories-on">
+        
+        渗透基础，武器化 &nbsp;
+        
+      </span>
+    </div>
+  </div>
+  
+  <div class="post-box">
+    <div class="post-title">
+    <a class="post-title" href="/%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/2024/09/15/%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7-P1soda%E5%92%8CP1finger%E7%9A%84poc%E5%92%8C%E6%8C%87%E7%BA%B9%E4%BF%A1%E6%81%AF.html" > 渗透工具 -- P1soda和P1finger的poc和指纹信息</a>
+    </div>
+    <div class="post-excerpt">
+      P1finger指纹信息 过多，不便展示 P1soda 指纹和POC信息 web指纹 BT-panel-宝塔面板.yaml CMS-ASPCMS.yaml CMS-CMSTOP.yaml CMS-DedeCMS-织梦.yaml CMS-DouPHP-豆皮CMS.yaml CMS-Drupal.yaml CMS-IDEACMS.yaml CMS-JEECMS-江西金磊科技.yaml CMS-KesionCMS.yaml CMS-MetInfo-米拓信息.yaml CMS-NPOINT.yaml CMS-PHPCMS.yaml CMS-PHPSHE.yaml CMS-PublicCMS.yaml CMS-TWCMS.yaml...
+    </div>
+    <div class="posted">
+      posted on
+      <span class="posted-on">
+        Sunday, September 15, 2024
+      </span>
+      <span class="in">
+        in
+      </span>
+      <span class="categories-on">
+        
+        安全工具 &nbsp;
+        
+      </span>
+    </div>
+  </div>
+  
+  <div class="post-box">
+    <div class="post-title">
+    <a class="post-title" href="/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7/2023/10/22/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-Windows%E9%9A%90%E8%94%BD%E5%88%9B%E5%BB%BA%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1-%E5%88%86%E6%9E%90%E5%92%8C%E5%AD%A6%E4%B9%A0.html" > 渗透技巧 -- Windows隐蔽创建计划任务-分析和学习</a>
     </div>
     <div class="post-excerpt">
       文前漫谈 最近一周刚放出来的一个持久化工具 netero1010/GhostTask (github.com)。利用计划任务实现持久化。 号称能够对抗取证调查、利用Silver Ticket创建计划任务横向。 win32编程本身也有对 Task Scheduler的支持 C/C++ Code Example Creating a Task Using NewWorkItem。之前也写过一个调用api的创建计划任务的持久化工具，痛点就是一查就查出来了 ：) 不同的是GhostTask单纯从注册表的角度实现了计划任务的创建，还能够一定程度上实现计划任务的隐蔽。本文对其进行分析学习 Usage...
@@ -128,7 +178,7 @@
       </span>
       <span class="categories-on">
         
-        持久化 &nbsp;
+        渗透技巧 &nbsp;
         
       </span>
     </div>
@@ -136,7 +186,7 @@
   
   <div class="post-box">
     <div class="post-title">
-    <a class="post-title" href="/potatoes%E5%AE%B6%E6%97%8F/2023/07/24/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-Windows%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%A8%A1%E6%8B%9F%E5%92%8CPrintSpoofer%E5%8E%9F%E7%90%86%E6%8E%A2%E7%A9%B6.html" > 渗透技巧--Windows命名管道客户端模拟和PrintSpoofer原理探究</a>
+    <a class="post-title" href="/potatoes%E5%AE%B6%E6%97%8F/2023/07/24/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-Windows%E5%91%BD%E5%90%8D%E7%AE%A1%E9%81%93%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%A8%A1%E6%8B%9F%E5%92%8CPrintSpoofer%E5%8E%9F%E7%90%86%E6%8E%A2%E7%A9%B6.html" > 渗透技巧 -- Windows命名管道客户端模拟和PrintSpoofer原理探究</a>
     </div>
     <div class="post-excerpt">
       文章首发于Seebug Paper Windows 命名管道客户端模拟和 PrintSpoofer 原理探究 (seebug.org) 前言 在Windows的实际渗透中，提权方面我们最常用到的就是众多的土豆家族 关于各种土豆的原理，似乎很多人印象中一直都是这样：利用COM interface的某些特性，诱骗具有System权限的帐户连接我们可控的RPC服务端进行身份验证，然后NTLM relay的过程，拿到System的权限。 现实是，基于这种想法利用的potatoes在win10 1089和server 2019之后基本都已失效了，现在正火热的RoguePotato (NG)，Sweetpotato(集成了Printspoofer等)，BadPotato，GodPotato等，都是结合了命名管道客户端模拟的老技术 命名管道客户端模拟（Named_Pipe_Client_Impersonation）可以说是中后期土豆家族的关键之处，由于微软官方认为从具有SeImpersonate privilege特权的Windows服务账户提升至 NT AUTHORITY/SYSTEM...
@@ -159,7 +209,7 @@
   
   <div class="post-box">
     <div class="post-title">
-    <a class="post-title" href="/vx%E5%B0%8F%E7%A8%8B%E5%BA%8F/2023/07/03/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-vx%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90%E5%92%8C%E5%8F%8D%E7%BC%96%E8%AF%91%E6%8B%BF%E6%BA%90%E7%A0%81.html" > 渗透技巧-vx小程序实例分析和反编译拿源码</a>
+    <a class="post-title" href="/vx%E5%B0%8F%E7%A8%8B%E5%BA%8F/2023/07/03/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-vx%E5%B0%8F%E7%A8%8B%E5%BA%8F%E5%AE%9E%E4%BE%8B%E5%88%86%E6%9E%90%E5%92%8C%E5%8F%8D%E7%BC%96%E8%AF%91%E6%8B%BF%E6%BA%90%E7%A0%81.html" > 渗透技巧 -- vx小程序实例分析和反编译拿源码</a>
     </div>
     <div class="post-excerpt">
       前言 无论是攻防演练还是SRC挖掘，小程序渗透测试已经成为了传统web打点之外、信息收集的重要一步。 17年微信小程序上线，vx小程序的定位是一种全新的连接用户与服务的方式，它可以在微信内被便捷地获取和传播，同时具有出色的使用体验 小程序并非凭空冒出来的一个概念。当微信中的 WebView 逐渐成为移动 Web 的一个重要入口时，微信就有相关的 JS API 了。 它的主要开发语言也是 JavaScript ，小程序的开发同普通的网页开发相比有很大的相似性。因为是JavaScript，所以还是基于用户端运行，也就出现了小程序反编译导致信息泄露的可能。下面就从一个实际项目了解vx小程序的项目结构 小程序项目结构 项目地址：yllg/WXxcx: 微信小程序-e生活 在微信开发者工具中导入e生活项目，打开后IDE自动开启热加载 小程序包含一个描述整体程序的 app...
@@ -182,7 +232,7 @@
   
   <div class="post-box">
     <div class="post-title">
-    <a class="post-title" href="/%E4%BA%91%E5%AE%89%E5%85%A8/2023/06/12/%E4%BA%91%E4%B8%8A-%E4%BA%91%E4%B8%8A%E5%A4%87%E5%BF%98%E5%BD%95%E5%92%8C%E6%9D%82%E5%AD%A6.html" > 云上-云上备忘录和杂学</a>
+    <a class="post-title" href="/%E4%BA%91%E5%AE%89%E5%85%A8/2023/06/12/%E4%BA%91%E4%B8%8A-%E4%BA%91%E4%B8%8A%E5%A4%87%E5%BF%98%E5%BD%95%E5%92%8C%E6%9D%82%E5%AD%A6.html" > 云上 -- 云上备忘录和杂学</a>
     </div>
     <div class="post-excerpt">
       文前漫谈 个人感觉，做云一定要简单看下云官方的SDK文档，也可以看别人产出总结出的文章。你看不懂的“黑话”，可能在官方的文档里都有详细的解释。 对头部的云厂商是这样，私有云肯定也是。著名的CF框架，就是拿到AK后，从开发者的角度利用账户的权限对云上的主机进行批量操作，这本身也是云厂商给客户的正常功能。说白了就是我们接管，“帮运维干活”。 本文记录和介绍云厂商通用概念、云上、学习SDK开发文档遇见的内容。 Access Key 为了保障云主机的安全性，各家云在API调用时均需要验证访问者的身份，以确保访问者具有相关权限。这种验证方式通过Access Key来实现，Access Key由用户自己创建，各家云颁发给云主机的所有者，它由Access Key ID和Access Key Secret构成，其重要性等同于用户的登录密码，代表了账号所有者的身份以及对应的权限。 拿腾讯云举例，其他云厂商都差不多，访问路径： 云产品 &gt; 管理与审计 &gt; 访问密钥 （From...
@@ -205,7 +255,7 @@
   
   <div class="post-box">
     <div class="post-title">
-    <a class="post-title" href="/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/%E6%B8%97%E9%80%8F%E5%8F%96%E8%AF%81-Chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AF%86%E7%A0%81%E5%87%AD%E6%8D%AE%E7%AA%83%E5%8F%96%E5%92%8CC-%E5%AE%9E%E7%8E%B0.html" > 渗透取证--Chrome浏览器密码凭据窃取和C#实现</a>
+    <a class="post-title" href="/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/%E6%B8%97%E9%80%8F%E5%8F%96%E8%AF%81-Chrome%E6%B5%8F%E8%A7%88%E5%99%A8%E5%AF%86%E7%A0%81%E5%87%AD%E6%8D%AE%E7%AA%83%E5%8F%96%E5%92%8CC-%E5%AE%9E%E7%8E%B0.html" > 渗透取证 -- Chrome浏览器密码凭据窃取和C#实现</a>
     </div>
     <div class="post-excerpt">
       文前漫谈 权限维持的重要步骤，抓密码。本文通过对Windows DPAPI的基本认识和chrome密码加密机制的理解基础上，编写C#代码实现对chrome浏览器密码的解密 实际利用下，最好是通过go，c/c++这种改写或者编到cs的插件中，基于.net平台还是有点麻烦，得准备两三个版本。 Chrome的加密过程 将用户保存的账户密码使用AES GCM加密 将AES加密密钥通过Windows DPAPI加密保存在名为Local State的文件中，文件以json格式存储。 将初始化向量与密文连接起来，并将它们保存在名为Login Data的文件中，文件以sqlite数据库形式存储。 Local State——加密密钥存放的位置 %USERPROFILE%\AppData\Local\Google\Chrome\User Data\Login Data 文件以json格式储存，encrypted_key 的值就是Windows dpapi加密过后的AES密钥...
@@ -230,7 +280,7 @@
   
   <div class="post-box">
     <div class="post-title">
-    <a class="post-title" href="/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/%E6%B8%97%E9%80%8F%E5%8F%96%E8%AF%81-Windows%E6%95%B0%E6%8D%AE%E4%BF%9D%E6%8A%A4%E6%8E%A5%E5%8F%A3-DPAPI.html" > 渗透取证--Windows数据保护接口——DPAPI</a>
+    <a class="post-title" href="/%E5%8F%96%E8%AF%81/windows%20dpapi/2023/05/12/%E6%B8%97%E9%80%8F%E5%8F%96%E8%AF%81-Windows%E6%95%B0%E6%8D%AE%E4%BF%9D%E6%8A%A4%E6%8E%A5%E5%8F%A3-DPAPI.html" > 渗透取证 -- Windows数据保护接口——DPAPI</a>
     </div>
     <div class="post-excerpt">
       文前漫谈 DPAPI Data Protection Application Programming Interface 数据保护应用程序编程接口 ​ 这是windows贴心的为开发者提供的针对用户身份加密的方案——DPAPI。win程序开发者可以方便的使用该API加密保护敏感数据，这种基于用户身份的加密使得该加密数据仅可被对数据进行加密的用户解密，它是Windows中保护敏感数据的首选API之一，被广泛应用于各种应用程序数据保护部分。 DPAPI提供了两种方法：基于用户和基于机器的加密。在基于用户的加密中，系统会根据用户的凭据生成一个唯一的主密钥，并将其存储在用户的配置文件中。此主密钥用于加密和解密用户的私密数据。在基于机器的加密中，系统会根据计算机的凭据生成一个唯一的主密钥，并将其存储在本地计算机上。此主密钥用于加密和解密系统级别的数据。 DPAPI针对用户身份加密的方案可以抽象理解为，不同用户拥有不同的DPAPI master key，一个用户也可能有不同的master key，这个DPAPI master key 相当于一个密钥，这个调用`DPAPI master key实施加密的过程由系统直接操作，相当于Windows给开发者封装了个加密算法，直接调用就能实现的敏感数据的加密解密保护...
@@ -255,7 +305,7 @@
   
   <div class="post-box">
     <div class="post-title">
-    <a class="post-title" href="/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/2023/04/27/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87.html" > Godzilla--从三种自带加密器看哥斯拉流量-PHP篇</a>
+    <a class="post-title" href="/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/2023/04/27/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87.html" > Godzilla -- 从三种自带加密器看哥斯拉流量-PHP篇</a>
     </div>
     <div class="post-excerpt">
       文前漫谈 Godzilla - designed by @BeichenDreams 本文记录我对哥斯拉流量的学习，主要分析了php版的shell流量加密解密过程，使用的是当前最新版本的哥斯拉，版本号为v4.01。 三种自带的加密器 生成Godzillz默认的服务端webshell，自带有三种加密器： PHP_EVAL_XOR_BASE64 PHP_XOR_BASE64 PHP_XOR_RAW PHP_XOR_BASE64加密器 笔者觉得应该从这种加密器先讲起，后面的PHP_EVAL_XOR_BASE64等加密器实现原理和它都相同，只是传输形式上的差别。 从http请求的角度看，PHP_XOR_BASE64加密器和PHP_EVAL_XOR_BASE64加密器的区别就是，命令执行的过程中，PHP_XOR_BASE64加密器的http请求正文长度（payload）更短，PHP_EVAL_XOR_BASE64加密器生成的shell服务端的内容就是一句话木马，这个加密器其实还是调用``PHP_XOR_BASE64`加密器的webshell脚本 用Godzilla的PHP_XOR_BASE64加密器生成的webshell内容 整个shell的基本流程就是：服务器接收到哥斯拉发送的第一个请求后，如果此时尚未建立session，将POST请求数据解密后（得到的内容为后续shell操作中所需要用到的相关php函数定义代码）存入session文件中，会话建立完成后，后续哥斯拉只会提交相关操作对应的函数名称和相关参数，这样哥斯拉的命令执行就不需要发送大量的请求数据。 这里的@run()函数是关键，后续的命令执行都以这个函数为入口 存储哥斯拉自定义命令执行函数的session文件 ......
@@ -278,7 +328,7 @@
   
   <div class="post-box">
     <div class="post-title">
-    <a class="post-title" href="/ntlm/2023/04/17/%E6%BC%8F%E6%B4%9E%E8%BF%BD%E8%B8%AA-Net-NTLMv2%E7%AA%83%E5%8F%96-By-Outlook-NTLM-Leak.html" > 漏洞追踪--Net-NTLMv2窃取--By Outlook NTLM Leak</a>
+    <a class="post-title" href="/ntlm/2023/04/17/%E6%BC%8F%E6%B4%9E%E8%BF%BD%E8%B8%AA-Net-NTLMv2%E7%AA%83%E5%8F%96-By-Outlook-NTLM-Leak.html" > 漏洞追踪 -- Net-NTLMv2窃取--By Outlook NTLM Leak</a>
     </div>
     <div class="post-excerpt">
       
@@ -308,7 +358,7 @@
   
   <div class="post-box">
     <div class="post-title">
-    <a class="post-title" href="/php/2023/04/07/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-%E4%BC%AA%E5%8D%8F%E8%AE%AEphp-input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86.html" > 渗透技巧--伪协议php://input命令执行的原理</a>
+    <a class="post-title" href="/php/2023/04/07/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-%E4%BC%AA%E5%8D%8F%E8%AE%AEphp-input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86.html" > 渗透技巧 -- 伪协议php://input命令执行的原理</a>
     </div>
     <div class="post-excerpt">
       文前漫谈 文章首发在Freebuf 研究几种webshell管理工具时遇见，发现几款常见的webshell管理工具都有对php://input的利用 本文记录我对php://input原理的学习和思考，如有疏漏失错，还请联系告知 $HTTP_RAW_POST_DATA的作用和php://input的作用相同，但是PHP 5.6.0. 被废弃了，后面的版本中就是用php://input替代。所有本文省略 官方文档的解释 $_POST数组 当 HTTP POST 请求的 Content-Type 是 application/x-www-form-urlencoded或 multipart/form-data时，会将变量以关联数组形式传入当前脚本。 php://input 伪协议 php://input...
@@ -331,7 +381,7 @@
   
   <div class="post-box">
     <div class="post-title">
-    <a class="post-title" href="/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/vol2/3/2023/03/12/volatility23%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%B0%E5%92%8C%E9%97%B2%E8%B0%88.html" > CTF--volatility2/3命令小记和闲谈</a>
+    <a class="post-title" href="/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/vol2/3/2023/03/12/volatility23%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%B0%E5%92%8C%E9%97%B2%E8%B0%88.html" > CTF -- volatility2/3命令小记和闲谈</a>
     </div>
     <div class="post-excerpt">
       文前漫谈 本文记录vol2/3常用命令，同时记录我的使用样例。以前初学时写过一篇，但是太过臃肿了，精简一下方便查阅。 从CTF的角度，取证和流量分析的题目一定是越来越多的，可能和“我们”的大方向有关，毕竟我们“攻是为了防”； 从渗透的角度，取证和流量分析大概是Misc里和渗透关系最近的。chrome浏览器的密码解密、Windows的DPAPI机制、webshell加密和解密流量分析等等，比找个工具跑跑脚本就从图片里提出个flag有意思，也更有意义。 取证是个各显神通的方向，显神通指的就是各位用的是哪家厂商的设备，这种东西事半功倍的效果立竿见影，也就是博客里常见的“一把嗦”。瞎扯了 简介 内存取证各家似乎都没有好用的产品，记得某古石，取个正常的内存进行要扫半个小时往上 建议去看看R-Studio，一款数据恢复软件，结合内存取证有奇效，其他的就看经验和积累了。比如，好东西总是在桌面上，如果不在，就骂出题人吧 闲谈结束，下面也就是我记得命令笔记了，没啥好看的 Vol2 离线手册：Volatility Cheat Sheet to make sure Volatility supports that sample...
@@ -356,7 +406,7 @@
   
   <div class="post-box">
     <div class="post-title">
-    <a class="post-title" href="/redis%E6%9C%AA%E6%8E%88%E6%9D%83/2022/11/14/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8-Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E6%BC%8F%E6%B4%9E%E4%B8%8E%E7%BB%84%E5%90%88%E6%8B%B3.html" > 渗透技巧--面试经典 Redis未授权漏洞与组合拳</a>
+    <a class="post-title" href="/redis%E6%9C%AA%E6%8E%88%E6%9D%83/2022/11/14/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-%E9%9D%A2%E8%AF%95%E7%BB%8F%E5%85%B8-Redis%E6%9C%AA%E6%8E%88%E6%9D%83%E6%BC%8F%E6%B4%9E%E4%B8%8E%E7%BB%84%E5%90%88%E6%8B%B3.html" > 渗透技巧 -- 面试经典 Redis未授权漏洞与组合拳</a>
     </div>
     <div class="post-excerpt">
       
@@ -385,7 +435,7 @@
   
   <div class="post-box">
     <div class="post-title">
-    <a class="post-title" href="/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/usb/2022/11/05/CTF-CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC.html" > CTF--CTF中我的USB键盘鼠标流量解密指南和脚本</a>
+    <a class="post-title" href="/%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/usb/2022/11/05/CTF-CTF%E4%B8%AD%E6%88%91%E7%9A%84USB%E9%94%AE%E7%9B%98%E9%BC%A0%E6%A0%87%E6%B5%81%E9%87%8F%E8%A7%A3%E5%AF%86%E6%8C%87%E5%8D%97%E5%92%8C%E8%84%9A%E6%9C%AC.html" > CTF -- CTF中我的USB键盘鼠标流量解密指南和脚本</a>
     </div>
     <div class="post-excerpt">
       文章首发于freebuf 文前漫谈 对ctf中的USB做一个了断吧，先摆上一些概念性的东西 USB是 UniversalSerial Bus（通用串行总线）的缩写，是一个外部总线标准，用于规范电脑与外部设备的连接和通讯，例如键盘、鼠标、打印机、磁盘或网络适配器等等。通过对该接口流量的监听，我们可以得到取键盘敲击键、鼠标移动与点击、存储设备的铭文传输通信、USB无线网卡网络传输内容等等。 USB的几种用途 现在USB协议版本有USB2.0, USB3.1,USB3.2, USB4等，目前USB2.0/3.0比较常用，你在淘宝上买U盘的时候可能看见过很多“USB 3.0”。 闲谈哈，你可能听过USB3.1的概念，是某苹果为了装逼提出来的，跟USB3.0差别不大，但是人家是老大哥啊，所有慢慢都向大哥看齐，都流行说USB3.1 USB UART 异步串行通信口(UART)就是我们在嵌入式中常说的串口，它还是一种通用的数据通信协议。这种方式下，设备只是简单的将 USB 用于接受和发射数据，除此之外就再没有其他通讯功能了。 USB HID（Human Interface...
@@ -410,7 +460,7 @@
   
   <div class="post-box">
     <div class="post-title">
-    <a class="post-title" href="/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-%E6%9E%84%E5%BB%BAprofile/2022/11/04/CTF-%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8Evolatility2%E6%9E%84%E5%BB%BA-%E6%96%B0-%E7%89%88%E6%9C%AC%E5%86%85%E6%A0%B8%E7%9A%84profile.html" > CTF--如何基于volatility2构建“新”版本内核的profile</a>
+    <a class="post-title" href="/%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81-%E6%9E%84%E5%BB%BAprofile/2022/11/04/CTF-%E5%A6%82%E4%BD%95%E5%9F%BA%E4%BA%8Evolatility2%E6%9E%84%E5%BB%BA-%E6%96%B0-%E7%89%88%E6%9C%AC%E5%86%85%E6%A0%B8%E7%9A%84profile.html" > CTF -- 如何基于volatility2构建“新”版本内核的profile</a>
     </div>
     <div class="post-excerpt">
       
@@ -439,7 +489,7 @@
   
   <div class="post-box">
     <div class="post-title">
-    <a class="post-title" href="/%E6%8F%90%E6%9D%83/2022/10/31/CTF-2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84SUID%E6%8F%90%E6%9D%83.html" > CTF--2022蓝帽杯遇见的SUID提权</a>
+    <a class="post-title" href="/%E6%8F%90%E6%9D%83/2022/10/31/CTF-2022%E8%93%9D%E5%B8%BD%E6%9D%AF%E9%81%87%E8%A7%81%E7%9A%84SUID%E6%8F%90%E6%9D%83.html" > CTF -- 2022蓝帽杯遇见的SUID提权</a>
     </div>
     <div class="post-excerpt">
       感谢我糖，文章发在跳跳糖上了 当时写的太麻烦， 三个命令完事上网站看看有没有可利用的文件，GTFOBins find / -user root -perm -4000 -print 2&gt;/dev/null find / -perm -u=s -type f 2&gt;/dev/null find /...

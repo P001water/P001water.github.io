@@ -1,14 +1,14 @@
 ---
 layout: post
-title:  "渗透工具-P1soda和P1finger的poc和指纹信息"
-date: 2025-09-15
+title:  "渗透工具 -- P1soda和P1finger的poc和指纹信息"
+date: 2024-09-15
 categories: 安全工具
 ---
 
 # P1finger指纹信息
 
 ```
-
+过多，不便展示
 ```
 
 

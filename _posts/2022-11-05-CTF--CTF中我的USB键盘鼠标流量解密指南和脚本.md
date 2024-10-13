@@ -1,6 +1,6 @@
 ---
 layout: post
-title: CTF--CTF中我的USB键盘鼠标流量解密指南和脚本
+title: CTF -- CTF中我的USB键盘鼠标流量解密指南和脚本
 author: P001water
 date: 2022-11-05
 categories: [流量分析, USB]

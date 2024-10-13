@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta content="渗透基础 -- rcube_webmail邮服版本探测思路和代码实现" property="og:title">
+
+
+  <meta content="article" property="og:type">
+
+
+  <meta content=" <h1>P001water</h1> <h4>红队攻防、安全开发和安全研究</h4> " property="og:description">
+
+
+  <meta content="https://p001water.github.io//%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80%EF%BC%8C%E6%AD%A6%E5%99%A8%E5%8C%96/2024/10/12/%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80-rcube_webmail%E7%89%88%E6%9C%AC%E6%8E%A2%E6%B5%8B.html" property="og:url">
+
+
+  <meta content="2024-10-12T00:00:00+08:00" property="article:published_time">
+  <meta content="https://p001water.github.io//about/" property="article:author">
+
+
+  <meta property="og:image" content="">
+
+
+  
+  <meta content="渗透基础，武器化" property="article:section">
+  
+
+
+  
+
+  <title>渗透基础 -- rcube_webmail邮服版本探测思路和代码实现</title>
+  <meta name="description" content="简介">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  
+  <link rel="canonical" href="https://p001water.github.io//%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80%EF%BC%8C%E6%AD%A6%E5%99%A8%E5%8C%96/2024/10/12/%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80-rcube_webmail%E7%89%88%E6%9C%AC%E6%8E%A2%E6%B5%8B.html">
+
+  <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="ATOM Feed" /> <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>渗透基础 – rcube_webmail邮服版本探测思路和代码实现 | P001water-Blog</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="渗透基础 – rcube_webmail邮服版本探测思路和代码实现" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="简介" />
+<meta property="og:description" content="简介" />
+<link rel="canonical" href="https://p001water.github.io//%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80%EF%BC%8C%E6%AD%A6%E5%99%A8%E5%8C%96/2024/10/12/%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80-rcube_webmail%E7%89%88%E6%9C%AC%E6%8E%A2%E6%B5%8B.html" />
+<meta property="og:url" content="https://p001water.github.io//%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80%EF%BC%8C%E6%AD%A6%E5%99%A8%E5%8C%96/2024/10/12/%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80-rcube_webmail%E7%89%88%E6%9C%AC%E6%8E%A2%E6%B5%8B.html" />
+<meta property="og:site_name" content="P001water-Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-10-12T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="渗透基础 – rcube_webmail邮服版本探测思路和代码实现" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-10-12T00:00:00+08:00","datePublished":"2024-10-12T00:00:00+08:00","description":"简介","headline":"渗透基础 – rcube_webmail邮服版本探测思路和代码实现","mainEntityOfPage":{"@type":"WebPage","@id":"https://p001water.github.io//%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80%EF%BC%8C%E6%AD%A6%E5%99%A8%E5%8C%96/2024/10/12/%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80-rcube_webmail%E7%89%88%E6%9C%AC%E6%8E%A2%E6%B5%8B.html"},"url":"https://p001water.github.io//%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80%EF%BC%8C%E6%AD%A6%E5%99%A8%E5%8C%96/2024/10/12/%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80-rcube_webmail%E7%89%88%E6%9C%AC%E6%8E%A2%E6%B5%8B.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+<section>
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">P001water-Blog</a>
+    </div>
+    
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        
+        
+        
+        <li><a href="/p1-tools/">P1-tools</a></li>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <li><a href="/Posts/">Posts Archive</a></li>
+        
+        
+        
+        <li><a href="/life-share/">Life 一角</a></li>
+        
+        
+        
+        <li><a href="/about/">About me</a></li>
+        
+        
+      </ul>
+
+    </div>
+  </div>
+</nav>
+</section>
+
+<section>
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="post-title-main" itemprop="name headline">渗透基础 -- rcube_webmail邮服版本探测思路和代码实现</h1>
+      <p class="post-meta"><time datetime="2024-10-12T00:00:00+08:00" itemprop="datePublished">Oct 12, 2024</time></p>
+      
+    </div>
+
+</div>
+
+
+  <div class="post-content container" itemprop="articleBody">
+    <h1 id="简介">简介</h1>
+
+<p>本文介绍了开源产品RoundCube webmail邮件系统的版本探测思路，并用go语言实现工具化、自动化探测。</p>
+
+<blockquote>
+  <p>文章首发于 <a href="https://xz.aliyun.com/t/15765?time__1311=GqjxnQiQ0%3DdQqGNDQiKiI2R3ooi%3DKzqa4D">渗透基础-rcube_webmail版本探测 - 先知社区 (aliyun.com)</a></p>
+</blockquote>
+
+<h1 id="正文">正文</h1>
+
+<h2 id="0x01-探测思路研究">0x01 探测思路研究</h2>
+
+<p>探测系统版本，最理想的方法就是系统主页html代码中有特定的字符串，比如特定版本对应的hash在主页的html代码中等等。</p>
+
+<p>对于rcube mail，我们先查看它的主页html代码</p>
+
+<p><img src="/img/image-20240927023732769.png" alt="image-20240927023732769" style="zoom:57%;" /></p>
+
+<p>稍作分析，发现上面html正文中，<code class="language-plaintext highlighter-rouge">?s</code>后面的字符串可能符合要求</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>?s=1716107237
+</code></pre></div></div>
+
+<p>这里有个验证的小技巧，可以用 <code class="language-plaintext highlighter-rouge">1716107237</code> 作为fofa的语句搜索（body=”1716107237”），看是否有足够多的资产的html代码中都有这串字符串，如果结果足够多，那很可能就可以依次判断。不过也只是可能，具体是否可以以此为依据还得从代码中看 <code class="language-plaintext highlighter-rouge">1716107237</code> 是如何生成的</p>
+
+<p>比如下图，资产足够多，起码能排除是随机生成的可能</p>
+
+<p><img src="/img/image-20240927025528660.png" alt="image-20240927025528660" style="zoom:57%;" /></p>
+
+<h2 id="0x02-探测思路判断">0x02 探测思路判断</h2>
+
+<p>由于rcube mail是个开源软件。我们即可直接从源代码中分析 <code class="language-plaintext highlighter-rouge">?s=</code> 后的值是如何得到的</p>
+
+<p>全局搜索 <code class="language-plaintext highlighter-rouge">?s=</code> 后，很快定位到下面的函数</p>
+
+<p><img src="/img/image-20240927175742113.png" alt="image-20240927175742113" style="zoom:57%;" /></p>
+
+<p><em>\rcmail_output_html::file_mod</em></p>
+
+<p>参考代码可知，<code class="language-plaintext highlighter-rouge">?s=1716107237</code> -&gt; filemtime()函数（如下图） -&gt; 这串数字即是文件的最后修改时间。</p>
+
+<p><img src="/img/image-20240927211814934.png" alt="image-20240927211814934" style="zoom:57%;" /></p>
+
+<p>理论上静态文件可能修改较少无法作为判断的依据，因为修改可能较少</p>
+
+<p>实际测试发现rcube mail每个版本的文件最后修改时间都不同。可能是使用了Jenkins这种构建工具，每次重新生成代码导致每个发布版本的文件都会新建，导致即使文件内容不变动，文件的最后修改时间还是会变。</p>
+
+<p>我们即可依据此作为判断</p>
+
+<h2 id="0x03-实现细节">0x03 实现细节</h2>
+
+<p>依据上面的思路，我们要实现版本检测，大致步骤如下</p>
+
+<ol>
+  <li>下载全部版本的rcubemail</li>
+  <li>计算 jquery.min.js 或其他静态资源文件的最后修改时间</li>
+  <li>建立rcube mail版本和文件最后修改时间的映射</li>
+  <li>go语言实现发送请求从目标html代码中取得 <code class="language-plaintext highlighter-rouge">?s=</code> 后的字符串，以此判断</li>
+</ol>
+
+<p>实现过程中下载全部版本的rcubemail较为麻烦，截至文章发布日最新版本是 v1.6.9，大致估略版本不少于70个，</p>
+
+<p>肯定不能手动下载。</p>
+
+<p>解决办法：</p>
+
+<p>这里用了github的REST api，从下面api地址获取rcubemail的全部版本</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>https://api.github.com/repos/roundcube/roundcubemail/releases
+</code></pre></div></div>
+
+<p>解析api返回的json数据，提取对应版本压缩包地址然后下载即可，关键代码如下</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>		<span class="c">// github releases API URL</span>
+		<span class="n">url</span> <span class="o">:=</span> <span class="s">"https://api.github.com/repos/roundcube/roundcubemail/releases"</span>
+
+		<span class="k">if</span> <span class="n">SocksProxy</span> <span class="o">!=</span> <span class="s">""</span> <span class="p">{</span>
+			<span class="n">CustomhttpClient</span> <span class="o">=</span> <span class="n">httputils</span><span class="o">.</span><span class="n">NewHttpClient</span><span class="p">(</span>
+				<span class="n">httputils</span><span class="o">.</span><span class="n">WithSocks5Proxy</span><span class="p">(</span><span class="n">SocksProxy</span><span class="p">),</span>
+			<span class="p">)</span>
+		<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+			<span class="n">CustomhttpClient</span> <span class="o">=</span> <span class="n">httputils</span><span class="o">.</span><span class="n">NewHttpClient</span><span class="p">()</span>
+		<span class="p">}</span>
+
+		<span class="n">JsonResp</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">httputils</span><span class="o">.</span><span class="n">HttpWithSocks</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">CustomhttpClient</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"Error making request:"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+		<span class="k">defer</span> <span class="n">JsonResp</span><span class="o">.</span><span class="n">Body</span><span class="o">.</span><span class="n">Close</span><span class="p">()</span>
+
+		<span class="n">body</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">io</span><span class="o">.</span><span class="n">ReadAll</span><span class="p">(</span><span class="n">JsonResp</span><span class="o">.</span><span class="n">Body</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"Error reading response body:"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+
+		<span class="k">var</span> <span class="n">releases</span> <span class="p">[]</span><span class="k">struct</span> <span class="p">{</span>
+			<span class="n">Assets</span> <span class="p">[]</span><span class="n">Asset</span> <span class="s">`json:"assets"`</span>
+		<span class="p">}</span>
+		<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">json</span><span class="o">.</span><span class="n">Unmarshal</span><span class="p">(</span><span class="n">body</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">releases</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"Error parsing JSON:"</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+
+		<span class="n">gologger</span><span class="o">.</span><span class="n">Info</span><span class="p">()</span><span class="o">.</span><span class="n">Msgf</span><span class="p">(</span><span class="s">"Matching download URLs:"</span><span class="p">)</span>
+		<span class="k">var</span> <span class="n">wg</span> <span class="n">sync</span><span class="o">.</span><span class="n">WaitGroup</span>
+		<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">release</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">releases</span> <span class="p">{</span>
+			<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">asset</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">release</span><span class="o">.</span><span class="n">Assets</span> <span class="p">{</span>
+				<span class="k">if</span> <span class="o">!</span><span class="n">strings</span><span class="o">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">BrowserDownloadURL</span><span class="p">,</span> <span class="s">"asc"</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">strings</span><span class="o">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">BrowserDownloadURL</span><span class="p">,</span> <span class="s">"framework"</span><span class="p">)</span> <span class="p">{</span>
+					<span class="n">wg</span><span class="o">.</span><span class="n">Add</span><span class="p">(</span><span class="m">1</span><span class="p">)</span>
+					<span class="k">go</span> <span class="k">func</span><span class="p">(</span><span class="n">urlDownload</span><span class="p">,</span> <span class="n">filename</span> <span class="kt">string</span><span class="p">)</span> <span class="p">{</span>
+						<span class="k">defer</span> <span class="n">wg</span><span class="o">.</span><span class="n">Done</span><span class="p">()</span>
+						<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"Downloading %s...</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+						<span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">downloadFile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">urlDownload</span><span class="p">);</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+							<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"Error downloading %s: %v</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">err</span><span class="p">)</span>
+						<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+							<span class="n">fmt</span><span class="o">.</span><span class="n">Printf</span><span class="p">(</span><span class="s">"Downloaded %s successfully.</span><span class="se">\n</span><span class="s">"</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+						<span class="p">}</span>
+					<span class="p">}(</span><span class="n">asset</span><span class="o">.</span><span class="n">BrowserDownloadURL</span><span class="p">,</span> <span class="n">asset</span><span class="o">.</span><span class="n">BrowserDownloadURL</span><span class="p">[</span><span class="n">strings</span><span class="o">.</span><span class="n">LastIndex</span><span class="p">(</span><span class="n">asset</span><span class="o">.</span><span class="n">BrowserDownloadURL</span><span class="p">,</span> <span class="s">"/"</span><span class="p">)</span><span class="o">+</span><span class="m">1</span><span class="o">:</span><span class="p">])</span>
+				<span class="p">}</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+		<span class="n">wg</span><span class="o">.</span><span class="n">Wait</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>然后从下载的源代码压缩包中导出每个版本的jquery.min.js文件，文件名带上rcube mail版本方便下一步使用。</p>
+
+<p>关键代码如下</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>		<span class="n">dir</span> <span class="o">:=</span> <span class="s">"D:</span><span class="se">\\</span><span class="s">SEC_Note</span><span class="se">\\</span><span class="s">rcube_versions"</span>
+
+		<span class="n">files</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">os</span><span class="o">.</span><span class="n">ReadDir</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span>
+		<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+			<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+			<span class="k">return</span>
+		<span class="p">}</span>
+
+		<span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">file</span> <span class="o">:=</span> <span class="k">range</span> <span class="n">files</span> <span class="p">{</span>
+			<span class="k">if</span> <span class="n">file</span><span class="o">.</span><span class="n">IsDir</span><span class="p">()</span> <span class="p">{</span>
+				<span class="k">continue</span>
+				<span class="c">//fmt.Println("Folder: ", file.Name())</span>
+			<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+				<span class="n">absPath</span><span class="p">,</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">filepath</span><span class="o">.</span><span class="n">Abs</span><span class="p">(</span><span class="n">filepath</span><span class="o">.</span><span class="n">Join</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="n">file</span><span class="o">.</span><span class="n">Name</span><span class="p">()))</span>
+				<span class="k">if</span> <span class="n">err</span> <span class="o">!=</span> <span class="no">nil</span> <span class="p">{</span>
+					<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+					<span class="k">continue</span>
+				<span class="p">}</span>
+				<span class="n">fmt</span><span class="o">.</span><span class="n">Println</span><span class="p">(</span><span class="s">"File: "</span><span class="p">,</span> <span class="n">absPath</span><span class="p">)</span>
+				<span class="n">mainDo</span><span class="p">(</span><span class="n">absPath</span><span class="p">)</span>
+			<span class="p">}</span>
+		<span class="p">}</span>
+</code></pre></div></div>
+
+<p>最后用php计算文件的最后修改时间</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="nv">$directory</span> <span class="o">=</span> <span class="s1">'.'</span><span class="p">;</span>
+<span class="nv">$files</span> <span class="o">=</span> <span class="nb">scandir</span><span class="p">(</span><span class="nv">$directory</span><span class="p">);</span>
+
+<span class="k">foreach</span> <span class="p">(</span><span class="nv">$files</span> <span class="k">as</span> <span class="nv">$file</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$file</span> <span class="o">!=</span> <span class="s2">"."</span> <span class="o">&amp;&amp;</span> <span class="nv">$file</span> <span class="o">!=</span> <span class="s2">".."</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nv">$filePath</span> <span class="o">=</span> <span class="nv">$directory</span> <span class="mf">.</span> <span class="no">DIRECTORY_SEPARATOR</span> <span class="mf">.</span> <span class="nv">$file</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nb">is_file</span><span class="p">(</span><span class="nv">$filePath</span><span class="p">))</span> <span class="p">{</span>
+            <span class="nv">$fileMTime</span> <span class="o">=</span> <span class="nb">filemtime</span><span class="p">(</span><span class="nv">$filePath</span><span class="p">);</span>
+            <span class="k">echo</span> <span class="nv">$file</span> <span class="mf">.</span> <span class="s1">' + '</span> <span class="mf">.</span> <span class="nv">$fileMTime</span> <span class="mf">.</span> <span class="kc">PHP_EOL</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+
+<p>建立映射，即可得到如下版本映射。然后用go实现请求目标获得html代码，匹配 <code class="language-plaintext highlighter-rouge">?s=</code> 即可</p>
+
+<div class="language-go highlighter-rouge"><div class="highlight"><pre class="highlight"><code>		<span class="c">// Define version map</span>
+		<span class="n">versionMap</span> <span class="o">:=</span> <span class="k">map</span><span class="p">[</span><span class="kt">string</span><span class="p">]</span><span class="kt">string</span><span class="p">{</span>
+			<span class="s">"1636751527"</span><span class="o">:</span> <span class="s">"roundcubemail-1.3.17-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1636751547"</span><span class="o">:</span> <span class="s">"roundcubemail-1.3.17.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1612812581"</span><span class="o">:</span> <span class="s">"roundcubemail-1.4.11-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1612812601"</span><span class="o">:</span> <span class="s">"roundcubemail-1.4.11.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1636753154"</span><span class="o">:</span> <span class="s">"roundcubemail-1.4.12-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1636753175"</span><span class="o">:</span> <span class="s">"roundcubemail-1.4.12.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1640818035"</span><span class="o">:</span> <span class="s">"roundcubemail-1.4.13-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1640818057"</span><span class="o">:</span> <span class="s">"roundcubemail-1.4.13.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1694896977"</span><span class="o">:</span> <span class="s">"roundcubemail-1.4.14-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1694897047"</span><span class="o">:</span> <span class="s">"roundcubemail-1.4.14.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1697461030"</span><span class="o">:</span> <span class="s">"roundcubemail-1.4.15-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1697461064"</span><span class="o">:</span> <span class="s">"roundcubemail-1.4.15.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1614281846"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5-beta-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1614281870"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5-beta.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1625341161"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5-rc-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1625341187"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5-rc.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1634503084"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.0-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1634503112"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.0.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1637615532"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.1-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1637615555"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.1.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1640816963"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.2-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1640817081"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.2.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1656275218"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.3-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1656275241"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.3.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1695024809"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.4-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1695024837"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.4.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1697451371"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.5-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1697451403"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.5.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1699175465"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.6-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1699175495"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.6.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1716112649"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.7-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1716112666"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.7.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1722763434"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.8-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1722763449"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.8.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1725175135"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.9-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1725175151"</span><span class="o">:</span> <span class="s">"roundcubemail-1.5.9.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1646598729"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6-beta-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1646598754"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6-beta.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1655027980"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6-rc-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1655025289"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6-rc.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1658607434"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.0-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1658607455"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.0.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1674504194"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.1-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1674504217"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.1.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1688210976"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.2-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1688211001"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.2.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1694765308"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.3-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1694765330"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.3.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1697448186"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.4-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1697448209"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.4.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1699174738"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.5-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1699174760"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.5.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1705745704"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.6-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1705745675"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.6.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1716107237"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.7-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1716107254"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.7.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1722764714"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.8-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1722764729"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.8.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1725175896"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.9-complete.tar.gz"</span><span class="p">,</span>
+			<span class="s">"1725175911"</span><span class="o">:</span> <span class="s">"roundcubemail-1.6.9.tar.gz"</span><span class="p">,</span>
+		<span class="p">}</span>
+</code></pre></div></div>
+
+<p>然后就是工具实现过程</p>
+
+<h2 id="0x04-工具实现和开源代码">0x04 工具实现和开源代码</h2>
+
+<p>工具最终的效果，相关代码随后开源在我的github地址</p>
+
+<p>https://github.com/P001water</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>P1rcubemail.exe getver -u http://192.168.110.142/roundcubemail-1.6.7/
+</code></pre></div></div>
+
+<p><img src="/img/image-20240928023039417.png" alt="image-20240928023039417" style="zoom:57%;" /></p>
+
+<h1 id="小结">小结</h1>
+
+<p>本文实现了rcube webmail的版本探测的go语言工具化，但是后续还有优化的空间，比如</p>
+
+<ol>
+  <li></li>
+</ol>
+
+<p>后来发现从github api接口拿到的并不是全部版本，只是到v1.3.17，后面还可以加上前面的版本。所以匹配不到版本也就代表着版本小于v1.3.17</p>
+
+<ol>
+  <li></li>
+</ol>
+
+<p>rcube mail系统访问很多情况需要挂代理，需要加上代理访问</p>
+
+<p>后续随着使用需求更新</p>
+
+  </div>
+
+</article>
+
+</section>
+<nav class="navbar navbar-default navbar-fixed-bottom">
+  <div class="container footer-content">
+    ByteDance with P001water<br>
+    公众号: 朴过安全的水
+  </div>
+</nav>
+
+</body>
+
+</html>

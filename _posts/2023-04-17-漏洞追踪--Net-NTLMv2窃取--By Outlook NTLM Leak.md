@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 漏洞追踪--Net-NTLMv2窃取--By Outlook NTLM Leak
+title: 漏洞追踪 -- Net-NTLMv2窃取--By Outlook NTLM Leak
 author: may1as
 date: 2023-04-17
 tags: [内网渗透,NTLM]

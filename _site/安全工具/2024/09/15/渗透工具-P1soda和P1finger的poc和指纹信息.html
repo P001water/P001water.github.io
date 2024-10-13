@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta content="渗透工具 -- P1soda和P1finger的poc和指纹信息" property="og:title">
+
+
+  <meta content="article" property="og:type">
+
+
+  <meta content=" <h1>P001water</h1> <h4>红队攻防、安全开发和安全研究</h4> " property="og:description">
+
+
+  <meta content="https://p001water.github.io//%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/2024/09/15/%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7-P1soda%E5%92%8CP1finger%E7%9A%84poc%E5%92%8C%E6%8C%87%E7%BA%B9%E4%BF%A1%E6%81%AF.html" property="og:url">
+
+
+  <meta content="2024-09-15T00:00:00+08:00" property="article:published_time">
+  <meta content="https://p001water.github.io//about/" property="article:author">
+
+
+  <meta property="og:image" content="">
+
+
+  
+  <meta content="安全工具" property="article:section">
+  
+
+
+  
+
+  <title>渗透工具 -- P1soda和P1finger的poc和指纹信息</title>
+  <meta name="description" content="P1finger指纹信息">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  
+  <link rel="canonical" href="https://p001water.github.io//%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/2024/09/15/%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7-P1soda%E5%92%8CP1finger%E7%9A%84poc%E5%92%8C%E6%8C%87%E7%BA%B9%E4%BF%A1%E6%81%AF.html">
+
+  <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="ATOM Feed" /> <!-- Begin Jekyll SEO tag v2.8.0 -->
+<title>渗透工具 – P1soda和P1finger的poc和指纹信息 | P001water-Blog</title>
+<meta name="generator" content="Jekyll v4.3.4" />
+<meta property="og:title" content="渗透工具 – P1soda和P1finger的poc和指纹信息" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="P1finger指纹信息" />
+<meta property="og:description" content="P1finger指纹信息" />
+<link rel="canonical" href="https://p001water.github.io//%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/2024/09/15/%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7-P1soda%E5%92%8CP1finger%E7%9A%84poc%E5%92%8C%E6%8C%87%E7%BA%B9%E4%BF%A1%E6%81%AF.html" />
+<meta property="og:url" content="https://p001water.github.io//%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/2024/09/15/%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7-P1soda%E5%92%8CP1finger%E7%9A%84poc%E5%92%8C%E6%8C%87%E7%BA%B9%E4%BF%A1%E6%81%AF.html" />
+<meta property="og:site_name" content="P001water-Blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2024-09-15T00:00:00+08:00" />
+<meta name="twitter:card" content="summary" />
+<meta property="twitter:title" content="渗透工具 – P1soda和P1finger的poc和指纹信息" />
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-09-15T00:00:00+08:00","datePublished":"2024-09-15T00:00:00+08:00","description":"P1finger指纹信息","headline":"渗透工具 – P1soda和P1finger的poc和指纹信息","mainEntityOfPage":{"@type":"WebPage","@id":"https://p001water.github.io//%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/2024/09/15/%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7-P1soda%E5%92%8CP1finger%E7%9A%84poc%E5%92%8C%E6%8C%87%E7%BA%B9%E4%BF%A1%E6%81%AF.html"},"url":"https://p001water.github.io//%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/2024/09/15/%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7-P1soda%E5%92%8CP1finger%E7%9A%84poc%E5%92%8C%E6%8C%87%E7%BA%B9%E4%BF%A1%E6%81%AF.html"}</script>
+<!-- End Jekyll SEO tag -->
+
+</head>
+
+<body>
+<section>
+<nav class="navbar navbar-default navbar-fixed-top">
+  <div class="container">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="/">P001water-Blog</a>
+    </div>
+    
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        
+        
+        
+        <li><a href="/p1-tools/">P1-tools</a></li>
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        <li><a href="/Posts/">Posts Archive</a></li>
+        
+        
+        
+        <li><a href="/life-share/">Life 一角</a></li>
+        
+        
+        
+        <li><a href="/about/">About me</a></li>
+        
+        
+      </ul>
+
+    </div>
+  </div>
+</nav>
+</section>
+
+<section>
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <div class="jumbotron">
+    <div class="container">
+      <h1 class="post-title-main" itemprop="name headline">渗透工具 -- P1soda和P1finger的poc和指纹信息</h1>
+      <p class="post-meta"><time datetime="2024-09-15T00:00:00+08:00" itemprop="datePublished">Sep 15, 2024</time></p>
+      
+    </div>
+
+</div>
+
+
+  <div class="post-content container" itemprop="articleBody">
+    <h1 id="p1finger指纹信息">P1finger指纹信息</h1>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>过多，不便展示
+</code></pre></div></div>
+
+<h1 id="p1soda-指纹和poc信息">P1soda 指纹和POC信息</h1>
+
+<p>web指纹</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>BT-panel-宝塔面板.yaml
+CMS-ASPCMS.yaml
+CMS-CMSTOP.yaml
+CMS-DedeCMS-织梦.yaml
+CMS-DouPHP-豆皮CMS.yaml
+CMS-Drupal.yaml
+CMS-IDEACMS.yaml
+CMS-JEECMS-江西金磊科技.yaml
+CMS-KesionCMS.yaml
+CMS-MetInfo-米拓信息.yaml
+CMS-NPOINT.yaml
+CMS-PHPCMS.yaml
+CMS-PHPSHE.yaml
+CMS-PublicCMS.yaml
+CMS-TWCMS.yaml
+CMS-emlog.yaml
+CMS-joomla.yaml
+CMS-万户网络-CMS.yaml
+CMS-大汉软件HanWeb.yaml
+CMS-易思-ESPCMS.yaml
+CMS-风讯科技-Foosun.yaml
+Grafana.yaml
+Influxdata-InfluxDB.yaml
+Microsoft-Exchange.yaml
+OA-78OA办公系统.yaml
+OA-Kingdee-K3-cloud金蝶云星空.yaml
+OA-PHPOA.yaml
+OA-万户网络-ezOFFICE.yaml
+OA-信呼-OA系统.yaml
+OA-华天动力-OA8000.yaml
+OA-快普M6.yaml
+OA-致远互联-FE.yaml
+OA-致远互联OA-协同管理软件.yaml
+OA-通达OA.yaml
+OA-飞企互联FE-协作平台.yaml
+Thinkphp.yaml
+VMware-ESXI.yaml
+ZenTao-专业版绑定域名访问错误页面.yaml
+ZenTao-禅道集成运行环境.yaml
+ZenTao-禅道项目管理软件.yaml
+Zimbra.yaml
+hikvision-IP-camera_NVR.yaml
+hikvision-海康威视摄像头管理后台.yaml
+phpMyAdmin-Http认证.yaml
+phpMyAdmin.yaml
+</code></pre></div></div>
+
+<p>poc信息</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>hikvision-unauthenticated-rce-cve-2021-36260.yaml
+thinkphp-2-rce.yaml
+thinkphp-501-rce.yaml
+thinkphp-5022-rce.yaml
+thinkphp-5023-rce.yaml
+thinkphp-509-information-disclosure.yaml
+thinkphp-multilingual-module-rce.yaml
+thinkphp6-arbitrary-write.yaml
+</code></pre></div></div>
+
+
+  </div>
+
+</article>
+
+</section>
+<nav class="navbar navbar-default navbar-fixed-bottom">
+  <div class="container footer-content">
+    ByteDance with P001water<br>
+    公众号: 朴过安全的水
+  </div>
+</nav>
+
+</body>
+
+</html>

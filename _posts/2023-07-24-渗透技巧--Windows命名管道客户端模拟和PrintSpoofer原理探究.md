@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "渗透技巧--Windows命名管道客户端模拟和PrintSpoofer原理探究"
+title:  "渗透技巧 -- Windows命名管道客户端模拟和PrintSpoofer原理探究"
 date: 2023-07-24
 categories: Potatoes家族
 ---

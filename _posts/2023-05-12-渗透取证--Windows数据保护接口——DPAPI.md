@@ -1,6 +1,6 @@
 ---
 layout: post
-title: 渗透取证--Windows数据保护接口——DPAPI
+title: 渗透取证 -- Windows数据保护接口——DPAPI
 date: 2023-05-12
 categories: [取证, windows DPAPI]
 ---

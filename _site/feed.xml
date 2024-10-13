@@ -1,16 +1,378 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>P001water-攻防笔记</title>
+    <title>P001water-Blog</title>
     <description> &lt;h1&gt;P001water&lt;/h1&gt; &lt;h4&gt;红队攻防、安全开发和安全研究&lt;/h4&gt; </description>
     <link>https://p001water.github.io//</link>
     <atom:link href="https://p001water.github.io//feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 11 Oct 2024 19:49:47 +0800</pubDate>
-    <lastBuildDate>Fri, 11 Oct 2024 19:49:47 +0800</lastBuildDate>
+    <pubDate>Sun, 13 Oct 2024 13:39:54 +0800</pubDate>
+    <lastBuildDate>Sun, 13 Oct 2024 13:39:54 +0800</lastBuildDate>
     <generator>Jekyll v4.3.4</generator>
     
       <item>
-        <title>持久化-GhostTask-注册表创建计划任务-分析和学习</title>
+        <title>渗透基础 -- rcube_webmail邮服版本探测思路和代码实现</title>
+        <description>&lt;h1 id=&quot;简介&quot;&gt;简介&lt;/h1&gt;
+
+&lt;p&gt;本文介绍了开源产品RoundCube webmail邮件系统的版本探测思路，并用go语言实现工具化、自动化探测。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;文章首发于 &lt;a href=&quot;https://xz.aliyun.com/t/15765?time__1311=GqjxnQiQ0%3DdQqGNDQiKiI2R3ooi%3DKzqa4D&quot;&gt;渗透基础-rcube_webmail版本探测 - 先知社区 (aliyun.com)&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;正文&quot;&gt;正文&lt;/h1&gt;
+
+&lt;h2 id=&quot;0x01-探测思路研究&quot;&gt;0x01 探测思路研究&lt;/h2&gt;
+
+&lt;p&gt;探测系统版本，最理想的方法就是系统主页html代码中有特定的字符串，比如特定版本对应的hash在主页的html代码中等等。&lt;/p&gt;
+
+&lt;p&gt;对于rcube mail，我们先查看它的主页html代码&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20240927023732769.png&quot; alt=&quot;image-20240927023732769&quot; style=&quot;zoom:57%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;稍作分析，发现上面html正文中，&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;?s&lt;/code&gt;后面的字符串可能符合要求&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;?s=1716107237
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;这里有个验证的小技巧，可以用 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1716107237&lt;/code&gt; 作为fofa的语句搜索（body=”1716107237”），看是否有足够多的资产的html代码中都有这串字符串，如果结果足够多，那很可能就可以依次判断。不过也只是可能，具体是否可以以此为依据还得从代码中看 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1716107237&lt;/code&gt; 是如何生成的&lt;/p&gt;
+
+&lt;p&gt;比如下图，资产足够多，起码能排除是随机生成的可能&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20240927025528660.png&quot; alt=&quot;image-20240927025528660&quot; style=&quot;zoom:57%;&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;0x02-探测思路判断&quot;&gt;0x02 探测思路判断&lt;/h2&gt;
+
+&lt;p&gt;由于rcube mail是个开源软件。我们即可直接从源代码中分析 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;?s=&lt;/code&gt; 后的值是如何得到的&lt;/p&gt;
+
+&lt;p&gt;全局搜索 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;?s=&lt;/code&gt; 后，很快定位到下面的函数&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20240927175742113.png&quot; alt=&quot;image-20240927175742113&quot; style=&quot;zoom:57%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;\rcmail_output_html::file_mod&lt;/em&gt;&lt;/p&gt;
+
+&lt;p&gt;参考代码可知，&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;?s=1716107237&lt;/code&gt; -&amp;gt; filemtime()函数（如下图） -&amp;gt; 这串数字即是文件的最后修改时间。&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20240927211814934.png&quot; alt=&quot;image-20240927211814934&quot; style=&quot;zoom:57%;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;理论上静态文件可能修改较少无法作为判断的依据，因为修改可能较少&lt;/p&gt;
+
+&lt;p&gt;实际测试发现rcube mail每个版本的文件最后修改时间都不同。可能是使用了Jenkins这种构建工具，每次重新生成代码导致每个发布版本的文件都会新建，导致即使文件内容不变动，文件的最后修改时间还是会变。&lt;/p&gt;
+
+&lt;p&gt;我们即可依据此作为判断&lt;/p&gt;
+
+&lt;h2 id=&quot;0x03-实现细节&quot;&gt;0x03 实现细节&lt;/h2&gt;
+
+&lt;p&gt;依据上面的思路，我们要实现版本检测，大致步骤如下&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;下载全部版本的rcubemail&lt;/li&gt;
+  &lt;li&gt;计算 jquery.min.js 或其他静态资源文件的最后修改时间&lt;/li&gt;
+  &lt;li&gt;建立rcube mail版本和文件最后修改时间的映射&lt;/li&gt;
+  &lt;li&gt;go语言实现发送请求从目标html代码中取得 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;?s=&lt;/code&gt; 后的字符串，以此判断&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;实现过程中下载全部版本的rcubemail较为麻烦，截至文章发布日最新版本是 v1.6.9，大致估略版本不少于70个，&lt;/p&gt;
+
+&lt;p&gt;肯定不能手动下载。&lt;/p&gt;
+
+&lt;p&gt;解决办法：&lt;/p&gt;
+
+&lt;p&gt;这里用了github的REST api，从下面api地址获取rcubemail的全部版本&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;https://api.github.com/repos/roundcube/roundcubemail/releases
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;解析api返回的json数据，提取对应版本压缩包地址然后下载即可，关键代码如下&lt;/p&gt;
+
+&lt;div class=&quot;language-go highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;		&lt;span class=&quot;c&quot;&gt;// github releases API URL&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;https://api.github.com/repos/roundcube/roundcubemail/releases&quot;&lt;/span&gt;
+
+		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;SocksProxy&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;&quot;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;CustomhttpClient&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;httputils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NewHttpClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;
+				&lt;span class=&quot;n&quot;&gt;httputils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;WithSocks5Proxy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;SocksProxy&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt;
+			&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;CustomhttpClient&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;httputils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;NewHttpClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+		&lt;span class=&quot;n&quot;&gt;JsonResp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;httputils&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;HttpWithSocks&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;url&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;CustomhttpClient&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Error making request:&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;defer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;JsonResp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Body&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Close&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+
+		&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;io&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ReadAll&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;JsonResp&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Error reading response body:&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+		&lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;releases&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;struct&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;Assets&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[]&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Asset&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;`json:&quot;assets&quot;`&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;json&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Unmarshal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;body&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;releases&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Error parsing JSON:&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+		&lt;span class=&quot;n&quot;&gt;gologger&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Info&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Msgf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Matching download URLs:&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;wg&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;sync&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;WaitGroup&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;release&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;range&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;releases&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asset&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;range&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;release&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Assets&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+				&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Contains&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;asset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BrowserDownloadURL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;asc&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Contains&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;asset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BrowserDownloadURL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;framework&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+					&lt;span class=&quot;n&quot;&gt;wg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Add&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+					&lt;span class=&quot;k&quot;&gt;go&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;urlDownload&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+						&lt;span class=&quot;k&quot;&gt;defer&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;wg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Done&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+						&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Downloading %s...&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+						&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;downloadFile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;urlDownload&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+							&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Error downloading %s: %v&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+						&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+							&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Printf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Downloaded %s successfully.&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;filename&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+						&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+					&lt;span class=&quot;p&quot;&gt;}(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;asset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BrowserDownloadURL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;asset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BrowserDownloadURL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;strings&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;LastIndex&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;asset&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;BrowserDownloadURL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;/&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;])&lt;/span&gt;
+				&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+			&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;wg&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Wait&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;然后从下载的源代码压缩包中导出每个版本的jquery.min.js文件，文件名带上rcube mail版本方便下一步使用。&lt;/p&gt;
+
+&lt;p&gt;关键代码如下&lt;/p&gt;
+
+&lt;div class=&quot;language-go highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;		&lt;span class=&quot;n&quot;&gt;dir&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;D:&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;SEC_Note&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\\&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;rcube_versions&quot;&lt;/span&gt;
+
+		&lt;span class=&quot;n&quot;&gt;files&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;os&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;ReadDir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;return&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+		&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;_&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;range&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;files&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;IsDir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+				&lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
+				&lt;span class=&quot;c&quot;&gt;//fmt.Println(&quot;Folder: &quot;, file.Name())&lt;/span&gt;
+			&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+				&lt;span class=&quot;n&quot;&gt;absPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;filepath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Abs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;filepath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Join&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;dir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Name&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()))&lt;/span&gt;
+				&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;err&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;nil&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+					&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;err&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+					&lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;
+				&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+				&lt;span class=&quot;n&quot;&gt;fmt&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Println&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;File: &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;absPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+				&lt;span class=&quot;n&quot;&gt;mainDo&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;absPath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+			&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;最后用php计算文件的最后修改时间&lt;/p&gt;
+
+&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$directory&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&apos;.&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;span class=&quot;nv&quot;&gt;$files&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;scandir&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$directory&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$files&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;as&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;.&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;..&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;nv&quot;&gt;$filePath&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$directory&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;no&quot;&gt;DIRECTORY_SEPARATOR&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;is_file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$filePath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+            &lt;span class=&quot;nv&quot;&gt;$fileMTime&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;filemtime&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$filePath&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+            &lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$file&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&apos; + &apos;&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;nv&quot;&gt;$fileMTime&lt;/span&gt; &lt;span class=&quot;mf&quot;&gt;.&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;PHP_EOL&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+        &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;建立映射，即可得到如下版本映射。然后用go实现请求目标获得html代码，匹配 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;?s=&lt;/code&gt; 即可&lt;/p&gt;
+
+&lt;div class=&quot;language-go highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;		&lt;span class=&quot;c&quot;&gt;// Define version map&lt;/span&gt;
+		&lt;span class=&quot;n&quot;&gt;versionMap&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;map&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;kt&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1636751527&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.3.17-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1636751547&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.3.17.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1612812581&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.4.11-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1612812601&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.4.11.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1636753154&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.4.12-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1636753175&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.4.12.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1640818035&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.4.13-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1640818057&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.4.13.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1694896977&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.4.14-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1694897047&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.4.14.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1697461030&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.4.15-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1697461064&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.4.15.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1614281846&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5-beta-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1614281870&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5-beta.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1625341161&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5-rc-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1625341187&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5-rc.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1634503084&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.0-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1634503112&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.0.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1637615532&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.1-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1637615555&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.1.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1640816963&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.2-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1640817081&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.2.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1656275218&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.3-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1656275241&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.3.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1695024809&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.4-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1695024837&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.4.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1697451371&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.5-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1697451403&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.5.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1699175465&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.6-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1699175495&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.6.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1716112649&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.7-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1716112666&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.7.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1722763434&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.8-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1722763449&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.8.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1725175135&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.9-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1725175151&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.5.9.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1646598729&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6-beta-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1646598754&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6-beta.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1655027980&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6-rc-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1655025289&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6-rc.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1658607434&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.0-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1658607455&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.0.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1674504194&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.1-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1674504217&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.1.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1688210976&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.2-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1688211001&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.2.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1694765308&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.3-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1694765330&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.3.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1697448186&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.4-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1697448209&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.4.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1699174738&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.5-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1699174760&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.5.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1705745704&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.6-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1705745675&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.6.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1716107237&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.7-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1716107254&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.7.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1722764714&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.8-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1722764729&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.8.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1725175896&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.9-complete.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+			&lt;span class=&quot;s&quot;&gt;&quot;1725175911&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;roundcubemail-1.6.9.tar.gz&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+		&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;然后就是工具实现过程&lt;/p&gt;
+
+&lt;h2 id=&quot;0x04-工具实现和开源代码&quot;&gt;0x04 工具实现和开源代码&lt;/h2&gt;
+
+&lt;p&gt;工具最终的效果，相关代码随后开源在我的github地址&lt;/p&gt;
+
+&lt;p&gt;https://github.com/P001water&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;P1rcubemail.exe getver -u http://192.168.110.142/roundcubemail-1.6.7/
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;img src=&quot;/img/image-20240928023039417.png&quot; alt=&quot;image-20240928023039417&quot; style=&quot;zoom:57%;&quot; /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;小结&quot;&gt;小结&lt;/h1&gt;
+
+&lt;p&gt;本文实现了rcube webmail的版本探测的go语言工具化，但是后续还有优化的空间，比如&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;后来发现从github api接口拿到的并不是全部版本，只是到v1.3.17，后面还可以加上前面的版本。所以匹配不到版本也就代表着版本小于v1.3.17&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;rcube mail系统访问很多情况需要挂代理，需要加上代理访问&lt;/p&gt;
+
+&lt;p&gt;后续随着使用需求更新&lt;/p&gt;
+</description>
+        <pubDate>Sat, 12 Oct 2024 00:00:00 +0800</pubDate>
+        <link>https://p001water.github.io//%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80%EF%BC%8C%E6%AD%A6%E5%99%A8%E5%8C%96/2024/10/12/%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80-rcube_webmail%E7%89%88%E6%9C%AC%E6%8E%A2%E6%B5%8B.html</link>
+        <guid isPermaLink="true">https://p001water.github.io//%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80%EF%BC%8C%E6%AD%A6%E5%99%A8%E5%8C%96/2024/10/12/%E6%B8%97%E9%80%8F%E5%9F%BA%E7%A1%80-rcube_webmail%E7%89%88%E6%9C%AC%E6%8E%A2%E6%B5%8B.html</guid>
+        
+        
+        <category>渗透基础，武器化</category>
+        
+      </item>
+    
+      <item>
+        <title>渗透工具 -- P1soda和P1finger的poc和指纹信息</title>
+        <description>&lt;h1 id=&quot;p1finger指纹信息&quot;&gt;P1finger指纹信息&lt;/h1&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;过多，不便展示
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;h1 id=&quot;p1soda-指纹和poc信息&quot;&gt;P1soda 指纹和POC信息&lt;/h1&gt;
+
+&lt;p&gt;web指纹&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;BT-panel-宝塔面板.yaml
+CMS-ASPCMS.yaml
+CMS-CMSTOP.yaml
+CMS-DedeCMS-织梦.yaml
+CMS-DouPHP-豆皮CMS.yaml
+CMS-Drupal.yaml
+CMS-IDEACMS.yaml
+CMS-JEECMS-江西金磊科技.yaml
+CMS-KesionCMS.yaml
+CMS-MetInfo-米拓信息.yaml
+CMS-NPOINT.yaml
+CMS-PHPCMS.yaml
+CMS-PHPSHE.yaml
+CMS-PublicCMS.yaml
+CMS-TWCMS.yaml
+CMS-emlog.yaml
+CMS-joomla.yaml
+CMS-万户网络-CMS.yaml
+CMS-大汉软件HanWeb.yaml
+CMS-易思-ESPCMS.yaml
+CMS-风讯科技-Foosun.yaml
+Grafana.yaml
+Influxdata-InfluxDB.yaml
+Microsoft-Exchange.yaml
+OA-78OA办公系统.yaml
+OA-Kingdee-K3-cloud金蝶云星空.yaml
+OA-PHPOA.yaml
+OA-万户网络-ezOFFICE.yaml
+OA-信呼-OA系统.yaml
+OA-华天动力-OA8000.yaml
+OA-快普M6.yaml
+OA-致远互联-FE.yaml
+OA-致远互联OA-协同管理软件.yaml
+OA-通达OA.yaml
+OA-飞企互联FE-协作平台.yaml
+Thinkphp.yaml
+VMware-ESXI.yaml
+ZenTao-专业版绑定域名访问错误页面.yaml
+ZenTao-禅道集成运行环境.yaml
+ZenTao-禅道项目管理软件.yaml
+Zimbra.yaml
+hikvision-IP-camera_NVR.yaml
+hikvision-海康威视摄像头管理后台.yaml
+phpMyAdmin-Http认证.yaml
+phpMyAdmin.yaml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+&lt;p&gt;poc信息&lt;/p&gt;
+
+&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;hikvision-unauthenticated-rce-cve-2021-36260.yaml
+thinkphp-2-rce.yaml
+thinkphp-501-rce.yaml
+thinkphp-5022-rce.yaml
+thinkphp-5023-rce.yaml
+thinkphp-509-information-disclosure.yaml
+thinkphp-multilingual-module-rce.yaml
+thinkphp6-arbitrary-write.yaml
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
+
+</description>
+        <pubDate>Sun, 15 Sep 2024 00:00:00 +0800</pubDate>
+        <link>https://p001water.github.io//%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/2024/09/15/%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7-P1soda%E5%92%8CP1finger%E7%9A%84poc%E5%92%8C%E6%8C%87%E7%BA%B9%E4%BF%A1%E6%81%AF.html</link>
+        <guid isPermaLink="true">https://p001water.github.io//%E5%AE%89%E5%85%A8%E5%B7%A5%E5%85%B7/2024/09/15/%E6%B8%97%E9%80%8F%E5%B7%A5%E5%85%B7-P1soda%E5%92%8CP1finger%E7%9A%84poc%E5%92%8C%E6%8C%87%E7%BA%B9%E4%BF%A1%E6%81%AF.html</guid>
+        
+        
+        <category>安全工具</category>
+        
+      </item>
+    
+      <item>
+        <title>渗透技巧 -- Windows隐蔽创建计划任务-分析和学习</title>
         <description>&lt;h1 id=&quot;文前漫谈&quot;&gt;文前漫谈&lt;/h1&gt;
 
 &lt;p&gt;最近一周刚放出来的一个持久化工具 &lt;a href=&quot;https://github.com/netero1010/GhostTask&quot;&gt;netero1010/GhostTask (github.com)&lt;/a&gt;。利用计划任务实现持久化。&lt;/p&gt;
@@ -80,16 +442,16 @@
 
 </description>
         <pubDate>Sun, 22 Oct 2023 00:00:00 +0800</pubDate>
-        <link>https://p001water.github.io//%E6%8C%81%E4%B9%85%E5%8C%96/2023/10/22/%E6%8C%81%E4%B9%85%E5%8C%96-GhostTask-%E5%88%86%E6%9E%90%E5%92%8C%E5%AD%A6%E4%B9%A0.html</link>
-        <guid isPermaLink="true">https://p001water.github.io//%E6%8C%81%E4%B9%85%E5%8C%96/2023/10/22/%E6%8C%81%E4%B9%85%E5%8C%96-GhostTask-%E5%88%86%E6%9E%90%E5%92%8C%E5%AD%A6%E4%B9%A0.html</guid>
+        <link>https://p001water.github.io//%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7/2023/10/22/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-Windows%E9%9A%90%E8%94%BD%E5%88%9B%E5%BB%BA%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1-%E5%88%86%E6%9E%90%E5%92%8C%E5%AD%A6%E4%B9%A0.html</link>
+        <guid isPermaLink="true">https://p001water.github.io//%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7/2023/10/22/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-Windows%E9%9A%90%E8%94%BD%E5%88%9B%E5%BB%BA%E8%AE%A1%E5%88%92%E4%BB%BB%E5%8A%A1-%E5%88%86%E6%9E%90%E5%92%8C%E5%AD%A6%E4%B9%A0.html</guid>
         
         
-        <category>持久化</category>
+        <category>渗透技巧</category>
         
       </item>
     
       <item>
-        <title>渗透技巧--Windows命名管道客户端模拟和PrintSpoofer原理探究</title>
+        <title>渗透技巧 -- Windows命名管道客户端模拟和PrintSpoofer原理探究</title>
         <description>&lt;blockquote&gt;
   &lt;p&gt;文章首发于Seebug Paper &lt;a href=&quot;https://paper.seebug.org/2090/&quot;&gt;Windows 命名管道客户端模拟和 PrintSpoofer 原理探究 (seebug.org)&lt;/a&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -658,7 +1020,7 @@ beacon_exploit_register(&quot;PrintSpoofer&quot;, &quot;PrintSpoofer local eleca
       </item>
     
       <item>
-        <title>渗透技巧-vx小程序实例分析和反编译拿源码</title>
+        <title>渗透技巧 -- vx小程序实例分析和反编译拿源码</title>
         <description>&lt;h1 id=&quot;前言&quot;&gt;前言&lt;/h1&gt;
 
 &lt;p&gt;无论是攻防演练还是SRC挖掘，小程序渗透测试已经成为了传统web打点之外、信息收集的重要一步。&lt;/p&gt;
@@ -859,7 +1221,7 @@ beacon_exploit_register(&quot;PrintSpoofer&quot;, &quot;PrintSpoofer local eleca
       </item>
     
       <item>
-        <title>云上-云上备忘录和杂学</title>
+        <title>云上 -- 云上备忘录和杂学</title>
         <description>&lt;h1 id=&quot;文前漫谈&quot;&gt;文前漫谈&lt;/h1&gt;
 
 &lt;p&gt;个人感觉，做云一定要简单看下云官方的SDK文档，也可以看别人产出总结出的文章。你看不懂的“黑话”，可能在官方的文档里都有详细的解释。&lt;/p&gt;
@@ -993,7 +1355,7 @@ http://metadata.tencentyun.com/latest/meta-data/&lt;/p&gt;
       </item>
     
       <item>
-        <title>渗透取证--Chrome浏览器密码凭据窃取和C#实现</title>
+        <title>渗透取证 -- Chrome浏览器密码凭据窃取和C#实现</title>
         <description>&lt;h1 id=&quot;文前漫谈&quot;&gt;文前漫谈&lt;/h1&gt;
 
 &lt;p&gt;权限维持的重要步骤，抓密码。本文通过对Windows DPAPI的基本认识和chrome密码加密机制的理解基础上，编写C#代码实现对chrome浏览器密码的解密&lt;/p&gt;
@@ -1197,7 +1559,7 @@ namespace ChromeThief
       </item>
     
       <item>
-        <title>渗透取证--Windows数据保护接口——DPAPI</title>
+        <title>渗透取证 -- Windows数据保护接口——DPAPI</title>
         <description>&lt;h1 id=&quot;文前漫谈&quot;&gt;文前漫谈&lt;/h1&gt;
 
 &lt;blockquote&gt;
@@ -1388,7 +1750,7 @@ namespace ChromeThief
       </item>
     
       <item>
-        <title>Godzilla--从三种自带加密器看哥斯拉流量-PHP篇</title>
+        <title>Godzilla -- 从三种自带加密器看哥斯拉流量-PHP篇</title>
         <description>&lt;h1 id=&quot;文前漫谈&quot;&gt;文前漫谈&lt;/h1&gt;
 
 &lt;p&gt;Godzilla - designed by &lt;a href=&quot;https://github.com/BeichenDream&quot;&gt;@BeichenDream&lt;/a&gt;s&lt;/p&gt;
@@ -2820,7 +3182,7 @@ namespace ChromeThief
       </item>
     
       <item>
-        <title>漏洞追踪--Net-NTLMv2窃取--By Outlook NTLM Leak</title>
+        <title>漏洞追踪 -- Net-NTLMv2窃取--By Outlook NTLM Leak</title>
         <description>&lt;blockquote&gt;
   &lt;p&gt;文章首发先知社区&lt;/p&gt;
 
@@ -2839,566 +3201,6 @@ namespace ChromeThief
         
         
         <category>NTLM</category>
-        
-      </item>
-    
-      <item>
-        <title>渗透技巧--伪协议php://input命令执行的原理</title>
-        <description>&lt;h1 id=&quot;文前漫谈&quot;&gt;文前漫谈&lt;/h1&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;文章首发在Freebuf&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;研究几种webshell管理工具时遇见，发现几款常见的webshell管理工具都有对php://input的利用&lt;/p&gt;
-
-&lt;p&gt;本文记录我对php://input原理的学习和思考，如有疏漏失错，还请联系告知&lt;/p&gt;
-
-&lt;p&gt;$HTTP_RAW_POST_DATA的作用和php://input的作用相同，但是PHP 5.6.0. 被废弃了，后面的版本中就是用php://input替代。所有本文省略&lt;/p&gt;
-
-&lt;h1 id=&quot;官方文档的解释&quot;&gt;官方文档的解释&lt;/h1&gt;
-
-&lt;h2 id=&quot;_post数组&quot;&gt;$_POST数组&lt;/h2&gt;
-
-&lt;p&gt;当 HTTP POST 请求的 Content-Type 是 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;application/x-www-form-urlencoded&lt;/code&gt;或 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;multipart/form-data&lt;/code&gt;时，会将变量以关联数组形式传入当前脚本。&lt;/p&gt;
-
-&lt;h2 id=&quot;phpinput-伪协议&quot;&gt;php://input 伪协议&lt;/h2&gt;
-
-&lt;p&gt;php://input 是个可以访问请求的原始数据的只读流。当请求方式是post，并且Content-Type不等于&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;&quot;multipart/form-data&quot;&lt;/code&gt;时，可以使用php://input来获取原始请求的数据。&lt;/p&gt;
-
-&lt;h1 id=&quot;从post的几种content-type看php的_post-与-phpinput&quot;&gt;从POST的几种Content-Type看PHP的$_POST []与 php://input&lt;/h1&gt;
-
-&lt;p&gt;通常的，在php中我们用&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;$POST[]&lt;/code&gt;数组来处理封装好的POST请求正文中的内容，下面从http post上传时几种不同的表单编码格式分析$POST[]数组和php://input伪协议在处理post内容时的差别&lt;/p&gt;
-
-&lt;p&gt;POST表单上传时常见有这几种编码：&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;multipart/form-data&lt;/li&gt;
-  &lt;li&gt;application/x-www-data-urlencoded&lt;/li&gt;
-  &lt;li&gt;application/json&lt;/li&gt;
-  &lt;li&gt;text/plain&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h2 id=&quot;multipartform-data-文件上传时的编码&quot;&gt;multipart/form-data (文件上传时的编码)&lt;/h2&gt;
-
-&lt;p&gt;服务端代码&lt;/p&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;form&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;enctype=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;multipart/form-data&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;post&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;name&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;file&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;upload_file&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;button&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;submit&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;submit&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Submit&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Submit&lt;span class=&quot;nt&quot;&gt;&amp;lt;/button&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\$&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;_POST[]: &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;var_dump&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_POST&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;br&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;br&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;php://input: &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;var_dump&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;file_get_contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;php://input&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;上传 upload.txt , form表单如下，文件上传的post包就不多解释了&lt;/p&gt;
-
-&lt;p&gt;boundary=—-WebKitFormBoundaryHwjtGxAgxib9xeFe就是multipart分块传输的分界线&lt;/p&gt;
-
-&lt;p&gt;这个http包我精简过，注意Content-Type即可&lt;/p&gt;
-
-&lt;div class=&quot;language-http highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nf&quot;&gt;POST&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;/test/demo.php&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;192.168.1.136&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Content-Length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;398&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Cache-Control&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;max-age=0&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Upgrade-Insecure-Requests&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Origin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://192.168.1.136&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Content-Type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;multipart/form-data; boundary=----WebKitFormBoundaryHwjtGxAgxib9xeFe&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;User-Agent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Accept&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Referer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://192.168.1.136/test/demo.php&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Accept-Encoding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;gzip, deflate&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Accept-Language&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;en,zh-CN;q=0.9,zh;q=0.8&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Connection&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;close&lt;/span&gt;
-
-------WebKitFormBoundaryHwjtGxAgxib9xeFe
-Content-Disposition: form-data; name=&quot;name&quot;
-
-123456
-------WebKitFormBoundaryHwjtGxAgxib9xeFe
-Content-Disposition: form-data; name=&quot;upload_file&quot;; filename=&quot;upload.txt&quot;
-Content-Type: text/plain
-
-upload test
-------WebKitFormBoundaryHwjtGxAgxib9xeFe
-Content-Disposition: form-data; name=&quot;submit&quot;
-
-Submit
-------WebKitFormBoundaryHwjtGxAgxib9xeFe--
-
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;看见后端只有$POST[] 数组接收了form表单上传的内容，正如上面说的，当Content-Type: multipart/form-data;，php://input并不起作用&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230403225438175-1680843364971-1.png&quot; alt=&quot;image-20230403225438175&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
-
-&lt;h2 id=&quot;applicationx-www-data-urlencoded&quot;&gt;application/x-www-data-urlencoded&lt;/h2&gt;
-
-&lt;p&gt;服务端代码&lt;/p&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;html&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;form&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;enctype=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;application/x-www-data-urlencoded&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;post&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;text&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;name&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;button&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;submit&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;submit&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Submit&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;Submit&lt;span class=&quot;nt&quot;&gt;&amp;lt;/button&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\$&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;_POST[]: &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;var_dump&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_POST&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;br&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&amp;lt;br&amp;gt;&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;echo&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;php://input: &quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
-&lt;span class=&quot;nb&quot;&gt;var_dump&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;file_get_contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;php://input&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/html&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;form表单的内容&lt;/p&gt;
-
-&lt;div class=&quot;language-http highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nf&quot;&gt;POST&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;/test/demo.php&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;HTTP&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;m&quot;&gt;1.1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Host&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;192.168.1.136&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Content-Length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;23&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Cache-Control&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;max-age=0&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Upgrade-Insecure-Requests&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;1&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Origin&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://192.168.1.136&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Content-Type&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;application/x-www-form-urlencoded&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;User-Agent&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.54&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Accept&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Referer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;http://192.168.1.136/test/demo.php&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Accept-Encoding&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;gzip, deflate&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Accept-Language&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;en,zh-CN;q=0.9,zh;q=0.8&lt;/span&gt;
-&lt;span class=&quot;na&quot;&gt;Connection&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;close&lt;/span&gt;
-
-name=demo&amp;amp;submit=Submit
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;$_POST[] 和 php://input都能接收到form表单的内容，也正如上面所说，php://input访问的时原始数据的只读流，后端接收到的和http传输的是相同的，但是解析的结果依然不同&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230403230323508.png&quot; alt=&quot;image-20230403230323508&quot; style=&quot;zoom:67%;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;这里我突发奇想看看试试如果url编码的结果是什么&lt;/p&gt;
-
-&lt;p&gt;把 ‘demo’ 进行再一次编码url全编码，相当于url二次编码了&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;demo
--&amp;gt;urlencode
-%31%32%37%2e%30%2e%30%2e%31
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230403231001651.png&quot; alt=&quot;image-20230403231001651&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;这里两者之间就有些差别了，具体原因就是浏览器发包时还会对post请求进行一次url编码，$_POST[]数组的内容是urldecode()之后的，而php://input访问的还是原始数据，也就没有解码&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230403233824446.png&quot; alt=&quot;image-20230403233824446&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;applicationjson&quot;&gt;application/json&lt;/h3&gt;
-
-&lt;p&gt;json格式通常在传输数据时使用，我直接在post包中发送json格式的数据了。其实理所应当的能想到$_POST[]数组是处理不了json格式的数据的，这种情况php只能用php://input读post的数据&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230403234723112.png&quot; alt=&quot;image-20230403234723112&quot; style=&quot;zoom: 50%;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;总的来说&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;php://input会接收除了Content_Type: multipart/form-data情况下的内容&lt;/p&gt;
-
-  &lt;p&gt;而$_POST[]数组只处理类型为&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;application/x-www-form-urlencoded&lt;/code&gt; 或 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;multipart/form-data&lt;/code&gt;的情况，因为只有这两种能被直接写成关联数组的形式（就是字典的形式）&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;phpinput-命令执行的原理&quot;&gt;php://input 命令执行的原理&lt;/h2&gt;
-
-&lt;p&gt;请求头中的Content-Type字段告诉服务器后端用户交互上传的是什么类型的数据，$_POST能处理form表单上传的键值对格式（类似字典）的内容，但是处理如上的json格式或者其他格式内容并不会生效。何况php的Content-Type类型且不止这三种&lt;/p&gt;
-
-&lt;p&gt;上面的三个例子也更好的说明了php://input是怎样和为什么要从原始数据的只读流处理post请求包的内容，但这不是php://input能进行命令执行的关键&lt;/p&gt;
-
-&lt;p&gt;它能进行命令执行的关键还是看它和什么函数联动，它本身并不能进行RCE，是处理php://input内容的函数出了问题&lt;/p&gt;
-
-&lt;p&gt;比如经典的远程文件包含&lt;/p&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;include&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nv&quot;&gt;$_GET&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&apos;file&apos;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;file接收php://input的内容，post body里就是完整的php文件内容，这里的关键就是include()函数，它会解析&amp;lt;?php标签，并把后面的代码当作php代码执行，直到读到?&amp;gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230404001117124.png&quot; alt=&quot;image-20230404001117124&quot; style=&quot;zoom:67%;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;或者说直接是&lt;/p&gt;
-
-&lt;div class=&quot;language-php highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?php&lt;/span&gt;
-&lt;span class=&quot;k&quot;&gt;eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;file_get_contents&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;php://input&quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;?&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;这种情况根据上面所说，直接在post body里输入php代码就行，连标签都不用加。（注意php://input和全局变量$_POST不同，它通常配合file_get_contents()函数使用）&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230404001948080.png&quot; alt=&quot;image-20230404001948080&quot; style=&quot;zoom:50%;&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;比如冰蝎4的默认shell&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;/img/image-20230404145214389.png&quot; alt=&quot;image-20230404145214389&quot; style=&quot;zoom: 50%;&quot; /&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;完&quot;&gt;完&lt;/h1&gt;
-
-</description>
-        <pubDate>Fri, 07 Apr 2023 20:55:00 +0800</pubDate>
-        <link>https://p001water.github.io//php/2023/04/07/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-%E4%BC%AA%E5%8D%8F%E8%AE%AEphp-input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86.html</link>
-        <guid isPermaLink="true">https://p001water.github.io//php/2023/04/07/%E6%B8%97%E9%80%8F%E6%8A%80%E5%B7%A7-%E4%BC%AA%E5%8D%8F%E8%AE%AEphp-input%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%9A%84%E5%8E%9F%E7%90%86.html</guid>
-        
-        <category>PHP</category>
-        
-        <category>php://input</category>
-        
-        
-        <category>PHP</category>
-        
-      </item>
-    
-      <item>
-        <title>CTF--volatility2/3命令小记和闲谈</title>
-        <description>&lt;h2 id=&quot;文前漫谈&quot;&gt;文前漫谈&lt;/h2&gt;
-
-&lt;p&gt;本文记录vol2/3常用命令，同时记录我的使用样例。以前初学时写过一篇，但是太过臃肿了，精简一下方便查阅。&lt;/p&gt;
-
-&lt;p&gt;从CTF的角度，取证和流量分析的题目一定是越来越多的，可能和“我们”的大方向有关，毕竟我们“攻是为了防”；&lt;/p&gt;
-
-&lt;p&gt;从渗透的角度，取证和流量分析大概是Misc里和渗透关系最近的。chrome浏览器的密码解密、Windows的DPAPI机制、webshell加密和解密流量分析等等，比找个工具跑跑脚本就从图片里提出个flag有意思，也更有意义。&lt;/p&gt;
-
-&lt;p&gt;取证是个各显神通的方向，显神通指的就是各位用的是哪家厂商的设备，这种东西事半功倍的效果立竿见影，也就是博客里常见的“一把嗦”。瞎扯了&lt;/p&gt;
-
-&lt;h2 id=&quot;简介&quot;&gt;简介&lt;/h2&gt;
-
-&lt;p&gt;内存取证各家似乎都没有好用的产品，记得某古石，取个正常的内存进行要扫半个小时往上&lt;/p&gt;
-
-&lt;p&gt;建议去看看R-Studio，一款数据恢复软件，结合内存取证有奇效，其他的就看经验和积累了。比如，好东西总是在桌面上，如果不在，就骂出题人吧&lt;/p&gt;
-
-&lt;p&gt;闲谈结束，下面也就是我记得命令笔记了，没啥好看的&lt;/p&gt;
-
-&lt;h1 id=&quot;vol2&quot;&gt;Vol2&lt;/h1&gt;
-
-&lt;p&gt;离线手册：&lt;a href=&quot;https://github.com/volatilityfoundation/volatility/raw/gh-pages/docs/VolatilityCheatSheet.pdf&quot;&gt;Volatility Cheat Sheet&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;to make sure Volatility supports that sample type, run&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;python vol.py imageinfo -f &amp;lt;imagename&amp;gt;&apos; or &apos;python vol.py kdbgscan -f &amp;lt;imagename&amp;gt;&apos;
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;here are common commands，带 &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;*&lt;/code&gt; 的常用命令&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;amcache                    - Print AmCache information
-apihooks                   - Detect API hooks in process and kernel memory
-atoms                      - Print session and window station atom tables
-atomscan                   - Pool scanner for atom tables
-auditpol                   - Prints out the Audit Policies from HKLM\SECURITY\Policy\PolAdtEv
-bigpools                   - Dump the big page pools using BigPagePoolScanner
-bioskbd                    - Reads the keyboard buffer from Real Mode memory
-cachedump                  - Dumps cached domain hashes from memory
-callbacks                  - Print system-wide notification routines
-clipboard                  - Extract the contents of the windows clipboard
-*cmdline                    - Display process command-line arguments
-*cmdscan                    - Extract command history by scanning for _COMMAND_HISTORY
-connections                - Print list of open connections [Windows XP and 2003 Only]
-connscan                   - Pool scanner for tcp connections
-consoles                   - Extract command history by scanning for _CONSOLE_INFORMATION
-crashinfo                  - Dump crash-dump information
-deskscan                   - Poolscaner for tagDESKTOP (desktops)
-devicetree                 - Show device tree
-dlldump                    - Dump DLLs from a process address space
-dlllist                    - Print list of loaded dlls for each process
-driverirp                  - Driver IRP hook detection
-drivermodule               - Associate driver objects to kernel modules
-driverscan                 - Pool scanner for driver objects
-dumpcerts                  - Dump RSA private and public SSL keys
-dumpfiles                  - Extract memory mapped and cached files
-dumpregistry               - Dumps registry files out to disk
-editbox                    - Displays information about Edit controls. (Listbox experimental.)
-envars                     - Display process environment variables
-eventhooks                 - Print details on windows event hooks
-evtlogs                    - Extract Windows Event Logs (XP/2003 only)
-*filescan                   - Pool scanner for file objects
-gahti                      - Dump the USER handle type information
-gditimers                  - Print installed GDI timers and callbacks
-gdt                        - Display Global Descriptor Table
-getservicesids             - Get the names of services in the Registry and return Calculated SID
-getsids                    - Print the SIDs owning each process
-handles                    - Print list of open handles for each process
-hashdump                   - Dumps passwords hashes (LM/NTLM) from memory
-hibinfo                    - Dump hibernation file information
-hivedump                   - Prints out a hive
-hivelist                   - Print list of registry hives.
-hivescan                   - Pool scanner for registry hives
-hpakextract                - Extract physical memory from an HPAK file
-hpakinfo                   - Info on an HPAK file
-idt                        - Display Interrupt Descriptor Table
-iehistory                  - Reconstruct Internet Explorer cache / history
-imagecopy                  - Copies a physical address space out as a raw DD image
-imageinfo                  - Identify information for the image
-impscan                    - Scan for calls to imported functions
-joblinks                   - Print process job link information
-kdbgscan                   - Search for and dump potential KDBG values
-kpcrscan                   - Search for and dump potential KPCR values
-ldrmodules                 - Detect unlinked DLLs
-limeinfo                   - Dump Lime file format information
-linux_apihooks             - Checks for userland apihooks
-linux_arp                  - Print the ARP table
-linux_aslr_shift           - Automatically detect the Linux ASLR shift
-linux_banner               - Prints the Linux banner information
-linux_bash                 - Recover bash history from bash process memory
-linux_bash_env             - Recover a process&apos; dynamic environment variables
-linux_bash_hash            - Recover bash hash table from bash process memory
-linux_check_afinfo         - Verifies the operation function pointers of network protocols
-linux_check_creds          - Checks if any processes are sharing credential structures
-linux_check_evt_arm        - Checks the Exception Vector Table to look for syscall table hooking
-linux_check_fop            - Check file operation structures for rootkit modifications
-linux_check_idt            - Checks if the IDT has been altered
-linux_check_inline_kernel  - Check for inline kernel hooks
-linux_check_modules        - Compares module list to sysfs info, if available
-linux_check_syscall        - Checks if the system call table has been altered
-linux_check_syscall_arm    - Checks if the system call table has been altered
-linux_check_tty            - Checks tty devices for hooks
-linux_cpuinfo              - Prints info about each active processor
-linux_dentry_cache         - Gather files from the dentry cache
-linux_dmesg                - Gather dmesg buffer
-linux_dump_map             - Writes selected memory mappings to disk
-linux_dynamic_env          - Recover a process&apos; dynamic environment variables
-linux_elfs                 - Find ELF binaries in process mappings
-linux_enumerate_files      - Lists files referenced by the filesystem cache
-linux_find_file            - Lists and recovers files from memory
-linux_getcwd               - Lists current working directory of each process
-linux_hidden_modules       - Carves memory to find hidden kernel modules
-linux_ifconfig             - Gathers active interfaces
-linux_info_regs            - It&apos;s like &apos;info registers&apos; in GDB. It prints out all the
-linux_iomem                - Provides output similar to /proc/iomem
-linux_kernel_opened_files  - Lists files that are opened from within the kernel
-linux_keyboard_notifiers   - Parses the keyboard notifier call chain
-linux_ldrmodules           - Compares the output of proc maps with the list of libraries from libdl
-linux_library_list         - Lists libraries loaded into a process
-linux_librarydump          - Dumps shared libraries in process memory to disk
-linux_list_raw             - List applications with promiscuous sockets
-linux_lsmod                - Gather loaded kernel modules
-linux_lsof                 - Lists file descriptors and their path
-linux_malfind              - Looks for suspicious process mappings
-linux_memmap               - Dumps the memory map for linux tasks
-linux_moddump              - Extract loaded kernel modules
-linux_mount                - Gather mounted fs/devices
-linux_mount_cache          - Gather mounted fs/devices from kmem_cache
-linux_netfilter            - Lists Netfilter hooks
-linux_netscan              - Carves for network connection structures
-linux_netstat              - Lists open sockets
-linux_pidhashtable         - Enumerates processes through the PID hash table
-linux_pkt_queues           - Writes per-process packet queues out to disk
-linux_plthook              - Scan ELF binaries&apos; PLT for hooks to non-NEEDED images
-linux_proc_maps            - Gathers process memory maps
-linux_proc_maps_rb         - Gathers process maps for linux through the mappings red-black tree
-linux_procdump             - Dumps a process&apos;s executable image to disk
-linux_process_hollow       - Checks for signs of process hollowing
-linux_psaux                - Gathers processes along with full command line and start time
-linux_psenv                - Gathers processes along with their static environment variables
-linux_pslist               - Gather active tasks by walking the task_struct-&amp;gt;task list
-linux_pslist_cache         - Gather tasks from the kmem_cache
-linux_psscan               - Scan physical memory for processes
-linux_pstree               - Shows the parent/child relationship between processes
-linux_psxview              - Find hidden processes with various process listings
-linux_recover_filesystem   - Recovers the entire cached file system from memory
-linux_route_cache          - Recovers the routing cache from memory
-linux_sk_buff_cache        - Recovers packets from the sk_buff kmem_cache
-linux_slabinfo             - Mimics /proc/slabinfo on a running machine
-linux_strings              - Match physical offsets to virtual addresses (may take a while, VERY verbose)
-linux_threads              - Prints threads of processes
-linux_tmpfs                - Recovers tmpfs filesystems from memory
-linux_truecrypt_passphrase - Recovers cached Truecrypt passphrases
-linux_vma_cache            - Gather VMAs from the vm_area_struct cache
-linux_volshell             - Shell in the memory image
-linux_yarascan             - A shell in the Linux memory image
-lsadump                    - Dump (decrypted) LSA secrets from the registry
-mac_adium                  - Lists Adium messages
-mac_apihooks               - Checks for API hooks in processes
-mac_apihooks_kernel        - Checks to see if system call and kernel functions are hooked
-mac_arp                    - Prints the arp table
-mac_bash                   - Recover bash history from bash process memory
-mac_bash_env               - Recover bash&apos;s environment variables
-mac_bash_hash              - Recover bash hash table from bash process memory
-mac_calendar               - Gets calendar events from Calendar.app
-mac_check_fop              - Validate File Operation Pointers
-mac_check_mig_table        - Lists entires in the kernel&apos;s MIG table
-mac_check_syscall_shadow   - Looks for shadow system call tables
-mac_check_syscalls         - Checks to see if system call table entries are hooked
-mac_check_sysctl           - Checks for unknown sysctl handlers
-mac_check_trap_table       - Checks to see if mach trap table entries are hooked
-mac_compressed_swap        - Prints Mac OS X VM compressor stats and dumps all compressed pages
-mac_contacts               - Gets contact names from Contacts.app
-mac_dead_procs             - Prints terminated/de-allocated processes
-mac_dead_sockets           - Prints terminated/de-allocated network sockets
-mac_dead_vnodes            - Lists freed vnode structures
-mac_devfs                  - Lists files in the file cache
-mac_dmesg                  - Prints the kernel debug buffer
-mac_dump_file              - Dumps a specified file
-mac_dump_maps              - Dumps memory ranges of process(es), optionally including pages in compressed swap
-mac_dyld_maps              - Gets memory maps of processes from dyld data structures
-mac_find_aslr_shift        - Find the ASLR shift value for 10.8+ images
-mac_get_profile            - Automatically detect Mac profiles
-mac_ifconfig               - Lists network interface information for all devices
-mac_interest_handlers      - Lists IOKit Interest Handlers
-mac_ip_filters             - Reports any hooked IP filters
-mac_kernel_classes         - Lists loaded c++ classes in the kernel
-mac_kevents                - Show parent/child relationship of processes
-mac_keychaindump           - Recovers possbile keychain keys. Use chainbreaker to open related keychain files
-mac_ldrmodules             - Compares the output of proc maps with the list of libraries from libdl
-mac_librarydump            - Dumps the executable of a process
-mac_list_files             - Lists files in the file cache
-mac_list_kauth_listeners   - Lists Kauth Scope listeners
-mac_list_kauth_scopes      - Lists Kauth Scopes and their status
-mac_list_raw               - List applications with promiscuous sockets
-mac_list_sessions          - Enumerates sessions
-mac_list_zones             - Prints active zones
-mac_lsmod                  - Lists loaded kernel modules
-mac_lsmod_iokit            - Lists loaded kernel modules through IOkit
-mac_lsmod_kext_map         - Lists loaded kernel modules
-mac_lsof                   - Lists per-process opened files
-mac_machine_info           - Prints machine information about the sample
-mac_malfind                - Looks for suspicious process mappings
-mac_memdump                - Dump addressable memory pages to a file
-mac_moddump                - Writes the specified kernel extension to disk
-mac_mount                  - Prints mounted device information
-mac_netstat                - Lists active per-process network connections
-mac_network_conns          - Lists network connections from kernel network structures
-mac_notesapp               - Finds contents of Notes messages
-mac_notifiers              - Detects rootkits that add hooks into I/O Kit (e.g. LogKext)
-mac_orphan_threads         - Lists threads that don&apos;t map back to known modules/processes
-mac_pgrp_hash_table        - Walks the process group hash table
-mac_pid_hash_table         - Walks the pid hash table
-mac_print_boot_cmdline     - Prints kernel boot arguments
-mac_proc_maps              - Gets memory maps of processes
-mac_procdump               - Dumps the executable of a process
-mac_psaux                  - Prints processes with arguments in user land (**argv)
-mac_psenv                  - Prints processes with environment in user land (**envp)
-mac_pslist                 - List Running Processes
-mac_pstree                 - Show parent/child relationship of processes
-mac_psxview                - Find hidden processes with various process listings
-mac_recover_filesystem     - Recover the cached filesystem
-mac_route                  - Prints the routing table
-mac_socket_filters         - Reports socket filters
-mac_strings                - Match physical offsets to virtual addresses (may take a while, VERY verbose)
-mac_tasks                  - List Active Tasks
-mac_threads                - List Process Threads
-mac_threads_simple         - Lists threads along with their start time and priority
-mac_timers                 - Reports timers set by kernel drivers
-mac_trustedbsd             - Lists malicious trustedbsd policies
-mac_version                - Prints the Mac version
-mac_vfsevents              - Lists processes filtering file system events
-mac_volshell               - Shell in the memory image
-mac_yarascan               - Scan memory for yara signatures
-machoinfo                  - Dump Mach-O file format information
-malfind                    - Find hidden and injected code
-mbrparser                  - Scans for and parses potential Master Boot Records (MBRs)
-memdump                    - Dump the addressable memory for a process
-memmap                     - Print the memory map
-messagehooks               - List desktop and thread window message hooks
-mftparser                  - Scans for and parses potential MFT entries
-moddump                    - Dump a kernel driver to an executable file sample
-modscan                    - Pool scanner for kernel modules
-modules                    - Print list of loaded modules
-multiscan                  - Scan for various objects at once
-mutantscan                 - Pool scanner for mutex objects
-netscan                    - Scan a Vista (or later) image for connections and sockets
-notepad                    - List currently displayed notepad text
-objtypescan                - Scan for Windows object type objects
-patcher                    - Patches memory based on page scans
-poolpeek                   - Configurable pool scanner plugin
-pooltracker                - Show a summary of pool tag usage
-printkey                   - Print a registry key, and its subkeys and values
-privs                      - Display process privileges
-procdump                   - Dump a process to an executable file sample
-pslist                     - Print all running processes by following the EPROCESS lists
-psscan                     - Pool scanner for process objects
-pstree                     - Print process list as a tree
-psxview                    - Find hidden processes with various process listings
-qemuinfo                   - Dump Qemu information
-raw2dmp                    - Converts a physical memory sample to a windbg crash dump
-screenshot                 - Save a pseudo-screenshot based on GDI windows
-servicediff                - List Windows services (ala Plugx)
-sessions                   - List details on _MM_SESSION_SPACE (user logon sessions)
-shellbags                  - Prints ShellBags info
-shimcache                  - Parses the Application Compatibility Shim Cache registry key
-shutdowntime               - Print ShutdownTime of machine from registry
-sockets                    - Print list of open sockets
-sockscan                   - Pool scanner for tcp socket objects
-ssdt                       - Display SSDT entries
-strings                    - Match physical offsets to virtual addresses (may take a while, VERY verbose)
-svcscan                    - Scan for Windows services
-symlinkscan                - Pool scanner for symlink objects
-thrdscan                   - Pool scanner for thread objects
-threads                    - Investigate _ETHREAD and _KTHREADs
-timeliner                  - Creates a timeline from various artifacts in memory
-timers                     - Print kernel timers and associated module DPCs
-truecryptmaster            - Recover TrueCrypt 7.1a Master Keys
-truecryptpassphrase        - TrueCrypt Cached Passphrase Finder
-truecryptsummary           - TrueCrypt Summary
-unloadedmodules            - Print list of unloaded modules
-userassist                 - Print userassist registry keys and information
-userhandles                - Dump the USER handle tables
-vaddump                    - Dumps out the vad sections to a file
-vadinfo                    - Dump the VAD info
-vadtree                    - Walk the VAD tree and display in tree format
-vadwalk                    - Walk the VAD tree
-vboxinfo                   - Dump virtualbox information
-verinfo                    - Prints out the version information from PE images
-vmwareinfo                 - Dump VMware VMSS/VMSN information
-volshell                   - Shell in the memory image
-win10cookie                - Find the ObHeaderCookie value for Windows 10
-windows                    - Print Desktop Windows (verbose details)
-wintree                    - Print Z-Order Desktop Windows Tree
-wndscan                    - Pool scanner for window stations
-yarascan                   - Scan process or kernel memory with Yara signatures
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;vol3&quot;&gt;vol3&lt;/h1&gt;
-
-&lt;p&gt;vol3不用识别image了，直接用插件就ok，但是查符号表要联网，有时候需要魔法上网&lt;/p&gt;
-
-&lt;p&gt;查找可用的插件&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ python3 vol.py --help | grep windows | head -n 5
-    windows.bigpools.BigPools
-    windows.cmdline.CmdLine
-    windows.crashinfo.Crashinfo
-    windows.dlllist.DllList
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;p&gt;使用，以hashdump为例&lt;/p&gt;
-
-&lt;div class=&quot;language-plaintext highlighter-rouge&quot;&gt;&lt;div class=&quot;highlight&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;$ python3 vol.py -f MemDump.DMP windows.hashdump
-Volatility 3 Framework 2.0.3
-Progress:  100.00           PDB scanning finished
-User        rid     lmhash  nthash
-
-Administrator       500         aad3b435b51404eeaad3b435b51404ee    31d6cfe0d16ae931b73c59d7e0c089c0
-Guest               501         aad3b435b51404eeaad3b435b51404ee    31d6cfe0d16ae931b73c59d7e0c089c0
-Frank Reynolds      1000    aad3b435b51404eeaad3b435b51404ee        a88d1e18706d3aa676e01e5943d15911
-HomeGroupUser$      1002    aad3b435b51404eeaad3b435b51404ee        af10ecac6ea817d2bb56e3e5c33ce1cd
-Dennis              1003    aad3b435b51404eeaad3b435b51404ee        cf96684bbc7877920adaa9663698bf54
-&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;
-
-&lt;h1 id=&quot;暂时结束--实时更新&quot;&gt;暂时结束- 实时更新&lt;/h1&gt;
-
-</description>
-        <pubDate>Sun, 12 Mar 2023 00:00:00 +0800</pubDate>
-        <link>https://p001water.github.io//%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/vol2/3/2023/03/12/volatility23%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%B0%E5%92%8C%E9%97%B2%E8%B0%88.html</link>
-        <guid isPermaLink="true">https://p001water.github.io//%E5%86%85%E5%AD%98%E5%8F%96%E8%AF%81/vol2/3/2023/03/12/volatility23%E5%91%BD%E4%BB%A4%E5%B0%8F%E8%AE%B0%E5%92%8C%E9%97%B2%E8%B0%88.html</guid>
-        
-        <category>内存取证</category>
-        
-        
-        <category>内存取证</category>
-        
-        <category>vol2/3</category>
         
       </item>
     
