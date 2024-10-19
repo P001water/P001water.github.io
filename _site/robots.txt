@@ -1,1 +1,1 @@
-Sitemap: https://p001water.github.io//sitemap.xml
+Sitemap: p001water.github.io/sitemap.xml

@@ -4,61 +4,42 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+  
   <meta content="Godzilla -- 从三种自带加密器看哥斯拉流量-PHP篇" property="og:title">
+  
 
-
+  
   <meta content="article" property="og:type">
+  
 
+  
+  <meta content=" P001water的blog，致力于红队攻防 安全开发和安全研究 " property="og:description">
+  
+  <meta name="description" content="文前漫谈">
 
-  <meta content=" <h1>P001water</h1> <h4>红队攻防、安全开发和安全研究</h4> " property="og:description">
-
-
-  <meta content="https://p001water.github.io//%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/2023/04/27/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87.html" property="og:url">
-
-
+  
   <meta content="2023-04-27T14:10:00+08:00" property="article:published_time">
-  <meta content="https://p001water.github.io//about/" property="article:author">
-
+  <meta content="p001water.github.io/about/" property="article:author">
+  
 
   <meta property="og:image" content="">
 
-
   
+    
   <meta content="流量分析" property="article:section">
+    
   
-
-
   
+  
+    
   <meta content="流量分析，Godzilla" property="article:tag">
+    
   
 
   <title>Godzilla -- 从三种自带加密器看哥斯拉流量-PHP篇</title>
-  <meta name="description" content="文前漫谈">
+
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/bootstrap.min.css">
-  
-  <link rel="canonical" href="https://p001water.github.io//%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/2023/04/27/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87.html">
-
-  <link href="/atom.xml" type="application/atom+xml" rel="alternate" title="ATOM Feed" /> <!-- Begin Jekyll SEO tag v2.8.0 -->
-<title>Godzilla – 从三种自带加密器看哥斯拉流量-PHP篇 | P001water-Blog</title>
-<meta name="generator" content="Jekyll v4.3.4" />
-<meta property="og:title" content="Godzilla – 从三种自带加密器看哥斯拉流量-PHP篇" />
-<meta name="author" content="P001water" />
-<meta property="og:locale" content="en_US" />
-<meta name="description" content="文前漫谈" />
-<meta property="og:description" content="文前漫谈" />
-<link rel="canonical" href="https://p001water.github.io//%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/2023/04/27/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87.html" />
-<meta property="og:url" content="https://p001water.github.io//%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/2023/04/27/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87.html" />
-<meta property="og:site_name" content="P001water-Blog" />
-<meta property="og:type" content="article" />
-<meta property="article:published_time" content="2023-04-27T14:10:00+08:00" />
-<meta name="twitter:card" content="summary" />
-<meta property="twitter:title" content="Godzilla – 从三种自带加密器看哥斯拉流量-PHP篇" />
-<script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"P001water"},"dateModified":"2023-04-27T14:10:00+08:00","datePublished":"2023-04-27T14:10:00+08:00","description":"文前漫谈","headline":"Godzilla – 从三种自带加密器看哥斯拉流量-PHP篇","mainEntityOfPage":{"@type":"WebPage","@id":"https://p001water.github.io//%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/2023/04/27/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87.html"},"url":"https://p001water.github.io//%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/2023/04/27/Godzilla-%E4%BB%8E%E4%B8%89%E7%A7%8D%E8%87%AA%E5%B8%A6%E5%8A%A0%E5%AF%86%E5%99%A8%E7%9C%8B%E5%93%A5%E6%96%AF%E6%8B%89%E6%B5%81%E9%87%8F-PHP%E7%AF%87.html"}</script>
-<!-- End Jekyll SEO tag -->
-
 </head>
 
 <body>
@@ -118,12 +99,19 @@
   <div class="jumbotron">
     <div class="container">
       <h1 class="post-title-main" itemprop="name headline">Godzilla -- 从三种自带加密器看哥斯拉流量-PHP篇</h1>
-      <p class="post-meta"><time datetime="2023-04-27T14:10:00+08:00" itemprop="datePublished">Apr 27, 2023</time> • <span itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">P001water</span></span></p>
-      
+      <p class="post-meta">
+        <time datetime="2023-04-27T14:10:00+08:00" itemprop="datePublished">
+            Apr 27, 2023
+        </time>
+        
+            <span itemprop="author" itemscope itemtype="http://schema.org/Person">
+                <span itemprop="name">P001water</span>
+            </span>
+        
+    </p>
+    
     </div>
-
 </div>
-
 
   <div class="post-content container" itemprop="articleBody">
     <h1 id="文前漫谈">文前漫谈</h1>
